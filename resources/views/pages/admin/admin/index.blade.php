@@ -27,6 +27,7 @@
                         <table class="table datatable">
                             <thead>
                                 <tr>
+                                    <th>#</th>
                                     <th>Nama</th>
                                     <th>No Telp</th>
                                     <th>Alamat</th>
@@ -37,6 +38,7 @@
                             <tbody>
                                 @foreach ($admins as $admin)
                                     <tr>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $admin->nama }}</td>
                                         <td>{{ $admin->no_telp }}</td>
                                         <td>{{ $admin->alamat }}</td>

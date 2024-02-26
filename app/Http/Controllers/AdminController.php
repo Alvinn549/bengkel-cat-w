@@ -40,15 +40,33 @@ class AdminController extends Controller
     public function store(Request $request)
     {
         // dd($request->all());
-        $validate = $request->validate([
-            'nama' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'string', 'email', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
-            'no_telp' => ['required', 'digits_between:11,16'],
-            'jenis_k' => ['required', 'string', 'in:L,P'],
-            'alamat' => ['required', 'string'],
-            'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
-        ]);
+        $validate = $request->validate(
+            [
+                'nama' => ['required', 'string', 'max:100'],
+                'email' => ['required', 'string', 'email', 'unique:users'],
+                'password' => ['required', 'string', 'min:8'],
+                'no_telp' => ['required', 'digits_between:11,16'],
+                'jenis_k' => ['required', 'string', 'in:L,P'],
+                'alamat' => ['required', 'string'],
+                'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
+            ],
+            [
+                'nama.required' => 'Nama tidak boleh kosong',
+                'nama.max' => 'Nama terlalu panjang',
+                'email.unique' => 'Email sudah terdaftar',
+                'email.required' => 'Email tidak boleh kosong',
+                'email.email' => 'Email tidak valid',
+                'password.required' => 'Password tidak boleh kosong',
+                'password.min' => 'Password terlalu pendek',
+                'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
+                'no_telp.digits_between' => 'Nomor Telepon tidak valid',
+                'jenis_k.required' => 'Jenis Kelamin tidak boleh kosong',
+                'jenis_k.in' => 'Jenis Kelamin tidak valid',
+                'alamat.required' => 'Alamat tidak boleh kosong',
+                'foto.max' => 'Ukuran gambar terlalu besar',
+                'foto.mimes' => 'Format gambar tidak valid',
+            ]
+        );
 
         $foto = null;
 
@@ -71,9 +89,7 @@ class AdminController extends Controller
             'foto' => $foto,
         ]);
 
-        Alert::toast('<p style="color: white; margin-top: 10px;">' . $admin->nama . ' berhasil ditambahkan !</p>', 'success')
-            ->toHtml()
-            ->background('#212529');
+        Alert::toast($admin->nama . ' berhasil ditambahkan !', 'success');
 
         return redirect()->route('admin.index');
     }
@@ -109,15 +125,34 @@ class AdminController extends Controller
      */
     public function update(Request $request, Admin $admin)
     {
-        $validate = $request->validate([
-            'nama' => ['required', 'string', 'max:100'],
-            'email' => ['required', 'string', 'email', 'unique:users,email,' . $admin->user->id],
-            'password' => ['nullable', 'string', 'min:8'],
-            'no_telp' => ['required', 'digits_between:11,16'],
-            'jenis_k' => ['required', 'string', 'in:L,P'],
-            'alamat' => ['required', 'string'],
-            'foto' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
-        ]);
+        // dd($request->all());
+        $validate = $request->validate(
+            [
+                'nama' => ['required', 'string', 'max:100'],
+                'email' => ['required', 'string', 'email', 'unique:users,email,' . $admin->user->id],
+                'password' => ['nullable', 'string', 'min:8'],
+                'no_telp' => ['required', 'digits_between:11,16'],
+                'jenis_k' => ['required', 'string', 'in:L,P'],
+                'alamat' => ['required', 'string'],
+                'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
+            ],
+            [
+                'nama.required' => 'Nama tidak boleh kosong',
+                'nama.max' => 'Nama terlalu panjang',
+                'email.unique' => 'Email sudah terdaftar',
+                'email.required' => 'Email tidak boleh kosong',
+                'email.email' => 'Email tidak valid',
+                'password.required' => 'Password tidak boleh kosong',
+                'password.min' => 'Password terlalu pendek',
+                'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
+                'no_telp.digits_between' => 'Nomor Telepon tidak valid',
+                'jenis_k.required' => 'Jenis Kelamin tidak boleh kosong',
+                'jenis_k.in' => 'Jenis Kelamin tidak valid',
+                'alamat.required' => 'Alamat tidak boleh kosong',
+                'foto.max' => 'Ukuran gambar terlalu besar',
+                'foto.mimes' => 'Format gambar tidak valid',
+            ]
+        );
 
         $admin->user->update([
             'email' => $validate['email'],
@@ -147,9 +182,7 @@ class AdminController extends Controller
             $admin->update(['foto' => $fotoPath]);
         }
 
-        Alert::toast('<p style="color: white; margin-top: 10px;">' . $admin->nama . ' berhasil diubah !</p>', 'success')
-            ->toHtml()
-            ->background('#212529');
+        Alert::toast($admin->nama . ' berhasil diubah !', 'success');
 
         return redirect()->route('admin.index');
     }
@@ -163,19 +196,19 @@ class AdminController extends Controller
      */
     public function destroy(Admin $admin)
     {
-        if (auth()->user()->id == $admin->id) {
-            Alert::error('Error', 'You cannot delete yourself');
+        if (auth()->user()->id == $admin->user->id) {
+            Alert::error('Error', 'Kamu tidak bisa menghapus akunmu sendiri !');
             return redirect()->route('admin.index');
         }
 
         if ($admin->foto) {
             Storage::delete($admin->foto);
         }
-        $admin->delete();
 
-        Alert::toast('<p style="color: white; margin-top: 10px;">' . $admin->nama . ' berhasil dihapus !</p>', 'success')
-            ->toHtml()
-            ->background('#212529');
+        $admin->delete();
+        $admin->user->delete();
+
+        Alert::toast($admin->nama . ' berhasil dihapus !', 'success');
 
         return redirect()->route('admin.index');
     }

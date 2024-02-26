@@ -17,7 +17,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Multi Columns Form</h5>
+                        <h5 class="card-title">Data Admin</h5>
                         <form class="row g-3" action="{{ route('admin.update', $admin) }}" method="POST" id="form"
                             enctype="multipart/form-data">
                             @csrf
@@ -56,8 +56,10 @@
                             </div>
                             <div class="col-md-8">
                                 <label for="inpuNoTelp" class="form-label">No Telp</label>
-                                <input type="number" class="form-control @error('no_telp') is-invalid @enderror"
-                                    name="no_telp" id="inpuNoTelp" value="{{ old('no_telp') ?? $admin->no_telp }}">
+                                <input type="text" class="form-control @error('no_telp') is-invalid @enderror"
+                                    name="no_telp" id="inpuNoTelp" pattern="\d+"
+                                    oninput="this.value = formatNoTelp(this.value)" inputmode="numeric"
+                                    value="{{ old('no_telp') ?? $admin->no_telp }}">
                                 @error('no_telp')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -157,6 +159,12 @@
                     document.getElementById('form').submit()
                 }
             });
+        }
+
+        function formatNoTelp(value) {
+            let formatedValue = value.replace(/[^0-9]/g, '').slice(0, 16);
+
+            return formatedValue;
         }
     </script>
 @endsection
