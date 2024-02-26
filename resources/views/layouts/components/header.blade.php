@@ -97,10 +97,16 @@
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                         data-bs-toggle="dropdown">
-                        <img src="{{ asset('storage') }}/{{ auth()->user()->admin->foto }}" alt="Profile"
-                            class="rounded-circle">
+                        @if (auth()->user()->admin->foto)
+                            <div class="foto-profil">
+                                <img src="{{ asset('storage') }}/{{ auth()->user()->admin->foto }}" alt="Profile">
+                            </div>
+                        @else
+                            <img src="{{ asset('assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">
+                        @endif
                         <span class="d-none d-md-block dropdown-toggle ps-2">{{ auth()->user()->admin->nama }}</span>
-                    </a><!-- End Profile Iamge Icon -->
+                    </a>
+                    <!-- End Profile Iamge Icon -->
 
                     <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                         <li class="dropdown-header">
