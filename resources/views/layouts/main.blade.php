@@ -25,6 +25,8 @@
     <link href="{{ asset('assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
     <link href="{{ url('assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
@@ -39,10 +41,6 @@
     <!-- ======= SweetAlert ======= -->
     @include('sweetalert::alert')
     <!-- End SweetAlert -->
-
-    <!-- ======= Modal Logout ======= -->
-    @include('layouts.components.modal-logout')
-    <!-- End Modal Logout -->
 
     <!-- ======= Header ======= -->
     @include('layouts.components.header')
@@ -70,14 +68,28 @@
     <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url('assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ url('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ url('assets/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/select2/js/select2.min.js') }}"></script>
 
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
     <script>
         function confirmLogout() {
-            $('#modalLogOut').modal('show');
+            Swal.fire({
+                title: 'Konfirmasi Logout',
+                text: "Anda yakin ingin keluar?",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Keluar',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('logout-form').submit();
+                }
+            });
         }
     </script>
 

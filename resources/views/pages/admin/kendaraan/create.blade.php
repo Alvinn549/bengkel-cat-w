@@ -1,8 +1,5 @@
 @extends('layouts.main')
 
-@section('css')
-    <link href="{{ asset('assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet">
-@endsection
 @section('content')
     <div class="pagetitle">
         <h1>Tambah Kendaraan</h1>
@@ -127,14 +124,13 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ url('assets/vendor/select2/js/select2.min.js') }}"></script>
-
     <script>
         $(document).ready(function() {
             $('.select2').select2();
         });
+    </script>
 
+    <script>
         function previewFoto() {
             const image = document.querySelector('#foto');
             const imageContainer = document.querySelector('#container-preview');
