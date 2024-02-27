@@ -63,7 +63,8 @@
             </li><!-- End Profile Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#">
+                <a class="nav-link {{ request()->routeIs('pelanggan*') ? 'active' : 'collapsed' }}"
+                    href="{{ route('pelanggan.index') }}">
                     <i class="bi bi-card-list"></i>
                     <span>Pelanggan</span>
                 </a>

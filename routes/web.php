@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PekerjaController;
+use App\Http\Controllers\PelangganController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,4 +27,5 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('admin', AdminController::class);
     Route::resource('pekerja', PekerjaController::class);
+    Route::resource('pelanggan', PelangganController::class);
 });
