@@ -70,7 +70,8 @@
             </li><!-- End Register Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link collapsed" href="#">
+                <a class="nav-link {{ request()->routeIs('pekerja*') ? 'active' : 'collapsed' }}"
+                    href="{{ route('pekerja.index') }}">
                     <i class="bi bi-box-arrow-in-right"></i>
                     <span>Pekerja</span>
                 </a>

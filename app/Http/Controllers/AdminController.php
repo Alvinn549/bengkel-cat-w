@@ -89,7 +89,9 @@ class AdminController extends Controller
             'foto' => $foto,
         ]);
 
-        Alert::toast($admin->nama . ' berhasil ditambahkan !', 'success');
+        Alert::toast('<p style="color: white; margin-top: 10px;">' . $admin->nama . ' berhasil ditambahkan!</p>', 'success')
+            ->toHtml()
+            ->background('#333A73');
 
         return redirect()->route('admin.index');
     }
@@ -182,7 +184,9 @@ class AdminController extends Controller
             $admin->update(['foto' => $fotoPath]);
         }
 
-        Alert::toast($admin->nama . ' berhasil diubah !', 'success');
+        Alert::toast('<p style="color: white; margin-top: 10px;">' . $admin->nama . ' berhasil diubah!</p>', 'success')
+            ->toHtml()
+            ->background('#333A73');
 
         return redirect()->route('admin.index');
     }
@@ -208,7 +212,9 @@ class AdminController extends Controller
         $admin->delete();
         $admin->user->delete();
 
-        Alert::toast($admin->nama . ' berhasil dihapus !', 'success');
+        Alert::toast('<p style="color: white; margin-top: 10px;">' . $admin->nama . ' berhasil dihapus!</p>', 'success')
+            ->toHtml()
+            ->background('#333A73');
 
         return redirect()->route('admin.index');
     }
