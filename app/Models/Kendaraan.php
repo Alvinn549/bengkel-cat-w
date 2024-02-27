@@ -14,11 +14,11 @@ class Kendaraan extends Model
         'no_plat',
         'merek',
         'tipe',
-        'fotos',
+        'foto',
         'keterangan',
     ];
 
-    public function pelanggans()
+    public function pelanggan()
     {
         return $this->belongsTo(Pelanggan::class);
     }
