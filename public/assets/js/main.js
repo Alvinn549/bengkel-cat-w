@@ -109,3 +109,23 @@
   })
 
 })();
+
+/**
+ * Logout confirmation
+ */
+function confirmLogout() {
+  Swal.fire({
+    title: 'Konfirmasi Logout',
+    text: "Anda yakin ingin keluar?",
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Ya, Keluar',
+    cancelButtonText: 'Batal'
+  }).then((result) => {
+      if (result.isConfirmed) {
+        document.getElementById('logout-form').submit();
+      }
+    });
+}
