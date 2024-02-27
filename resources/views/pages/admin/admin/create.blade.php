@@ -67,7 +67,7 @@
                                 <label for="inputJenisKelamin" class="form-label">Jenis Kelamin</label>
                                 <select id="inputJenisKelamin" name="jenis_k"
                                     class="form-select @error('jenis_k') is-invalid @enderror">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     <option value="L" {{ old('jenis_k') == 'L' ? 'selected' : '' }}>Laki Laki</option>
                                     <option value="P" {{ old('jenis_k') == 'P' ? 'selected' : '' }}>Perempuan</option>
                                 </select>

@@ -18,13 +18,13 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Data Admin</h5>
-                        <a class="btn btn-outline-primary" href="{{ route('admin.create') }}">
+                        <a class="btn btn-outline-primary mb-4" href="{{ route('admin.create') }}">
                             <i class="ri-add-circle-line"></i>
                             Tambah
                         </a>
 
                         <!-- Table with stripped rows -->
-                        <table class="table datatable">
+                        <table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -71,7 +71,16 @@
 @endsection
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                lengthMenu: [
+                    [5, 10, 25, -1],
+                    [5, 10, 25, "All"]
+                ],
+            });
+        })
+    </script>
 
     <script>
         function deleteData(id) {

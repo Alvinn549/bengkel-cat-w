@@ -60,7 +60,7 @@
                     <i class="bi bi-person"></i>
                     <span>Admin</span>
                 </a>
-            </li><!-- End Profile Page Nav -->
+            </li><!-- End Admin Page Nav -->
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('pelanggan*') ? 'active' : 'collapsed' }}"
@@ -68,7 +68,15 @@
                     <i class="bi bi-card-list"></i>
                     <span>Pelanggan</span>
                 </a>
-            </li><!-- End Register Page Nav -->
+            </li><!-- End Pelanggan Page Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('kendaraan*') ? 'active' : 'collapsed' }}"
+                    href="{{ route('kendaraan.index') }}">
+                    <i class="bi bi-card-list"></i>
+                    <span>Kendaraan</span>
+                </a>
+            </li><!-- End Kendaraan Page Nav -->
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('pekerja*') ? 'active' : 'collapsed' }}"
