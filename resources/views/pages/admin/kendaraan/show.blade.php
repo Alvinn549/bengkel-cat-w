@@ -1,9 +1,22 @@
 @extends('layouts.main')
 
+@section('css')
+    <style>
+        .btn-show-pemilik {
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+        }
+
+        .btn-show-pemilik:hover {
+            color: #007bff;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="pagetitle">
         <h1>Lihat Kendaraan</h1>
-        <nav class="d-flex justify-content-end">
+        <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('kendaraan.index') }}">Kendaraan</a></li>
@@ -42,7 +55,7 @@
 
     <section class="section">
         <div class="row">
-            <div class="d-flex justify-content-end mb-4">
+            <div class="mb-4">
                 <a href="{{ route('kendaraan.index') }}" class="btn">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>
@@ -50,22 +63,23 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row mt-4">
+                        <h5 class="card-title">Data Kendaraan</h5>
+                        <div class="row">
                             <div class="col-md-6 d-flex justify-content-center">
                                 @if ($kendaraan->foto)
-                                    <img src="{{ asset('storage') }}/{{ $kendaraan->foto }}" class="img-fluid rounded"
+                                    <img src="{{ asset('storage/' . $kendaraan->foto) }}" class="img-fluid rounded"
                                         alt="">
                                 @else
                                     <i class="ri-car-line ri-9x"></i>
                                 @endif
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 align-self-center">
                                 <table class="table">
                                     <tr>
                                         <th>Pemilik</th>
-                                        <td>{{ $kendaraan->pelanggan->nama ?? '' }}
-
-                                            <button type="button" class="btn" data-bs-toggle="modal"
+                                        <td>
+                                            {{ $kendaraan->pelanggan->nama ?? '' }}
+                                            <button type="button" data-bs-toggle="modal" class="btn-show-pemilik"
                                                 data-bs-target="#dataPemilik">
                                                 <i class="ri-eye-line"></i>
                                             </button>
@@ -86,6 +100,10 @@
                                     <tr>
                                         <th>Keterangan</th>
                                         <td>{{ $kendaraan->keterangan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Terdaftar Sejak</th>
+                                        <td>{{ $kendaraan->created_at }}</td>
                                     </tr>
                                 </table>
                             </div>

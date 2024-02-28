@@ -106,7 +106,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col-6">
                                         @if ($admin->foto)
-                                            <img src="{{ asset('storage') }}/{{ $admin->foto }}"
+                                            <img src="{{ asset('storage/' . $admin->foto) }}"
                                                 class="preview-foto img-fluid rounded" alt="">
                                         @else
                                             <img class="preview-foto img-fluid rounded">

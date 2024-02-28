@@ -99,7 +99,7 @@
                         data-bs-toggle="dropdown">
                         @if (auth()->user()->admin->foto)
                             <div class="foto-profil">
-                                <img src="{{ asset('storage') }}/{{ auth()->user()->admin->foto }}" alt="Profile">
+                                <img src="{{ asset('storage/' . auth()->user()->admin->foto) }}" alt="Profile">
                             </div>
                         @else
                             <img src="{{ asset('assets/img/profile-img.jpg') }}" alt="Profile" class="rounded-circle">

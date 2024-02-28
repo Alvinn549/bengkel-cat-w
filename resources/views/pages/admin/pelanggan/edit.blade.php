@@ -70,7 +70,7 @@
                                 <label for="inputJenisKelamin" class="form-label">Jenis Kelamin</label>
                                 <select id="inputJenisKelamin" name="jenis_k"
                                     class="form-select @error('jenis_k') is-invalid @enderror">
-                                    <option>Choose...</option>
+                                    <option value="">Choose...</option>
                                     <option value="L" {{ $pelanggan->jenis_k == 'L' ? 'selected' : '' }}>Laki Laki
                                     </option>
                                     <option value="P" {{ $pelanggan->jenis_k == 'P' ? 'selected' : '' }}>Perempuan
@@ -106,7 +106,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col-6">
                                         @if ($pelanggan->foto)
-                                            <img src="{{ asset('storage') }}/{{ $pelanggan->foto }}"
+                                            <img src="{{ asset('storage/' . $pelanggan->foto) }}"
                                                 class="preview-foto img-fluid rounded" alt="">
                                         @else
                                             <img class="preview-foto img-fluid rounded">
