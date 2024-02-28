@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('nama')->nullable();
             $table->text('keterangan')->nullable();
             $table->string('foto')->nullable();
-            $table->decimal('biaya', 10, 2)->nullable();
+            $table->integer('biaya')->nullable();
             $table->string('durasi')->nullable();
             $table->dateTime('tgl_selesai')->nullable();
             $table->enum('status', ['Selesai', 'Dalam Proses', 'Ditunda', 'Dibatalkan', 'Tidak Dapat Diperbaiki'])->nullable();

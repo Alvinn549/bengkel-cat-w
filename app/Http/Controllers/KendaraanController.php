@@ -92,6 +92,7 @@ class KendaraanController extends Controller
     public function show(Kendaraan $kendaraan)
     {
         $kendaraan->load('pelanggan');
+        $kendaraan->load('perbaikans');
         return view('pages.admin.kendaraan.show', compact('kendaraan'));
     }
 

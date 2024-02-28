@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\PekerjaController;
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\PerbaikanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,4 +31,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('pekerja', PekerjaController::class);
     Route::resource('pelanggan', PelangganController::class);
     Route::resource('kendaraan', KendaraanController::class);
+    Route::resource('perbaikan', PerbaikanController::class);
 });
