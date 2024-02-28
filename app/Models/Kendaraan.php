@@ -22,4 +22,9 @@ class Kendaraan extends Model
     {
         return $this->belongsTo(Pelanggan::class);
     }
+
+    public function perbaikans()
+    {
+        return $this->hasMany(Perbaikan::class);
+    }
 }
