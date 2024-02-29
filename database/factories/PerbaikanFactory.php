@@ -17,7 +17,11 @@ class PerbaikanFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'nama' => $this->faker->words(3, true),
+            'keterangan' => $this->faker->sentence(10),
+            'biaya' => $this->faker->numerify('#######'),
+            'durasi' => $this->faker->word(),
+            'status' => $this->faker->randomElement(['Selesai', 'Dalam Proses', 'Ditunda', 'Dibatalkan', 'Tidak Dapat Diperbaiki']),
         ];
     }
 }

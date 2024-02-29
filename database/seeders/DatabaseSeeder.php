@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             PelangganSeeder::class,
-            KendaraanSeeder::class
+            KendaraanSeeder::class,
+            PerbaikanSeeder::class
         ]);
 
         $admin = User::create([

@@ -18,7 +18,7 @@ class KendaraanSeeder extends Seeder
         $pelanggans = Pelanggan::all();
 
         foreach ($pelanggans as $pelanggan) {
-            Kendaraan::factory(rand(1, 10))->create(['pelanggan_id' => $pelanggan->id]);
+            Kendaraan::factory(rand(1, 5))->create(['pelanggan_id' => $pelanggan->id]);
         }
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Kendaraan;
+use App\Models\Perbaikan;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,6 +16,12 @@ class PerbaikanSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $kendaraans = Kendaraan::all();
+
+        foreach ($kendaraans as $kendaraan) {
+            Perbaikan::factory(rand(1, 10))->create([
+                'kendaraan_id' => $kendaraan->id
+            ]);
+        }
     }
 }
