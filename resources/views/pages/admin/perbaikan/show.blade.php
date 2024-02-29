@@ -25,57 +25,27 @@
         </nav>
     </div><!-- End Page Title -->
 
-    {{-- <div class="modal fade" id="dataPemilik" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Data Pemilik</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <tr>
-                            <th>Nama</th>
-                            <td>{{ $kendaraan->pelanggan->nama ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>No Telp</th>
-                            <td>{{ $kendaraan->pelanggan->no_telp ?? '' }}</td>
-                        </tr>
-                        <tr>
-                            <th>Alamat</th>
-                            <td>{{ $kendaraan->pelanggan->alamat ?? '' }}</td>
-                        </tr>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-    </div> --}}
-    <!-- End Vertically centered Modal-->
-
-    <section class="section">
+    <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
                 <a href="{{ route('kendaraan.show', $perbaikan->kendaraan_id) }}" class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Data Perbaikan</h5>
-
-                        <div class="row">
-                            <div class="col-md-6 d-flex justify-content-center">
+                        <div class="row g-3">
+                            <div class="col-md-12 d-flex justify-content-center">
                                 @if ($perbaikan->foto)
                                     <img src="{{ asset('storage/' . $perbaikan->foto) }}" class="img-fluid rounded"
                                         alt="">
                                 @else
-                                    <i class="ri-car-line ri-9x"></i>
+                                    <i class="ri-car-line ri-7x"></i>
                                 @endif
                             </div>
-                            <div class="col-md-6 align-self-center">
+                            <div class="col-md-12">
                                 <table class="table">
                                     <tr>
                                         <th>Nama</th>
@@ -126,21 +96,49 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
+            </div><!-- End Data Perbaikan-->
+            <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Progress</h5>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h1>Ini Progres</h1>
-                            </div>
+                        <h5 class="card-title">Progres Perbaikan</h5>
+                        <div class="activity">
+                            @forelse ($perbaikan->progres as $progres)
+                                @php
+                                    $carbonDate = \Carbon\Carbon::parse($progres->created_at)->locale('id');
+                                    $formattedDate = $carbonDate->format('d-m-Y');
+                                    $formattedTime = $carbonDate->format('H:i');
+                                    $diffForHumans = $carbonDate->diffForHumans();
+                                @endphp
+                                <div class="activity-item d-flex">
+                                    <div class="activite-label" style="width: 150px">
+                                        {{ $diffForHumans }} <br>
+                                        {{ $formattedDate }} <br>
+                                        {{ $formattedTime }}
+                                    </div>
+                                    <i
+                                        class='bi bi-circle-fill activity-badge {{ $progres->status == 'Selesai' ? 'text-success' : 'text-warning' }} align-self-start'></i>
+                                    <div class="activity-content">
+                                        {{ $progres->keterangan }}
+                                        <div class="col-md-4">
+                                            @if ($progres->foto)
+                                                <a href="#">
+                                                    <img src="{{ asset('storage/' . $progres->foto) }}"
+                                                        class="img-fluid rounded" alt=""
+                                                        onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
+                                                </a>
+                                            @else
+                                                <i class="ri-paint-brush-line ri-3x"></i>
+                                            @endif
+                                        </div>
+                                    </div>
+                                </div><!-- End Progres item-->
+                            @empty
+                                <h5>Belum ada progres</h5>
+                            @endforelse
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><!-- End Progres -->
         </div>
     </section>
 @endsection
@@ -156,7 +154,16 @@
             });
         })
     </script>
-
+    <script>
+        function openImage(imageUrl) {
+            Swal.fire({
+                imageUrl: imageUrl,
+                imageWidth: 450,
+                imageAlt: 'Foto Progres',
+                showConfirmButton: false,
+            });
+        }
+    </script>
     <script>
         function deleteData(id) {
             Swal.fire({

@@ -18,8 +18,8 @@ class ProgresFactory extends Factory
     {
         return [
             'keterangan' => $this->faker->sentence(10),
-            // 'status' => $this->faker->randomElement(['Selesai', 'Dalam Proses']),
             'status' => 'Dalam Proses',
+            'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
         ];
     }
 }

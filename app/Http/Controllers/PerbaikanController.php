@@ -99,6 +99,7 @@ class PerbaikanController extends Controller
     public function show(Perbaikan $perbaikan)
     {
         $perbaikan->load('kendaraan');
+        $perbaikan->load('progres');
         return view('pages.admin.perbaikan.show', compact('perbaikan'));
     }
 
