@@ -87,7 +87,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>No Plat</th>
+                                        <th nowrap>No Plat</th>
                                         <td>{{ $kendaraan->no_plat }}</td>
                                     </tr>
                                     <tr>
@@ -103,7 +103,7 @@
                                         <td>{{ $kendaraan->keterangan }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Terdaftar Sejak</th>
+                                        <th nowrap>Terdaftar Sejak</th>
                                         <td>{{ $kendaraan->created_at }}</td>
                                     </tr>
                                 </table>
@@ -125,7 +125,7 @@
                         </a>
                         <div class="row">
                             <div class="col-md-12">
-                                <table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
+                                <table id="datatable" class="table table-bordered ">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -163,7 +163,7 @@
                                                         {{ $perbaikan->status ?? '-' }}
                                                     </span>
                                                 </td>
-                                                <td>
+                                                <td nowrap>
                                                     <a class="btn btn-success btn-sm" data-bs-toggle="tooltip"
                                                         data-bs-placement="top" title="Lihat"
                                                         href="{{ route('perbaikan.show', $perbaikan->id) }}">

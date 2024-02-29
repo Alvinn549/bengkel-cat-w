@@ -24,7 +24,7 @@
                         </a>
 
                         <!-- Table with stripped rows -->
-                        <table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
+                        <table id="datatable" class="table table-bordered ">
                             <thead>
                                 <tr>
                                     <th>#</th>

@@ -24,14 +24,13 @@
                         </a>
 
                         <!-- Table with stripped rows -->
-                        <table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
+                        <table id="datatable" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Nama</th>
                                     <th>No Telp</th>
                                     <th>Alamat</th>
-                                    <th>Jenis K</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -42,12 +41,14 @@
                                         <td>{{ $admin->nama }}</td>
                                         <td>{{ $admin->no_telp }}</td>
                                         <td>{{ $admin->alamat }}</td>
-                                        <td>{{ $admin->jenis_k }}</td>
-                                        <td>
-                                            <a class="btn btn-primary btn-sm" href="{{ route('admin.edit', $admin->id) }}">
+                                        <td nowrap>
+                                            <a class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Edit"
+                                                href="{{ route('admin.edit', $admin->id) }}">
                                                 <i class="ri-edit-2-line"></i>
                                             </a>
-                                            <a class="btn btn-danger btn-sm" href="javascript:"
+                                            <a class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Hapus" href="javascript:"
                                                 onclick="deleteData({{ $admin->id }})">
                                                 <i class="ri-delete-bin-5-line"></i>
                                             </a>

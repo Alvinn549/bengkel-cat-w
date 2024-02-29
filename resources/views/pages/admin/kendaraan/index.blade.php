@@ -24,7 +24,7 @@
                         </a>
 
                         <!-- Table with stripped rows -->
-                        <table id="datatable" class="table table-bordered dt-responsive table-responsive nowrap">
+                        <table id="datatable" class="table table-bordered ">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -45,16 +45,19 @@
                                         <td>{{ $kendaraan->merek }}</td>
                                         <td>{{ $kendaraan->tipe }}</td>
                                         <td>{{ $kendaraan->keterangan }}</td>
-                                        <td>
-                                            <a class="btn btn-success btn-sm"
+                                        <td nowrap>
+                                            <a class="btn btn-success btn-sm" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Lihat"
                                                 href="{{ route('kendaraan.show', $kendaraan->id) }}">
                                                 <i class="ri-eye-line"></i>
                                             </a>
-                                            <a class="btn btn-primary btn-sm"
+                                            <a class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Edit"
                                                 href="{{ route('kendaraan.edit', $kendaraan->id) }}">
                                                 <i class="ri-edit-2-line"></i>
                                             </a>
-                                            <a class="btn btn-danger btn-sm" href="javascript:"
+                                            <a class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Hapus" href="javascript:"
                                                 onclick="deleteData({{ $kendaraan->id }})">
                                                 <i class="ri-delete-bin-5-line"></i>
                                             </a>
