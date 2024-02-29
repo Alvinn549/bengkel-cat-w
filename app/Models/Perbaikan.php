@@ -24,4 +24,9 @@ class Perbaikan extends Model
     {
         return $this->belongsTo(Kendaraan::class);
     }
+
+    public function progres()
+    {
+        return $this->hasMany(Progres::class);
+    }
 }

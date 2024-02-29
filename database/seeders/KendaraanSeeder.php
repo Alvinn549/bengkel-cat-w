@@ -15,10 +15,10 @@ class KendaraanSeeder extends Seeder
      */
     public function run()
     {
-        $pelanggans = Pelanggan::all();
-
-        foreach ($pelanggans as $pelanggan) {
-            Kendaraan::factory(rand(1, 5))->create(['pelanggan_id' => $pelanggan->id]);
-        }
+        Pelanggan::chunk(20, function ($pelanggans) {
+            foreach ($pelanggans as $pelanggan) {
+                Kendaraan::factory(rand(1, 5))->create(['pelanggan_id' => $pelanggan->id]);
+            }
+        });
     }
 }

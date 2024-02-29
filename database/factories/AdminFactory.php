@@ -17,7 +17,10 @@ class AdminFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'nama' => $this->faker->name,
+            'no_telp' => $this->faker->phoneNumber,
+            'alamat' => $this->faker->address,
+            'jenis_k' => $this->faker->randomElement(['L', 'P']),
         ];
     }
 }
