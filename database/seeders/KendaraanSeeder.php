@@ -2,7 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Kendaraan;
+use App\Models\Pelanggan;
 use Illuminate\Database\Seeder;
 
 class KendaraanSeeder extends Seeder
@@ -14,6 +15,10 @@ class KendaraanSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $pelanggans = Pelanggan::all();
+
+        foreach ($pelanggans as $pelanggan) {
+            Kendaraan::factory(rand(1, 10))->create(['pelanggan_id' => $pelanggan->id]);
+        }
     }
 }

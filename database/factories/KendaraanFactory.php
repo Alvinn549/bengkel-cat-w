@@ -19,12 +19,10 @@ class KendaraanFactory extends Factory
     public function definition()
     {
         return [
-            'pelanggan_id' => null,
             'no_plat' => $this->faker->numerify('###-###'),
             'merek' => $this->faker->randomElement(['Avanza', 'Kijang', 'Honda', 'Suzuki']),
-            'tipe' => $this->faker->randomElement(['Mobil', 'Motor', 'Truk']),
-            'foto' => $this->faker->imageUrl(),
-            'keterangan' => $this->faker->sentences(),
+            'tipe' => $this->faker->randomElement(['Mobil', 'Motor', 'Truk', 'Sepeda Motor', 'Bus']),
+            'keterangan' => $this->faker->sentence(10),
         ];
     }
 }

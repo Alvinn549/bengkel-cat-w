@@ -18,6 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        $this->call([
+            UserSeeder::class,
+            PelangganSeeder::class,
+            KendaraanSeeder::class
+        ]);
+
         $admin = User::create([
             'role' => 'admin',
             'is_active' => true,
