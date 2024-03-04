@@ -14,15 +14,15 @@
     </div><!-- End Page Title -->
 
     <section class="section">
-        <form class="row g-3" action="{{ route('perbaikan.store') }}" method="POST" id="form"
-            enctype="multipart/form-data">
-            @csrf
-            <input type="hidden" value="{{ request('idKendaraan') }}" name="idKendaraan">
-            <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Data Perbaikan <small class="text-danger">*</small></h5>
-                        <div class="row g-3">
+                        <form class="row g-3" action="{{ route('perbaikan.store') }}" method="POST" id="form"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <input type="hidden" value="{{ request('idKendaraan') }}" name="idKendaraan">
                             <div class="col-md-12">
                                 <label for="inputNama" class="form-label">Nama</label>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror"
@@ -44,6 +44,17 @@
                                 @enderror
                             </div>
                             <div class="col-md-12">
+                                <label for="inputDurasi" class="form-label">Durasi</label>
+                                <input type="text" id="durasi" name="durasi" class="form-control"
+                                    placeholder="Masukkan perkiraan durasi" value="{{ old('durasi') }}">
+
+                                @error('durasi')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-md-12">
                                 <label for="inputFoto" class="form-label">Foto</label>
                                 <input class="form-control @error('foto') is-invalid @enderror" type="file"
                                     id="foto" name="foto" onchange="previewFoto()">
@@ -54,43 +65,17 @@
                                 @enderror
                             </div>
                             <div class="col-md-12 d-none" id="container-preview">
-                                <img class="preview-foto img-fluid rounded">
+                                <div class="row justify-content-center">
+                                    <div class="col-6">
+                                        <img class="preview-foto img-fluid rounded">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Status</h5>
-                        <div class="row g-3">
-                            <div class="col-md-12">
-                                <label for="inputBiaya" class="form-label">Biaya</label>
-                                <input type="text" class="form-control @error('biaya') is-invalid @enderror"
-                                    name="biaya" id="inputBiaya" value="{{ old('biaya') }}" pattern="\d+"
-                                    oninput="this.value = formatNumberInput(this.value)" inputmode="numeric">
-                                @error('biaya')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-md-12">
-                                <label for="inputDurasi" class="form-label">Durasi</label>
-                                <input type="text" class="form-control @error('durasi') is-invalid @enderror"
-                                    name="durasi" id="inputDurasi" value="{{ old('durasi') }}">
-                                @error('durasi')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+        </div>
         <div class="text-center">
             <button type="submit" class="btn btn-primary" onclick="submit()">Submit</button>
             <a href="{{ route('kendaraan.show', request('idKendaraan')) }}" class="btn btn-secondary">Kembali</a></a>
@@ -100,6 +85,15 @@
 
 @section('js')
     <script>
+        $(document).ready(function() {
+            $('#durasi').flatpickr({
+                mode: "range",
+                minDate: "today",
+                dateFormat: "d-m-Y",
+                locale: "id",
+            });
+        });
+
         $(document).ready(function() {
             $('.select2').select2();
         });

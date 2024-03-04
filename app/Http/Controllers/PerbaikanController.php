@@ -57,7 +57,6 @@ class PerbaikanController extends Controller
                 'nama' => ['required', 'string'],
                 'keterangan' => ['required', 'string'],
                 'foto' => ['required', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
-                'biaya' => ['nullable', 'string'],
                 'durasi' => ['nullable', 'string'],
             ],
             [
@@ -70,7 +69,6 @@ class PerbaikanController extends Controller
             ]
         );
 
-        $formatedBiaya = str_replace(',', '', $validate['biaya']);
         $foto = $validate['foto']->store('foto');
 
         $perbaikan = Perbaikan::create([
@@ -78,7 +76,6 @@ class PerbaikanController extends Controller
             'nama' => $request->nama,
             'keterangan' => $request->keterangan,
             'foto' => $foto,
-            'biaya' => (int)$formatedBiaya,
             'status' => $request->status,
             'durasi' => $request->durasi,
         ]);

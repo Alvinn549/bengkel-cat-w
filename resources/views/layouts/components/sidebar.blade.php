@@ -71,7 +71,7 @@
             </li><!-- End Pelanggan Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('kendaraan*') ? 'active' : 'collapsed' }}"
+                <a class="nav-link {{ request()->routeIs(['kendaraan*', 'perbaikan*']) ? 'active' : 'collapsed' }}"
                     href="{{ route('kendaraan.index') }}">
                     <i class="bi bi-card-list"></i>
                     <span>Kendaraan</span>

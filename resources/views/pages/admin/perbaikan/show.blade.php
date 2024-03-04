@@ -60,8 +60,15 @@
                                         <td>Rp. {{ number_format($perbaikan->biaya) ?? '-' }}</td>
                                     </tr>
                                     <tr>
+                                        @php
+                                            $durations = explode(' to ', $perbaikan->durasi);
+                                            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[0]);
+                                            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[1]);
+
+                                            $days = $startDate->diffInDays($endDate);
+                                        @endphp
                                         <th>Durasi</th>
-                                        <td>{{ $perbaikan->durasi ?? '-' }}</td>
+                                        <td>{{ $perbaikan->durasi ?? '-' }} <br> {{ $days }} Hari</td>
                                     </tr>
                                     <tr>
                                         <th>Masuk</th>

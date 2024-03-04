@@ -24,7 +24,8 @@
                             <div class="col-md-12">
                                 <label for="inputPelangganId" class="form-label">Pelanggan</label>
                                 <select id="inputPelangganId" name="pelanggan_id"
-                                    class="form-select select2 @error('pelanggan_id') is-invalid @enderror">
+                                    class="form-select select2 @error('pelanggan_id') is-invalid @enderror"
+                                    data-width="100%">
                                     <option value="">Choose...</option>
                                     @foreach ($pelanggans as $pelanggan)
                                         <option value="{{ $pelanggan->id }}"

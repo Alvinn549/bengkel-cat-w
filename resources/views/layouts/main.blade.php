@@ -27,6 +27,7 @@
     <link href="{{ url('assets/vendor/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/vendor/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/vendor/flatpickr/flatpickr.min.css') }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
@@ -70,6 +71,7 @@
     <script src="{{ url('assets/vendor/datatables.net-bs5/js/dataTables.bootstrap5.min.js') }}"></script>
     <script src="{{ url('assets/vendor/sweetalert2/sweetalert2.min.js') }}"></script>
     <script src="{{ url('assets/vendor/select2/js/select2.min.js') }}"></script>
+    <script src="{{ url('assets/vendor/flatpickr/flatpickr.min.js') }}"></script>
 
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/js/main.js') }}"></script>

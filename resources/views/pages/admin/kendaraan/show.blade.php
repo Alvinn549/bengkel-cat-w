@@ -39,7 +39,7 @@
                             <td>{{ $kendaraan->pelanggan->nama ?? '' }}</td>
                         </tr>
                         <tr>
-                            <th>No Telp</th>
+                            <th nowrap>No Telp</th>
                             <td>{{ $kendaraan->pelanggan->no_telp ?? '' }}</td>
                         </tr>
                         <tr>
@@ -157,6 +157,8 @@
                                                             $badge_bg = 'bg-warning';
                                                         } elseif ($perbaikan->status == 'Tidak Dapat Diperbaiki') {
                                                             $badge_bg = 'bg-danger';
+                                                        } else {
+                                                            $badge_bg = 'text-dark';
                                                         }
                                                     @endphp
                                                     <span class="badge {{ $badge_bg }}">
