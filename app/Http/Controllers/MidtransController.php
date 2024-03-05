@@ -19,8 +19,15 @@ class MidtransController extends Controller
     public function getSnapToken(Request $request)
     {
         $this->setupMidtrans();
-        $input = $request->all();
-        $snapToken = MidtransSnap::getSnapToken($input);
+
+        $params = array(
+            'transaction_details' => array(
+                'order_id' => rand(),
+                'gross_amount' => 10000,
+            )
+        );
+
+        $snapToken = MidtransSnap::getSnapToken($params);
 
         return response()->json([
             'snap_token' => $snapToken

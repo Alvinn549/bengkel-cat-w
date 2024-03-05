@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
 use App\Models\Perbaikan;
+use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -148,17 +149,34 @@ class PerbaikanController extends Controller
         $biaya  = null;
         $tgl_selesai = null;
 
-        if ($request->status == 'Selesai') {
-            $request->validate(
+        if ($validate['status'] == 'Selesai') {
+            $request->validate([
+                'biaya' => ['required', 'string'],
+            ], [
+                'biaya.required' => 'Biaya tidak boleh kosong',
+            ]);
+
+            $biaya = (int) str_replace(',', '', $request->biaya);
+
+            $pelanggan = $perbaikan->kendaraan->pelanggan;
+
+            $fullName = explode(' ', $pelanggan->nama);
+            $firstName = $fullName[0];
+            $lastName = isset($fullName[1]) ? $fullName[1] : null;
+
+            $transaksi = Transaksi::updateOrCreate(
+                ['order_id' => 'tr-' . $perbaikan->kode_unik],
                 [
-                    'biaya' => ['required', 'string'],
-                ],
-                [
-                    'biaya.required' => 'Biaya tidak boleh kosong',
+                    'perbaikan_id' => $perbaikan->id,
+                    'pelanggan_id' => $pelanggan->id,
+                    'gross_amount' => $biaya,
+                    'first_name' => $firstName,
+                    'last_name' => $lastName,
+                    'email' => $pelanggan->user->email,
+                    'phone' => $pelanggan->no_telp,
                 ]
             );
 
-            $biaya = (int)str_replace(',', '', $request->biaya);
             $tgl_selesai = now();
         }
 
@@ -182,9 +200,14 @@ class PerbaikanController extends Controller
             $perbaikan->update(['foto' => $fotoPath]);
         }
 
-        Alert::toast('<p style="color: white; margin-top: 10px;">' . $perbaikan->nama . ' berhasil diubah!</p>', 'success')
-            ->toHtml()
-            ->background('#333A73');
+        if ($validate['status'] == 'Selesai') {
+            Alert::success('Perbaikan Selesai', 'Perbaikan telah selesai <br> Transaksi dengan nomor <strong>' . $transaksi->order_id . '</strong> telah dibuat. <a href="' . route('transaksi.show', $transaksi) . '">Lihat Transaksi</a>')
+                ->toHtml();
+        } else {
+            Alert::toast('<p style="color: white; margin-top: 10px;">' . $perbaikan->nama . ' berhasil diubah!</p>', 'success')
+                ->toHtml()
+                ->background('#333A73');
+        }
 
         return redirect()->route('kendaraan.show', $perbaikan->kendaraan_id);
     }
