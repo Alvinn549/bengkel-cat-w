@@ -30,4 +30,9 @@ class Perbaikan extends Model
     {
         return $this->hasMany(Progres::class);
     }
+
+    public function transaksi()
+    {
+        return $this->hasOne(Transaksi::class);
+    }
 }
