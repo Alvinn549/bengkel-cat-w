@@ -45,9 +45,9 @@
                             </div>
                             <div class="col-md-12">
                                 <label for="inputDurasi" class="form-label">Durasi</label>
-                                <input type="text" id="durasi" name="durasi" class="form-control"
+                                <input type="text" id="durasi" name="durasi"
+                                    class="form-control  @error('durasi') is-invalid @enderror"
                                     placeholder="Masukkan perkiraan durasi" value="{{ old('durasi') }}">
-
                                 @error('durasi')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -86,11 +86,15 @@
 @section('js')
     <script>
         $(document).ready(function() {
+            var durasi = "{{ old('durasi') }}";
+            var defaultDate = durasi.split(" to ");
+
+
             $('#durasi').flatpickr({
                 mode: "range",
                 minDate: "today",
                 dateFormat: "d-m-Y",
-                locale: "id",
+                defaultDate: defaultDate,
             });
         });
 

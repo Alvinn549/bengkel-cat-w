@@ -7,6 +7,7 @@ use App\Models\Perbaikan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Str;
 
 class PerbaikanController extends Controller
 {
@@ -57,7 +58,7 @@ class PerbaikanController extends Controller
                 'nama' => ['required', 'string'],
                 'keterangan' => ['required', 'string'],
                 'foto' => ['required', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
-                'durasi' => ['nullable', 'string'],
+                'durasi' => ['required', 'string'],
             ],
             [
                 'nama.required' => 'Nama tidak boleh kosong',
@@ -65,13 +66,18 @@ class PerbaikanController extends Controller
                 'foto.required' => 'Foto tidak boleh kosong',
                 'foto.max' => 'Ukuran gambar terlalu besar',
                 'foto.mimes' => 'Format gambar tidak valid',
-                'biaya.required' => 'Biaya tidak boleh kosong',
+                'durasi.required' => 'Durasi tidak boleh kosong',
             ]
         );
 
         $foto = $validate['foto']->store('foto');
 
+        $randomString = Str::random(4);
+        $randomNumber = rand(1000, 9999);
+        $kodeUnik = $randomString . '-' . $randomNumber;
+
         $perbaikan = Perbaikan::create([
+            'kode_unik' => $kodeUnik,
             'kendaraan_id' => $request->idKendaraan,
             'nama' => $request->nama,
             'keterangan' => $request->keterangan,
@@ -126,31 +132,43 @@ class PerbaikanController extends Controller
                 'nama' => ['required', 'string'],
                 'keterangan' => ['required', 'string'],
                 'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
-                'biaya' => ['nullable', 'string'],
                 'status' => ['nullable', 'string'],
-                'durasi' => ['nullable', 'string'],
-                'tgl_selesai' => ['nullable', 'date'],
+                'durasi' => ['required', 'string'],
             ],
             [
                 'nama.required' => 'Nama tidak boleh kosong',
                 'keterangan.required' => 'Keterangan tidak boleh kosong',
-                'biaya.required' => 'Biaya tidak boleh kosong',
-                'status.in' => 'Status tidak valid',
                 'tgl_selesai.date' => 'Format Tgl. Selesai tidak valid',
                 'foto.max' => 'Ukuran gambar terlalu besar',
                 'foto.mimes' => 'Format gambar tidak valid',
+                'durasi.required' => 'Durasi tidak boleh kosong',
             ]
         );
 
-        $formatedBiaya = str_replace(',', '', $validate['biaya']);
+        $biaya  = null;
+        $tgl_selesai = null;
+
+        if ($request->status == 'Selesai') {
+            $request->validate(
+                [
+                    'biaya' => ['required', 'string'],
+                ],
+                [
+                    'biaya.required' => 'Biaya tidak boleh kosong',
+                ]
+            );
+
+            $biaya = (int)str_replace(',', '', $request->biaya);
+            $tgl_selesai = now();
+        }
 
         $perbaikan->update([
-            'nama' => $request->nama,
-            'keterangan' => $request->keterangan,
-            'biaya' => (int)$formatedBiaya,
-            'status' => $request->status,
-            'durasi' => $request->durasi,
-            'tgl_selesai' => $request->tgl_selesai,
+            'nama' => $validate['nama'],
+            'keterangan' => $validate['keterangan'],
+            'biaya' => $biaya,
+            'status' => $validate['status'],
+            'durasi' => $validate['durasi'],
+            'tgl_selesai' => $tgl_selesai,
         ]);
 
         if ($request->hasFile('foto')) {

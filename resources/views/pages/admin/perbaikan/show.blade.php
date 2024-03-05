@@ -42,7 +42,8 @@
                                     <img src="{{ asset('storage/' . $perbaikan->foto) }}" class="img-fluid rounded"
                                         alt="">
                                 @else
-                                    <i class="ri-car-line ri-7x"></i>
+                                    <img src="{{ asset('assets/img/repair.png') }}" alt="Default"
+                                        class="col-md-6 img-fluid">
                                 @endif
                             </div>
                             <div class="col-md-12">
@@ -61,14 +62,22 @@
                                     </tr>
                                     <tr>
                                         @php
-                                            $durations = explode(' to ', $perbaikan->durasi);
-                                            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[0]);
-                                            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[1]);
+                                            if ($perbaikan->durasi) {
+                                                $durations = explode(' to ', $perbaikan->durasi);
+                                                $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[0]);
+                                                $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[1]);
 
-                                            $days = $startDate->diffInDays($endDate);
+                                                $days = $startDate->diffInDays($endDate);
+                                            }
                                         @endphp
                                         <th>Durasi</th>
-                                        <td>{{ $perbaikan->durasi ?? '-' }} <br> {{ $days }} Hari</td>
+                                        <td>
+                                            @if ($perbaikan->durasi)
+                                                {{ $days ?? '-' }} Hari <br> {{ $perbaikan->durasi ?? '-' }}
+                                            @else
+                                                {{ $perbaikan->durasi ?? '-' }}
+                                            @endif
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th>Masuk</th>
@@ -111,16 +120,16 @@
                         <div class="activity">
                             @forelse ($perbaikan->progres as $progres)
                                 @php
-                                    $carbonDate = \Carbon\Carbon::parse($progres->created_at)->locale('id');
-                                    $formattedDate = $carbonDate->format('d-m-Y');
-                                    $formattedTime = $carbonDate->format('H:i');
-                                    $diffForHumans = $carbonDate->diffForHumans();
+                                    $date = \Carbon\Carbon::parse($progres->created_at)->locale('id');
+                                    $formattedDate = $date->format('d-m-Y');
+                                    $formattedTime = $date->format('H:i');
+                                    $diffForHumans = $date->diffForHumans();
                                 @endphp
                                 <div class="activity-item d-flex">
                                     <div class="activite-label" style="width: 150px">
-                                        {{ $diffForHumans }} <br>
-                                        {{ $formattedDate }} <br>
-                                        {{ $formattedTime }}
+                                        {{ $diffForHumans ?? '-' }} <br>
+                                        {{ $formattedDate ?? '-' }} <br>
+                                        {{ $formattedTime ?? '-' }}
                                     </div>
                                     <i
                                         class='bi bi-circle-fill activity-badge {{ $progres->status == 'Selesai' ? 'text-success' : 'text-warning' }} align-self-start'></i>
@@ -134,7 +143,11 @@
                                                         onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
                                                 </a>
                                             @else
-                                                <i class="ri-paint-brush-line ri-3x"></i>
+                                                <a href="#">
+                                                    <img src="{{ asset('assets/img/spray-gun.png') }}"
+                                                        class="img-fluid rounded" alt=""
+                                                        onclick="openImage('{{ asset('assets/img/spray-gun.png') }}')">
+                                                </a>
                                             @endif
                                         </div>
                                     </div>

@@ -11,6 +11,7 @@ class Perbaikan extends Model
 
     protected $fillable = [
         'kendaraan_id',
+        'kode_unik',
         'nama',
         'keterangan',
         'foto',

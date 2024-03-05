@@ -16,12 +16,14 @@ class PerbaikanFactory extends Factory
      */
     public function definition()
     {
+        $today = today()->format('d-m-Y');
+
         return [
+            'kode_unik' => $this->faker->bothify('?????-#####'),
             'nama' => $this->faker->words(3, true),
             'keterangan' => $this->faker->sentence(10),
-            'biaya' => $this->faker->numerify('#######'),
-            'durasi' => $this->faker->word(),
-            'status' => $this->faker->randomElement(['Selesai', 'Dalam Proses', 'Ditunda', 'Dibatalkan', 'Tidak Dapat Diperbaiki']),
+            'durasi' => $today . ' to ' . $this->faker->dateTimeBetween($today, '+30 days')->format('d-m-Y'),
+            'status' => $this->faker->randomElement(['Dalam Proses', 'Ditunda', 'Dibatalkan', 'Tidak Dapat Diperbaiki']),
         ];
     }
 }

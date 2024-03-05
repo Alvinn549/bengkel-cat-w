@@ -71,7 +71,8 @@
                                     <img src="{{ asset('storage/' . $kendaraan->foto) }}" class="img-fluid rounded"
                                         alt="">
                                 @else
-                                    <i class="ri-car-line ri-9x"></i>
+                                    <img src="{{ asset('assets/img/hatchback.png') }}" alt="Default"
+                                        class="col-md-6 img-fluid">
                                 @endif
                             </div>
                             <div class="col-md-6 align-self-center">
@@ -129,6 +130,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>Kode</th>
                                             <th>Nama</th>
                                             <th>Masuk</th>
                                             <th>Selesai</th>
@@ -140,6 +142,7 @@
                                         @foreach ($kendaraan->perbaikans->sortByDesc('created_at') as $perbaikan)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $perbaikan->kode_unik }}</td>
                                                 <td>{{ $perbaikan->nama }}</td>
                                                 <td>{{ $perbaikan->created_at ?? '-' }}</td>
                                                 <td>{{ $perbaikan->tgl_selesai ?? '-' }}</td>
