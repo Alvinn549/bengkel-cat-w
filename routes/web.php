@@ -28,10 +28,20 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    Route::get('/admin/data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');
     Route::resource('admin', AdminController::class);
+
+    Route::get('/pekerja/data-table', [PekerjaController::class, 'dataTablePekerja'])->name('pekerja.data-table');
     Route::resource('pekerja', PekerjaController::class);
+
+    Route::get('/pelanggan/data-table', [PelangganController::class, 'dataTablePelanggan'])->name('pelanggan.data-table');
     Route::resource('pelanggan', PelangganController::class);
+
+    Route::get('/kendaraan/data-table', [KendaraanController::class, 'dataTableKendaraan'])->name('kendaraan.data-table');
     Route::resource('kendaraan', KendaraanController::class);
+
     Route::resource('perbaikan', PerbaikanController::class);
+
+    Route::get('/transaksi/data-table', [TransaksiController::class, 'dataTableTransaksi'])->name('transaksi.data-table');
     Route::resource('transaksi', TransaksiController::class);
 });

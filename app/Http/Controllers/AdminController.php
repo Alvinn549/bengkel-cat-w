@@ -7,36 +7,33 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $admins = Admin::latest()->get();
-        return view('pages.admin.admin.index', compact('admins'));
+        return view('pages.admin.admin.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function dataTableAdmin()
+    {
+        $admins = Admin::get();
+
+        return DataTables::of($admins)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($data) {
+                return view('pages.admin.admin.components.aksi-data-table', ['id' => $data->id]);
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
     public function create()
     {
         return view('pages.admin.admin.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreAdminRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         // dd($request->all());
@@ -96,35 +93,16 @@ class AdminController extends Controller
         return redirect()->route('admin.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
     public function show(Admin $admin)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Admin $admin)
     {
         return view('pages.admin.admin.edit', compact('admin'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateAdminRequest  $request
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Admin $admin)
     {
         // dd($request->all());
@@ -191,31 +169,29 @@ class AdminController extends Controller
         return redirect()->route('admin.index');
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Admin $admin)
     {
-        if (auth()->user()->id == $admin->user->id) {
-            Alert::error('Error', 'Kamu tidak bisa menghapus akunmu sendiri !');
-            return redirect()->route('admin.index');
+        try {
+            if (auth()->user()->id == $admin->user->id) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Anda tidak bisa menghapus diri sendiri',
+                ], 422);
+            }
+
+            if ($admin->foto) {
+                Storage::delete($admin->foto);
+            }
+
+            $admin->delete();
+            $admin->user->delete();
+
+            return response()->json(['status' => 'success'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
         }
-
-        if ($admin->foto) {
-            Storage::delete($admin->foto);
-        }
-
-        $admin->delete();
-        $admin->user->delete();
-
-        Alert::toast('<p style="color: white; margin-top: 10px;">' . $admin->nama . ' berhasil dihapus!</p>', 'success')
-            ->toHtml()
-            ->background('#333A73');
-
-        return redirect()->route('admin.index');
     }
 }

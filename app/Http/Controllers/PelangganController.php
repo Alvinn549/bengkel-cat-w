@@ -7,36 +7,34 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class PelangganController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $pelanggans = Pelanggan::latest()->get();
-        return view('pages.admin.pelanggan.index', compact('pelanggans'));
+        return view('pages.admin.pelanggan.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function dataTablePelanggan()
+    {
+        $pelanggans = Pelanggan::get();
+
+        return DataTables::of($pelanggans)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($data) {
+                return view('pages.admin.pelanggan.components.aksi-data-table', ['id' => $data->id]);
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
     public function create()
     {
         return view('pages.admin.pelanggan.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorePelangganRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         // dd($request->all());
@@ -96,35 +94,16 @@ class PelangganController extends Controller
         return redirect()->route('pelanggan.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Pelanggan  $pelanggan
-     * @return \Illuminate\Http\Response
-     */
     public function show(Pelanggan $pelanggan)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pelanggan  $pelanggan
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Pelanggan $pelanggan)
     {
         return view('pages.admin.pelanggan.edit', compact('pelanggan'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePelangganRequest  $request
-     * @param  \App\Models\Pelanggan  $pelanggan
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Pelanggan $pelanggan)
     {
         // dd($request->all());
@@ -191,30 +170,22 @@ class PelangganController extends Controller
         return redirect()->route('pelanggan.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Pelanggan  $pelanggan
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Pelanggan $pelanggan)
     {
-        if (auth()->user()->id == $pelanggan->user->id) {
-            Alert::error('Error', 'Kamu tidak bisa menghapus akunmu sendiri !');
-            return redirect()->route('admin.index');
+        try {
+            if ($pelanggan->foto) {
+                Storage::delete($pelanggan->foto);
+            }
+
+            $pelanggan->delete();
+            $pelanggan->user->delete();
+
+            return response()->json(['status' => 'success']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
         }
-
-        if ($pelanggan->foto) {
-            Storage::delete($pelanggan->foto);
-        }
-
-        $pelanggan->delete();
-        $pelanggan->user->delete();
-
-        Alert::toast('<p style="color: white; margin-top: 10px;">' . $pelanggan->nama . ' berhasil dihapus!</p>', 'success')
-            ->toHtml()
-            ->background('#333A73');
-
-        return redirect()->route('pelanggan.index');
     }
 }

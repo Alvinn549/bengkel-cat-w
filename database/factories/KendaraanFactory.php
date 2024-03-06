@@ -19,7 +19,7 @@ class KendaraanFactory extends Factory
     public function definition()
     {
         return [
-            'no_plat' => $this->faker->numerify('###-###'),
+            'no_plat' => $this->faker->bothify('??-####-??'),
             'merek' => $this->faker->randomElement(['Avanza', 'Kijang', 'Honda', 'Suzuki']),
             'tipe' => $this->faker->randomElement(['Mobil', 'Motor', 'Truk', 'Sepeda Motor', 'Bus']),
             'keterangan' => $this->faker->sentence(10),

@@ -7,37 +7,38 @@ use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 
 class KendaraanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $kendaraans = Kendaraan::with('pelanggan')->latest()->get();
-        return view('pages.admin.kendaraan.index', compact('kendaraans'));
+        return view('pages.admin.kendaraan.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function dataTableKendaraan()
+    {
+        $kendaraans = Kendaraan::with('pelanggan')->get();
+
+        return DataTables::of($kendaraans)
+            ->addIndexColumn()
+            ->addColumn('pemilik', function ($data) {
+                return $data->pelanggan->nama;
+            })
+            ->addColumn('aksi', function ($data) {
+                return view('pages.admin.kendaraan.components.aksi-data-table', ['id' => $data->id]);
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
     public function create()
     {
         $pelanggans = Pelanggan::get(['id', 'nama']);
         return view('pages.admin.kendaraan.create', compact('pelanggans'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreKendaraanRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         // dd($request->all());
@@ -83,12 +84,6 @@ class KendaraanController extends Controller
         return redirect()->route('kendaraan.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Kendaraan  $kendaraan
-     * @return \Illuminate\Http\Response
-     */
     public function show(Kendaraan $kendaraan)
     {
         $kendaraan->load('pelanggan');
@@ -96,25 +91,12 @@ class KendaraanController extends Controller
         return view('pages.admin.kendaraan.show', compact('kendaraan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Kendaraan  $kendaraan
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Kendaraan $kendaraan)
     {
         $pelanggans = Pelanggan::get(['id', 'nama']);
         return view('pages.admin.kendaraan.edit', compact('kendaraan', 'pelanggans'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateKendaraanRequest  $request
-     * @param  \App\Models\Kendaraan  $kendaraan
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Kendaraan $kendaraan)
     {
         // dd($request->all());
@@ -164,24 +146,21 @@ class KendaraanController extends Controller
         return redirect()->route('kendaraan.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Kendaraan  $kendaraan
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Kendaraan $kendaraan)
     {
-        if ($kendaraan->foto) {
-            Storage::delete($kendaraan->foto);
+        try {
+            if ($kendaraan->foto) {
+                Storage::delete($kendaraan->foto);
+            }
+
+            $kendaraan->delete();
+
+            return response()->json(['status' => 'success']);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
         }
-
-        $kendaraan->delete();
-
-        Alert::toast('<p style="color: white; margin-top: 10px;">' . $kendaraan->no_plat . ' berhasil dihapus!</p>', 'success')
-            ->toHtml()
-            ->background('#333A73');
-
-        return redirect()->route('kendaraan.index');
     }
 }

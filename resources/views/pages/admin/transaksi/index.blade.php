@@ -23,45 +23,18 @@
                             Tambah
                         </a>
 
-                        <!-- Table with stripped rows -->
-                        <table id="datatable" class="table table-bordered ">
+                        <table id="datatable"
+                            class="display table table-hover table-bordered dt-responsive table-responsive nowrap"
+                            style="width:100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Order ID</th>
+                                    <th>order_id</th>
                                     <th>gross_amount</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                @foreach ($transaksis as $transaksi)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $transaksi->order_id }}</td>
-                                        <td>Rp. {{ number_format($transaksi->gross_amount) }}</td>
-                                        <td nowrap>
-                                            {{-- <a class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Edit"
-                                                href="{{ route('transaksi.edit', $transaksi->id) }}">
-                                                <i class="ri-edit-2-line"></i>
-                                            </a> --}}
-                                            <a class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Hapus" href="javascript:"
-                                                onclick="deleteData({{ $transaksi->id }})">
-                                                <i class="ri-delete-bin-5-line"></i>
-                                            </a>
-
-                                            <form class="d-none" id="formDelete-{{ $transaksi->id }}"
-                                                action="{{ route('transaksi.destroy', $transaksi->id) }}" method="POST">
-                                                @method('DELETE')
-                                                @csrf
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
                         </table>
-                        <!-- End Table with stripped rows -->
                     </div>
                 </div>
             </div>
@@ -73,15 +46,35 @@
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
-                lengthMenu: [
-                    [5, 10, 25, -1],
-                    [5, 10, 25, "All"]
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: "{{ route('transaksi.data-table') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: '5%'
+                    },
+                    {
+                        data: 'order_id',
+                        name: 'order_id'
+                    },
+                    {
+                        data: 'gross_amount',
+                        name: 'gross_amount'
+                    },
+                    {
+                        data: 'aksi',
+                        name: 'aksi',
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
             });
-        })
-    </script>
+        });
 
-    <script>
         function deleteData(id) {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
@@ -94,7 +87,39 @@
                 cancelButtonText: 'Batal'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById('formDelete-' + id).submit()
+                    var url = '{{ route('transaksi.destroy', ':id') }}';
+                    url = url.replace(':id', id);
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: {
+                            '_token': '{{ csrf_token() }}',
+                            '_method': 'DELETE'
+                        },
+                        success: function(response) {
+                            $('#datatable').DataTable().ajax.reload();
+                            Swal.fire(
+                                'Deleted!',
+                                'Data telah dihapus.',
+                                'success'
+                            );
+                        },
+                        error: function(xhr, status, error) {
+                            var errorMessage = '';
+                            if (xhr.responseText) {
+                                var errorResponse = JSON.parse(xhr.responseText);
+                                if (errorResponse.message) {
+                                    errorMessage = errorResponse.message;
+                                }
+                            }
+                            Swal.fire(
+                                'Error!',
+                                errorMessage,
+                                'error'
+                            );
+                        }
+                    });
                 }
             });
         }

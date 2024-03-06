@@ -7,26 +7,29 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Yajra\DataTables\Facades\DataTables;
 
 class PekerjaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $pekerjas = Pekerja::latest()->get();
-        return view('pages.admin.pekerja.index', compact('pekerjas'));
+        return view('pages.admin.pekerja.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function dataTablePekerja()
+    {
+        $pekerjas = Pekerja::get();
+
+        return DataTables::of($pekerjas)
+            ->addIndexColumn()
+            ->addColumn('aksi', function ($data) {
+                return view('pages.admin.pekerja.components.aksi-data-table', ['id' => $data->id]);
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
     public function create()
     {
         return view('pages.admin.pekerja.create');
@@ -91,23 +94,11 @@ class PekerjaController extends Controller
         return redirect()->route('pekerja.index');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Pekerja  $pekerja
-     * @return \Illuminate\Http\Response
-     */
     public function show(Pekerja $pekerja)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pekerja  $pekerja
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Pekerja $pekerja)
     {
         return view('pages.admin.pekerja.edit', compact('pekerja'));
@@ -179,30 +170,22 @@ class PekerjaController extends Controller
         return redirect()->route('pekerja.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Pekerja  $pekerja
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Pekerja $pekerja)
     {
-        if (auth()->user()->id == $pekerja->user->id) {
-            Alert::error('Error', 'Kamu tidak bisa menghapus akunmu sendiri !');
-            return redirect()->route('admin.index');
+        try {
+            if ($pekerja->foto) {
+                Storage::delete($pekerja->foto);
+            }
+
+            $pekerja->delete();
+            $pekerja->user->delete();
+
+            return response()->json(['status' => 'success'], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
         }
-
-        if ($pekerja->foto) {
-            Storage::delete($pekerja->foto);
-        }
-
-        $pekerja->delete();
-        $pekerja->user->delete();
-
-        Alert::toast('<p style="color: white; margin-top: 10px;">' . $pekerja->nama . ' berhasil dihapus!</p>', 'success')
-            ->toHtml()
-            ->background('#333A73');
-
-        return redirect()->route('pekerja.index');
     }
 }
