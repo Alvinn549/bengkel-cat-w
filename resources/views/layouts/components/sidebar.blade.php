@@ -10,62 +10,12 @@
         </li><!-- End Dashboard Nav -->
 
         @if (auth()->user()->role == 'admin')
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-menu-button-wide"></i><span>Components</span><i
-                        class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Alerts</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Accordion</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End Components Nav -->
-
-            <li class="nav-item">
-                <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-                    <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
-                </a>
-                <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                    <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>Chart.js</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>ApexCharts</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="bi bi-circle"></i><span>ECharts</span>
-                        </a>
-                    </li>
-                </ul>
-            </li><!-- End Charts Nav -->
-
             <li class="nav-heading">Pages</li>
-
-            <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('admin*') ? 'active' : 'collapsed' }}"
-                    href="{{ route('admin.index') }}">
-                    <i class="bi bi-person"></i>
-                    <span>Admin</span>
-                </a>
-            </li><!-- End Admin Page Nav -->
 
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('pelanggan*') ? 'active' : 'collapsed' }}"
                     href="{{ route('pelanggan.index') }}">
-                    <i class="bi bi-card-list"></i>
+                    <i class="bi bi-people"></i>
                     <span>Pelanggan</span>
                 </a>
             </li><!-- End Pelanggan Page Nav -->
@@ -73,18 +23,43 @@
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs(['kendaraan*', 'perbaikan*']) ? 'active' : 'collapsed' }}"
                     href="{{ route('kendaraan.index') }}">
-                    <i class="bi bi-card-list"></i>
+                    <i class="bx bxs-car"></i>
                     <span>Kendaraan</span>
                 </a>
             </li><!-- End Kendaraan Page Nav -->
 
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('pekerja*') ? 'active' : 'collapsed' }}"
-                    href="{{ route('pekerja.index') }}">
-                    <i class="bi bi-box-arrow-in-right"></i>
-                    <span>Pekerja</span>
+                <a class="nav-link {{ request()->routeIs('transaksi*') ? 'active' : 'collapsed' }}"
+                    href="{{ route('transaksi.index') }}">
+                    <i class="bi bi-credit-card-2-back-fill"></i>
+                    <span>Transaksi</span>
                 </a>
-            </li><!-- End Login Page Nav -->
+            </li><!-- End Transaksi Page Nav -->
+
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs(['admin*', 'pekerja*']) ? 'active' : 'collapsed' }}"
+                    data-bs-target="#master-user" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-file-earmark-person"></i><span>Master User</span><i
+                        class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="master-user"
+                    class="nav-content {{ request()->routeIs(['admin*', 'pekerja*']) ? 'active' : 'collapse' }} "
+                    data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="{{ route('admin.index') }}"
+                            class="{{ request()->routeIs('admin*') ? 'active' : '' }}">
+                            <i class="bi bi-circle"></i><span>Admin</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('pekerja.index') }}"
+                            class="{{ request()->routeIs('pekerja*') ? 'active' : '' }}">
+                            <i class="bi bi-circle"></i><span>Pekerja</span>
+                        </a>
+                    </li>
+                </ul>
+            </li><!-- End Master User Nav -->
         @elseif (auth()->user()->role == 'pelanggan')
 
         @elseif (auth()->user()->role == 'pekerja')

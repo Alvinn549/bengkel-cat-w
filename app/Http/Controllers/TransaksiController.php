@@ -15,7 +15,8 @@ class TransaksiController extends Controller
      */
     public function index()
     {
-        //
+        $transaksis = Transaksi::latest()->get();
+        return view('pages.admin.transaksi.index', compact('transaksis'));
     }
 
     /**
