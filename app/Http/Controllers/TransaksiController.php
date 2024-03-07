@@ -40,7 +40,7 @@ class TransaksiController extends Controller
 
     public function show(Transaksi $transaksi)
     {
-        //
+        return view('pages.admin.transaksi.show', compact('transaksi'));
     }
 
     public function edit(Transaksi $transaksi)

@@ -18,10 +18,6 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Data Transaksi</h5>
-                        <a class="btn btn-outline-primary mb-4" href="{{ route('transaksi.create') }}">
-                            <i class="ri-add-circle-line"></i>
-                            Tambah
-                        </a>
 
                         <table id="datatable"
                             class="display table table-hover table-bordered dt-responsive table-responsive nowrap"
@@ -29,8 +25,11 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>order_id</th>
-                                    <th>gross_amount</th>
+                                    <th>Order ID</th>
+                                    <th>Jumlah</th>
+                                    <th>Email</th>
+                                    <th>No Telp</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -63,7 +62,25 @@
                     },
                     {
                         data: 'gross_amount',
-                        name: 'gross_amount'
+                        name: 'gross_amount',
+                        render: function(data, type, row) {
+                            return new Intl.NumberFormat('id-ID', {
+                                style: 'currency',
+                                currency: 'IDR'
+                            }).format(data);
+                        }
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'phone',
+                        name: 'phone'
+                    },
+                    {
+                        data: 'transaction_status',
+                        name: 'transaction_status'
                     },
                     {
                         data: 'aksi',
