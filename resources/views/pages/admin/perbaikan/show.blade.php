@@ -42,7 +42,7 @@
                                     <img src="{{ asset('storage/' . $perbaikan->foto) }}" class="img-fluid rounded"
                                         alt="">
                                 @else
-                                    <img src="{{ asset('assets/img/repair.png') }}" alt="Default"
+                                    <img src="{{ asset('assets/dashboard/img/repair.png') }}" alt="Default"
                                         class="col-md-6 img-fluid">
                                 @endif
                             </div>
@@ -144,9 +144,9 @@
                                                 </a>
                                             @else
                                                 <a href="#">
-                                                    <img src="{{ asset('assets/img/spray-gun.png') }}"
+                                                    <img src="{{ asset('assets/dashboard/img/spray-gun.png') }}"
                                                         class="img-fluid rounded" alt=""
-                                                        onclick="openImage('{{ asset('assets/img/spray-gun.png') }}')">
+                                                        onclick="openImage('{{ asset('assets/dashboard/img/spray-gun.png') }}')">
                                                 </a>
                                             @endif
                                         </div>

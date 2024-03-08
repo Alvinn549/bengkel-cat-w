@@ -71,7 +71,7 @@
                                     <img src="{{ asset('storage/' . $kendaraan->foto) }}" class="img-fluid rounded"
                                         alt="">
                                 @else
-                                    <img src="{{ asset('assets/img/hatchback.png') }}" alt="Default"
+                                    <img src="{{ asset('assets/dashboard/img/hatchback.png') }}" alt="Default"
                                         class="col-md-6 img-fluid">
                                 @endif
                             </div>

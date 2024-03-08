@@ -17,8 +17,12 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
+Route::get('/', function () {
+    return view('landing.index');
+});
+
 Route::middleware(['guest'])->group(function () {
-    Route::get('/', [AuthController::class, 'login'])->name('login');
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/do-login', [AuthController::class, 'doLogin'])->name('do-login');
 });
 
