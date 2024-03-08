@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KendaraanController;
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PekerjaController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PerbaikanController;
@@ -17,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function () {
-    return view('landing.index');
-});
+Route::get('/', [LandingPageController::class, 'index'])->name('home');
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');

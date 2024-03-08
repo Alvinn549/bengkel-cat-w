@@ -36,7 +36,7 @@ class PerbaikanController extends Controller
             return redirect()->back();
         }
 
-        return view('pages.admin.perbaikan.create');
+        return view('dashboard.pages.admin.perbaikan.create');
     }
 
     /**
@@ -104,7 +104,7 @@ class PerbaikanController extends Controller
     {
         $perbaikan->load('kendaraan');
         $perbaikan->load('progres');
-        return view('pages.admin.perbaikan.show', compact('perbaikan'));
+        return view('dashboard.pages.admin.perbaikan.show', compact('perbaikan'));
     }
 
     /**
@@ -116,7 +116,7 @@ class PerbaikanController extends Controller
     public function edit(Perbaikan $perbaikan)
     {
         $perbaikan->load('kendaraan');
-        return view('pages.admin.perbaikan.edit', compact('perbaikan'));
+        return view('dashboard.pages.admin.perbaikan.edit', compact('perbaikan'));
     }
 
     /**

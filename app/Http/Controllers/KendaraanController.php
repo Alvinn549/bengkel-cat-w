@@ -14,7 +14,7 @@ class KendaraanController extends Controller
 
     public function index()
     {
-        return view('pages.admin.kendaraan.index');
+        return view('dashboard.pages.admin.kendaraan.index');
     }
 
     public function dataTableKendaraan()
@@ -27,7 +27,7 @@ class KendaraanController extends Controller
                 return $data->pelanggan->nama;
             })
             ->addColumn('aksi', function ($data) {
-                return view('pages.admin.kendaraan.components.aksi-data-table', ['id' => $data->id]);
+                return view('dashboard.pages.admin.kendaraan.components.aksi-data-table', ['id' => $data->id]);
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -36,7 +36,7 @@ class KendaraanController extends Controller
     public function create()
     {
         $pelanggans = Pelanggan::get(['id', 'nama']);
-        return view('pages.admin.kendaraan.create', compact('pelanggans'));
+        return view('dashboard.pages.admin.kendaraan.create', compact('pelanggans'));
     }
 
     public function store(Request $request)
@@ -88,13 +88,13 @@ class KendaraanController extends Controller
     {
         $kendaraan->load('pelanggan');
         $kendaraan->load('perbaikans');
-        return view('pages.admin.kendaraan.show', compact('kendaraan'));
+        return view('dashboard.pages.admin.kendaraan.show', compact('kendaraan'));
     }
 
     public function edit(Kendaraan $kendaraan)
     {
         $pelanggans = Pelanggan::get(['id', 'nama']);
-        return view('pages.admin.kendaraan.edit', compact('kendaraan', 'pelanggans'));
+        return view('dashboard.pages.admin.kendaraan.edit', compact('kendaraan', 'pelanggans'));
     }
 
     public function update(Request $request, Kendaraan $kendaraan)

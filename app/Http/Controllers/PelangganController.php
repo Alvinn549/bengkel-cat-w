@@ -14,7 +14,7 @@ class PelangganController extends Controller
 
     public function index()
     {
-        return view('pages.admin.pelanggan.index');
+        return view('dashboard.pages.admin.pelanggan.index');
     }
 
     public function dataTablePelanggan()
@@ -24,7 +24,7 @@ class PelangganController extends Controller
         return DataTables::of($pelanggans)
             ->addIndexColumn()
             ->addColumn('aksi', function ($data) {
-                return view('pages.admin.pelanggan.components.aksi-data-table', ['id' => $data->id]);
+                return view('dashboard.pages.admin.pelanggan.components.aksi-data-table', ['id' => $data->id]);
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -32,7 +32,7 @@ class PelangganController extends Controller
 
     public function create()
     {
-        return view('pages.admin.pelanggan.create');
+        return view('dashboard.pages.admin.pelanggan.create');
     }
 
     public function store(Request $request)
@@ -101,7 +101,7 @@ class PelangganController extends Controller
 
     public function edit(Pelanggan $pelanggan)
     {
-        return view('pages.admin.pelanggan.edit', compact('pelanggan'));
+        return view('dashboard.pages.admin.pelanggan.edit', compact('pelanggan'));
     }
 
     public function update(Request $request, Pelanggan $pelanggan)

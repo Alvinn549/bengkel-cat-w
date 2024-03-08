@@ -12,7 +12,7 @@ class TransaksiController extends Controller
 {
     public function index()
     {
-        return view('pages.admin.transaksi.index');
+        return view('dashboard.pages.admin.transaksi.index');
     }
 
     public function dataTableTransaksi()
@@ -22,7 +22,7 @@ class TransaksiController extends Controller
         return DataTables::of($transaksis)
             ->addIndexColumn()
             ->addColumn('aksi', function ($data) {
-                return view('pages.admin.transaksi.components.aksi-data-table', ['id' => $data->id]);
+                return view('dashboard.pages.admin.transaksi.components.aksi-data-table', ['id' => $data->id]);
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -42,7 +42,7 @@ class TransaksiController extends Controller
     {
         $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
 
-        return view('pages.admin.transaksi.show', compact('transaksi'));
+        return view('dashboard.pages.admin.transaksi.show', compact('transaksi'));
     }
 
     public function edit(Transaksi $transaksi)

@@ -13,7 +13,7 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('pages.admin.admin.index');
+        return view('dashboard.pages.admin.admin.index');
     }
 
     public function dataTableAdmin()
@@ -23,7 +23,7 @@ class AdminController extends Controller
         return DataTables::of($admins)
             ->addIndexColumn()
             ->addColumn('aksi', function ($data) {
-                return view('pages.admin.admin.components.aksi-data-table', ['id' => $data->id]);
+                return view('dashboard.pages.admin.admin.components.aksi-data-table', ['id' => $data->id]);
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -31,7 +31,7 @@ class AdminController extends Controller
 
     public function create()
     {
-        return view('pages.admin.admin.create');
+        return view('dashboard.pages.admin.admin.create');
     }
 
     public function store(Request $request)
@@ -100,7 +100,7 @@ class AdminController extends Controller
 
     public function edit(Admin $admin)
     {
-        return view('pages.admin.admin.edit', compact('admin'));
+        return view('dashboard.pages.admin.admin.edit', compact('admin'));
     }
 
     public function update(Request $request, Admin $admin)

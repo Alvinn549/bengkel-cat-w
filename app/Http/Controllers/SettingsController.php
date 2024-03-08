@@ -13,7 +13,7 @@ class SettingsController extends Controller
     public function index()
     {
         $settings = Settings::first();
-        return view('pages.admin.settings.index', compact('settings'));
+        return view('dashboard.pages.admin.settings.index', compact('settings'));
     }
 
     public function create()

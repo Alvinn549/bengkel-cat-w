@@ -14,7 +14,7 @@ class PekerjaController extends Controller
 
     public function index()
     {
-        return view('pages.admin.pekerja.index');
+        return view('dashboard.pages.admin.pekerja.index');
     }
 
     public function dataTablePekerja()
@@ -24,7 +24,7 @@ class PekerjaController extends Controller
         return DataTables::of($pekerjas)
             ->addIndexColumn()
             ->addColumn('aksi', function ($data) {
-                return view('pages.admin.pekerja.components.aksi-data-table', ['id' => $data->id]);
+                return view('dashboard.pages.admin.pekerja.components.aksi-data-table', ['id' => $data->id]);
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -32,7 +32,7 @@ class PekerjaController extends Controller
 
     public function create()
     {
-        return view('pages.admin.pekerja.create');
+        return view('dashboard.pages.admin.pekerja.create');
     }
 
     public function store(Request $request)
@@ -101,7 +101,7 @@ class PekerjaController extends Controller
 
     public function edit(Pekerja $pekerja)
     {
-        return view('pages.admin.pekerja.edit', compact('pekerja'));
+        return view('dashboard.pages.admin.pekerja.edit', compact('pekerja'));
     }
 
     public function update(Request $request, Pekerja $pekerja)

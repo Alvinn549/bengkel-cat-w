@@ -130,7 +130,7 @@
                                     <span class="badge bg-design rounded-pill ms-auto">14</span>
                                 </div>
 
-                                <img src="images/topics/undraw_Remote_design_team_re_urdx.png"
+                                <img src="assets/landing/images/topics/undraw_Remote_design_team_re_urdx.png"
                                     class="custom-block-image img-fluid" alt="">
                             </a>
                         </div>
@@ -139,7 +139,7 @@
                     <div class="col-lg-6 col-12">
                         <div class="custom-block custom-block-overlay">
                             <div class="d-flex flex-column h-100">
-                                <img src="images/businesswoman-using-tablet-analysis.jpg"
+                                <img src="assets/landing/images/businesswoman-using-tablet-analysis.jpg"
                                     class="custom-block-image img-fluid" alt="">
 
                                 <div class="custom-block-overlay-text d-flex">
@@ -248,7 +248,7 @@
                                                     <span class="badge bg-design rounded-pill ms-auto">14</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_Remote_design_team_re_urdx.png"
+                                                <img src="assets/landing/images/topics/undraw_Remote_design_team_re_urdx.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -267,7 +267,7 @@
                                                     <span class="badge bg-design rounded-pill ms-auto">75</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_Redesign_feedback_re_jvm0.png"
+                                                <img src="assets/landing/images/topics/undraw_Redesign_feedback_re_jvm0.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -286,7 +286,7 @@
                                                     <span class="badge bg-design rounded-pill ms-auto">100</span>
                                                 </div>
 
-                                                <img src="images/topics/colleagues-working-cozy-office-medium-shot.png"
+                                                <img src="assets/landing/images/topics/colleagues-working-cozy-office-medium-shot.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -310,7 +310,7 @@
                                                     <span class="badge bg-advertising rounded-pill ms-auto">30</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_online_ad_re_ol62.png"
+                                                <img src="assets/landing/images/topics/undraw_online_ad_re_ol62.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -329,7 +329,7 @@
                                                     <span class="badge bg-advertising rounded-pill ms-auto">65</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_Group_video_re_btu7.png"
+                                                <img src="assets/landing/images/topics/undraw_Group_video_re_btu7.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -348,7 +348,7 @@
                                                     <span class="badge bg-advertising rounded-pill ms-auto">50</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_viral_tweet_gndb.png"
+                                                <img src="assets/landing/images/topics/undraw_viral_tweet_gndb.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -372,7 +372,7 @@
                                                     <span class="badge bg-finance rounded-pill ms-auto">30</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_Finance_re_gnv2.png"
+                                                <img src="assets/landing/images/topics/undraw_Finance_re_gnv2.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -381,7 +381,7 @@
                                     <div class="col-lg-6 col-md-6 col-12">
                                         <div class="custom-block custom-block-overlay">
                                             <div class="d-flex flex-column h-100">
-                                                <img src="images/businesswoman-using-tablet-analysis-graph-company-finance-strategy-statistics-success-concept-planning-future-office-room.jpg"
+                                                <img src="assets/landing/images/businesswoman-using-tablet-analysis-graph-company-finance-strategy-statistics-success-concept-planning-future-office-room.jpg"
                                                     class="custom-block-image img-fluid" alt="">
 
                                                 <div class="custom-block-overlay-text d-flex">
@@ -444,7 +444,7 @@
                                                     <span class="badge bg-music rounded-pill ms-auto">45</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_Compose_music_re_wpiw.png"
+                                                <img src="assets/landing/images/topics/undraw_Compose_music_re_wpiw.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -463,7 +463,7 @@
                                                     <span class="badge bg-music rounded-pill ms-auto">45</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_happy_music_g6wc.png"
+                                                <img src="assets/landing/images/topics/undraw_happy_music_g6wc.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -482,7 +482,7 @@
                                                     <span class="badge bg-music rounded-pill ms-auto">20</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_Podcast_audience_re_4i5q.png"
+                                                <img src="assets/landing/images/topics/undraw_Podcast_audience_re_4i5q.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -506,7 +506,7 @@
                                                     <span class="badge bg-education rounded-pill ms-auto">80</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_Graduation_re_gthn.png"
+                                                <img src="assets/landing/images/topics/undraw_Graduation_re_gthn.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -525,7 +525,7 @@
                                                     <span class="badge bg-education rounded-pill ms-auto">75</span>
                                                 </div>
 
-                                                <img src="images/topics/undraw_Educator_re_ju47.png"
+                                                <img src="assets/landing/images/topics/undraw_Educator_re_ju47.png"
                                                     class="custom-block-image img-fluid" alt="">
                                             </a>
                                         </div>
@@ -619,7 +619,7 @@
                     <div class="clearfix"></div>
 
                     <div class="col-lg-5 col-12">
-                        <img src="images/faq_graphic.jpg" class="img-fluid" alt="FAQs">
+                        <img src="assets/landing/images/faq_graphic.jpg" class="img-fluid" alt="FAQs">
                     </div>
 
                     <div class="col-lg-6 col-12 m-auto">
