@@ -40,6 +40,8 @@ class TransaksiController extends Controller
 
     public function show(Transaksi $transaksi)
     {
+        $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
+
         return view('pages.admin.transaksi.show', compact('transaksi'));
     }
 
