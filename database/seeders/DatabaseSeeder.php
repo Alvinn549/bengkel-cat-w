@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             KendaraanSeeder::class,
             PerbaikanSeeder::class,
             ProgresSeeder::class,
+            SettingsSeeder::class
         ]);
     }
 }

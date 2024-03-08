@@ -36,7 +36,6 @@
                 </a>
             </li><!-- End Transaksi Page Nav -->
 
-
             <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs(['admin*', 'pekerja*']) ? 'active' : 'collapsed' }}"
                     data-bs-target="#master-user" data-bs-toggle="collapse" href="#">
@@ -60,6 +59,14 @@
                     </li>
                 </ul>
             </li><!-- End Master User Nav -->
+
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('settings*') ? 'active' : 'collapsed' }}"
+                    href="{{ route('settings.index') }}">
+                    <i class="ri ri-list-settings-fill"></i>
+                    <span>Settings</span>
+                </a>
+            </li><!-- End Settings Page Nav -->
         @elseif (auth()->user()->role == 'pelanggan')
 
         @elseif (auth()->user()->role == 'pekerja')
