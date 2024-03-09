@@ -37,7 +37,6 @@ class SettingsSeeder extends Seeder
             'deskripsi' => $deskripsi,
             'alamat' => 'Jl. Mawar No. 1, Jakarta',
             'jam_operasional' => '08.00 to 17.00',
-            'hero' => $filename,
             'telepon' => '081234567890',
             'email' => 'bengkel-cat-w@bengkel-cat-w.com',
             'facebook' => 'https://facebook.com/bengkel-cat-w',
