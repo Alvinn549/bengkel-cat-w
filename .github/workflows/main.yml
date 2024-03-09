@@ -1,24 +1,18 @@
-name: Auto Update ECS ALIBABA
+name: Auto Update ECS
 
 on:
   push:
     branches:
       - main
+
 jobs:
   update-ecs:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - name: Install sshpass
+      run: sudo apt-get update && sudo apt-get install -y sshpass
 
     - name: SSH into ECS and pull changes
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.ECS_HOST }}
-        username: ${{ secrets.ECS_USERNAME }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: ${{ secrets.ECS_SSH_PORT }}
-        script: |
-          cd /var/www/bengkel-cat-w
-          git pull
+      run: |
+        sshpass -p ${{ secrets.ECS_PASSWORD }} ssh ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }} -p ${{ secrets.ECS_SSH_PORT }} 'cd /var/www/bengkel-cat && git pull'
