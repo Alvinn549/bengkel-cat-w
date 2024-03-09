@@ -23,14 +23,14 @@ class SettingsSeeder extends Seeder
 
         $deskripsi = '<p>' . implode('</p><p>', $faker->sentences(5)) . '</p>';
 
-        $path_hero = public_path('/assets/img/banner.jpg');
-        $originalFilename = 'banner.jpg';
-        $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
-        $filename = 'foto/' . Str::uuid()->toString() . '.' . $extension; // Unique filename
+        // $path_hero = public_path('/assets/img/banner.jpg');
+        // $originalFilename = 'banner.jpg';
+        // $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
+        // $filename = 'foto/' . Str::uuid()->toString() . '.' . $extension; // Unique filename
 
-        $hero = File::get($path_hero);
+        // $hero = File::get($path_hero);
 
-        Storage::disk('public')->put($filename, $hero);
+        // Storage::disk('public')->put($filename, $hero);
 
         Settings::create([
             'master_nama' => 'Bengkel CAT Wijayanto',
