@@ -1,0 +1,24 @@
+name: Auto Update ECS ALIBABA
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  update-ecs:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: SSH into ECS and pull changes
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.ECS_HOST }}
+        username: ${{ secrets.ECS_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.ECS_SSH_PORT }}
+        script: |
+          cd /var/www/bengkel-cat-w
+          git pull
