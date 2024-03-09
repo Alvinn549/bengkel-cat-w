@@ -1,7 +1,7 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-center">
+        <a href="{{ route('home') }}" class="logo d-flex align-items-center">
             <img src="{{ asset('assets/dashboard/img/logo.png') }}" alt="">
             <span class="d-none d-lg-block">NiceAdmin</span>
         </a>
@@ -178,7 +178,8 @@
                                 <span>Sign Out</span>
                             </a>
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                style="display: none;">
                                 {{ csrf_field() }}
                             </form>
                         </li>
