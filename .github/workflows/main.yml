@@ -15,4 +15,4 @@ jobs:
 
     - name: SSH into ECS and pull changes
       run: |
-        sshpass -p ${{ secrets.ECS_PASSWORD }} ssh ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }} -p ${{ secrets.ECS_SSH_PORT }} 'cd /var/www/bengkel-cat && git pull'
+        sshpass -p ${{ secrets.ECS_PASSWORD }} ssh ${{ secrets.ECS_USERNAME }}@${{ secrets.ECS_HOST }} -p ${{ secrets.ECS_SSH_PORT }} 'cd /var/www/bengkel-cat-w && git pull'
