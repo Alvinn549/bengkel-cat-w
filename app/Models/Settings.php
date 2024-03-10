@@ -14,7 +14,6 @@ class Settings extends Model
         'deskripsi',
         'alamat',
         'jam_operasional',
-        'hero',
         'telepon',
         'email',
         'facebook',

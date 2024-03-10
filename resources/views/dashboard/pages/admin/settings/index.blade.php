@@ -78,8 +78,8 @@
                                     $jam_operasional1 = $jam_operasional[0];
                                     $jam_operasional2 = $jam_operasional[1];
                                 @endphp
-                                <div class="col-sm-2" style="width: 218px;">
-                                    <input type="text" id="jam_operasional1" name="jam_operasional1"
+                                <div class="col-sm-2">
+                                    <input type="time" id="jam_operasional1" name="jam_operasional1"
                                         class="form-control  @error('jam_operasional1') is-invalid @enderror"
                                         value="{{ old('jam_operasional1') ?? $jam_operasional1 }}">
                                     @error('jam_operasional1')
@@ -88,11 +88,11 @@
                                         </div>
                                     @enderror
                                 </div>
-                                <div class="col-sm-1" style="width: 50px;">
-                                    <p class="text-center mt-1">s/d</p>
+                                <div class="col-sm-2">
+                                    <p class="text-center mt-2">------ s/d ------</p>
                                 </div>
-                                <div class="col-sm-2" style="width: 218px;">
-                                    <input type="text" id="jam_operasional2" name="jam_operasional2"
+                                <div class="col-sm-2">
+                                    <input type="time" id="jam_operasional2" name="jam_operasional2"
                                         class="form-control  @error('jam_operasional2') is-invalid @enderror"
                                         value="{{ old('jam_operasional2') ?? $jam_operasional2 }}">
                                     @error('jam_operasional2')
@@ -103,21 +103,46 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label for="inputHero" class="col-sm-2 col-form-label">Hero</label>
+                                <label for="inputGallery" class="col-sm-2 col-form-label">Gallery</label>
                                 <div class="col-sm-6">
-                                    <input class="form-control @error('hero') is-invalid @enderror" type="file"
-                                        id="hero" name="hero" onchange="previewFoto()">
+                                    @forelse ($galleries as $gallery)
+                                        <div class=" d-flex mb-2">
+                                            <input type="hidden" name="old_foto[]" value="{{ $gallery->foto }}">
+                                            @php
+                                                $filename = explode('foto/', $gallery->foto);
+                                                $old_foto = end($filename);
+                                            @endphp
+                                            <input readonly type="text" class="form-control"
+                                                value="{{ $old_foto }}">
 
-                                    <div class="row mt-3">
-                                        <div class="col-sm-12">
-                                            @if ($settings->hero)
-                                                <img src="{{ asset('storage/' . $settings->hero) }}"
-                                                    class="preview-foto img-fluid rounded" alt="">
-                                            @else
-                                                <img class="preview-foto img-fluid rounded">
-                                            @endif
+                                            {{-- <a href="#" class="btn btn-primary">
+                                                <img src="{{ asset('storage/' . $gallery->foto) }}"
+                                                    class="img-fluid rounded" alt=""
+                                                    onclick="openImage('{{ asset('storage/' . $gallery->foto) }}')">
+                                            </a> --}}
+
+                                            <button disabled id="btnShowOldFoto{{ $gallery->id }}" type="button"
+                                                class="btn btn-success ms-2"
+                                                onclick="openImage('{{ asset('storage/' . $gallery->foto) }}')">
+                                                <i class="ri-eye-line"></i>
+                                            </button>
+
+                                            <button disabled id="btnHapusOldFoto{{ $gallery->id }}" type="button"
+                                                class="btn btn-danger ms-2" onclick="this.parentNode.remove()">
+                                                <i class="ri-delete-bin-5-line"></i>
+                                            </button>
                                         </div>
+                                    @empty
+                                        <p class="text-danger">Belum ada asset tersimpan!</p>
+                                    @endforelse
+
+                                    <div id="fileInputs">
+                                        <!-- File input elements will be added here -->
                                     </div>
+                                    <button style="display:none;" type="button" class="btn btn-primary"
+                                        id="addFileInput">
+                                        <i class="ri-image-add-line"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -172,6 +197,7 @@
                                         </div>
                                     @enderror
                                 </div>
+
                             </div>
                             <div class="row mb-3">
                                 <label for="inputWhatsapp" class="col-sm-2 col-form-label">Whatsapp</label>
@@ -196,6 +222,34 @@
 
 @section('js')
     <script>
+        function openImage(imageUrl) {
+            Swal.fire({
+                imageUrl: imageUrl,
+                imageWidth: 450,
+                imageAlt: 'Foto Progres',
+                showConfirmButton: false,
+            });
+        }
+
+        function addFileInputRow() {
+            const fileInputsContainer = document.getElementById('fileInputs');
+
+            const fileInputContainer = `
+                <div class="form-group d-flex mb-2">
+                    <input type="file" class="form-control " name="foto[]">
+                    <button type="button" class="btn btn-danger ms-2" onclick="this.parentNode.remove()">
+                        <i class="ri-delete-bin-5-line"></i>
+                    </button>
+                </div>
+            `;
+
+            fileInputsContainer.insertAdjacentHTML('beforeend', fileInputContainer);
+        }
+
+        document.getElementById('addFileInput').addEventListener('click', addFileInputRow);
+    </script>
+
+    <script>
         const quill = new Quill('.quill-editor-default', {
             theme: 'snow'
         });
@@ -206,6 +260,7 @@
         const submitButton = document.getElementById('submitButton');
         const editButton = document.getElementById('editButton');
         const editBatalButton = document.getElementById('editBatalButton');
+        const addFileInput = document.getElementById('addFileInput');
 
         formInputs.forEach(input => input.disabled = true);
 
@@ -217,6 +272,12 @@
             submitButton.style.display = 'block';
             editButton.style.display = 'none';
             editBatalButton.style.display = 'block';
+            addFileInput.style.display = 'block';
+
+            @foreach ($galleries as $gallery)
+                document.getElementById('btnHapusOldFoto{{ $gallery->id }}').disabled = false;
+                document.getElementById('btnShowOldFoto{{ $gallery->id }}').disabled = false;
+            @endforeach
 
             quill.enable(true);
         });
@@ -226,24 +287,14 @@
             submitButton.style.display = 'none';
             editButton.style.display = 'block';
             editBatalButton.style.display = 'none';
+            addFileInput.style.display = 'none';
+
+            @foreach ($galleries as $gallery)
+                document.getElementById('btnHapusOldFoto{{ $gallery->id }}').disabled = true;
+                document.getElementById('btnShowOldFoto{{ $gallery->id }}').disabled = true;
+            @endforeach
 
             quill.enable(false);
-        });
-
-        $(document).ready(function() {
-            $('#jam_operasional1').flatpickr({
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-
-            });
-
-            $('#jam_operasional2').flatpickr({
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-
-            });
         });
 
         function previewFoto() {

@@ -21,16 +21,7 @@ class SettingsSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        $deskripsi = '<p>' . implode('</p><p>', $faker->sentences(5)) . '</p>';
-
-        // $path_hero = public_path('/assets/img/banner.jpg');
-        // $originalFilename = 'banner.jpg';
-        // $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
-        // $filename = 'foto/' . Str::uuid()->toString() . '.' . $extension; // Unique filename
-
-        // $hero = File::get($path_hero);
-
-        // Storage::disk('public')->put($filename, $hero);
+        $deskripsi = '<p>' . implode('</p><p>', $faker->sentences(10)) . '</p>';
 
         Settings::create([
             'master_nama' => 'Bengkel CAT Wijayanto',
@@ -41,7 +32,7 @@ class SettingsSeeder extends Seeder
             'email' => 'bengkel-cat-w@bengkel-cat-w.com',
             'facebook' => 'https://facebook.com/bengkel-cat-w',
             'instagram' => 'https://instagram.com/bengkel-cat-w',
-            'whatsapp' => '081234567890',
+            'whatsapp' => 'https://wa.me/6281234567890',
         ]);
     }
 }

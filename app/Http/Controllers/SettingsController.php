@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gallery;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +14,9 @@ class SettingsController extends Controller
     public function index()
     {
         $settings = Settings::first();
-        return view('dashboard.pages.admin.settings.index', compact('settings'));
+        $galleries = Gallery::all();
+
+        return view('dashboard.pages.admin.settings.index', compact('settings', 'galleries'));
     }
 
     public function create()
@@ -68,15 +71,28 @@ class SettingsController extends Controller
             'whatsapp' => $validate['whatsapp'],
         ]);
 
-        if ($request->hasFile('hero')) {
-            if ($settings->hero) {
-                // Delete old photo
-                Storage::delete($settings->hero);
-            }
+        $existingGalleries = Gallery::pluck('foto')->toArray();
 
-            // Store new photo
-            $heroPath = $request->file('hero')->store('foto');
-            $settings->update(['hero' => $heroPath]);
+        $oldPhotos = $request->old_foto ?? [];
+
+        $photosToDelete = array_diff($existingGalleries, $oldPhotos);
+
+        foreach ($photosToDelete as $photo) {
+            Storage::delete($photo);
+            Gallery::where('foto', $photo)->delete();
+        }
+
+        if ($request->hasFile('foto')) {
+            foreach ($request->file('foto') as $photo) {
+                $originalName = $photo->getClientOriginalName();
+
+                $filename =  uniqid() . '-'  . $originalName;
+                $photoPath = $photo->storeAs('foto', $filename);
+
+                Gallery::create([
+                    'foto' => $photoPath,
+                ]);
+            }
         }
 
         Alert::toast(

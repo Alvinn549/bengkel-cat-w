@@ -38,18 +38,11 @@
             <h2 id="title">Our Works</h2>
         </div>
         <div class="owl-carousel">
-            <div>
-                <img src="{{ asset('storage/' . $settings->hero) }}" class="rounded" alt="">
-            </div>
-            <div>
-                <img src="{{ asset('storage/' . $settings->hero) }}" class="rounded" alt="">
-            </div>
-            <div>
-                <img src="{{ asset('storage/' . $settings->hero) }}" class="rounded" alt="">
-            </div>
-            <div>
-                <img src="{{ asset('storage/' . $settings->hero) }}" class="rounded" alt="">
-            </div>
+            @foreach ($galleries as $gallery)
+                <div>
+                    <img src="{{ asset('storage/' . $gallery->foto) }}" class="rounded" alt="">
+                </div>
+            @endforeach
         </div>
     </section>
     <!-- End Gallery Section -->
@@ -116,6 +109,7 @@
     <script>
         $(document).ready(function() {
             $('.owl-carousel').owlCarousel({
+                center: true,
                 loop: true,
                 margin: 20,
                 autoplay: true,

@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text('deskripsi')->nullable();
             $table->text('alamat')->nullable();
             $table->string('jam_operasional')->nullable();
-            $table->string('hero')->nullable();
             $table->string('telepon')->nullable();
             $table->string('email')->nullable();
             $table->string('facebook')->nullable();
