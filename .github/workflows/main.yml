@@ -15,3 +15,4 @@ jobs:
           script: |
             cd /var/www/bengkel-cat-w
             git pull
+            php artisan optimize
