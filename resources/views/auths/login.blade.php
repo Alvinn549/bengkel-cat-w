@@ -21,9 +21,6 @@
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset('assets/dashboard/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/dashboard/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/dashboard/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('assets/dashboard/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
 
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/dashboard/css/style.css') }}" rel="stylesheet">
@@ -41,8 +38,8 @@
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
                             <div class="d-flex justify-content-center py-4">
-                                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                                    <img src="assets/img/logo.png" alt="">
+                                <a href="{{ route('home') }}" class="logo d-flex align-items-center w-auto">
+                                    <img src="{{ asset('assets/dashboard/img/logo.png') }}" alt="">
                                     <span class="d-none d-lg-block">NiceAdmin</span>
                                 </a>
                             </div><!-- End Logo -->
