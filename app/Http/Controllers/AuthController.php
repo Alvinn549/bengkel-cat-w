@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pelanggan;
+use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,6 +18,35 @@ class AuthController extends Controller
     public function register()
     {
         return view('auths.register');
+    }
+
+    public function doRegister(Request $request)
+    {
+        $validate = $request->validate([
+            'nama' => 'required|string|max:250',
+            'email' => 'required|string|email:rfc,dns|max:250|unique:users,email',
+            'password' => 'required|string|min:8',
+            'terms' => 'required'
+        ]);
+
+        $user = User::create([
+            'role' => 'pelanggan',
+            'email' =>  $validate['email'],
+            'password' => bcrypt($validate['password']),
+        ]);
+
+        Pelanggan::create([
+            'user_id' => $user->id,
+            'nama' => $validate['nama'],
+        ]);
+
+        event(new Registered($user));
+
+        $credentials = $request->only('email', 'password');
+        Auth::attempt($credentials);
+        $request->session()->regenerate();
+
+        return redirect()->route('verification.notice');
     }
 
     public function doLogin(Request $request)

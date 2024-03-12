@@ -18,10 +18,10 @@ class AdminSeeder extends Seeder
     {
         $admin = User::create([
             'role' => 'admin',
-            'is_active' => true,
             'device_id' => null,
             'email' => 'admin@gmail.com',
             'password' => bcrypt('password'),
+            'email_verified_at' => now(),
             'created_at' => now()
         ]);
 

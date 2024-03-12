@@ -18,10 +18,10 @@ class PekerjaSeeder extends Seeder
     {
         $pekerja = User::create([
             'role' => 'pekerja',
-            'is_active' => true,
             'device_id' => null,
             'email' => 'pekerja@gmail.com',
             'password' => bcrypt('password'),
+            'email_verified_at' => now(),
             'created_at' => now(),
         ]);
 

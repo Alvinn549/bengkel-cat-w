@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PekerjaController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PerbaikanController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TransaksiController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,31 +25,39 @@ Route::get('/', [LandingPageController::class, 'index'])->name('home');
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/do-login', [AuthController::class, 'doLogin'])->name('do-login');
+
+    Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/do-register', [AuthController::class, 'doRegister'])->name('doRegister');
 });
 
-Route::get('/register', [AuthController::class, 'register'])->name('register');
+Route::middleware('auth')->group(function () {
 
-Route::middleware(['auth'])->group(function () {
+    Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
+    Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware('signed')->name('verification.verify');
+    Route::post('/email/verification-notification', [VerificationController::class, 'resend'])->middleware('throttle:6,1')->name('verification.send');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/admin/data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');
-    Route::resource('admin', AdminController::class);
+    Route::middleware('verified')->group(function () {
+        Route::get('/admin/data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');
+        Route::resource('admin', AdminController::class);
 
-    Route::get('/pekerja/data-table', [PekerjaController::class, 'dataTablePekerja'])->name('pekerja.data-table');
-    Route::resource('pekerja', PekerjaController::class);
+        Route::get('/pekerja/data-table', [PekerjaController::class, 'dataTablePekerja'])->name('pekerja.data-table');
+        Route::resource('pekerja', PekerjaController::class);
 
-    Route::get('/pelanggan/data-table', [PelangganController::class, 'dataTablePelanggan'])->name('pelanggan.data-table');
-    Route::resource('pelanggan', PelangganController::class);
+        Route::get('/pelanggan/data-table', [PelangganController::class, 'dataTablePelanggan'])->name('pelanggan.data-table');
+        Route::resource('pelanggan', PelangganController::class);
 
-    Route::get('/kendaraan/data-table', [KendaraanController::class, 'dataTableKendaraan'])->name('kendaraan.data-table');
-    Route::resource('kendaraan', KendaraanController::class);
+        Route::get('/kendaraan/data-table', [KendaraanController::class, 'dataTableKendaraan'])->name('kendaraan.data-table');
+        Route::resource('kendaraan', KendaraanController::class);
 
-    Route::resource('perbaikan', PerbaikanController::class);
+        Route::resource('perbaikan', PerbaikanController::class);
 
-    Route::get('/transaksi/data-table', [TransaksiController::class, 'dataTableTransaksi'])->name('transaksi.data-table');
-    Route::resource('transaksi', TransaksiController::class);
+        Route::get('/transaksi/data-table', [TransaksiController::class, 'dataTableTransaksi'])->name('transaksi.data-table');
+        Route::resource('transaksi', TransaksiController::class);
 
-    Route::resource('settings', SettingsController::class);
+        Route::resource('settings', SettingsController::class);
+    });
 });
