@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::middleware('verified')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+        Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
+        Route::put('/profil/{id}/change', [ProfilController::class, 'update'])->name('profil.update');
         Route::post('/profil/change-email', [ProfilController::class, 'changeEmail'])->name('profil.change-email');
 
         Route::get('/admin/data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');

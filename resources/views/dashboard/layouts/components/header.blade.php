@@ -147,7 +147,14 @@
 
                     <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                         data-bs-toggle="dropdown">
-                        <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                        @if (auth()->user()->pelanggan->foto)
+                            <div class="foto-profil">
+                                <img src="{{ asset('storage/' . auth()->user()->pelanggan->foto) }}" alt="Profile">
+                            </div>
+                        @else
+                            <img src="{{ asset('assets/dashboard/img/man.png') }}" alt="Profile"
+                                class="rounded-circle">
+                        @endif
                         <span
                             class="d-none d-md-block dropdown-toggle ps-2">{{ auth()->user()->pelanggan->nama }}</span>
                     </a><!-- End Profile Iamge Icon -->
@@ -156,12 +163,13 @@
                         <li class="dropdown-header">
                             <h6>{{ auth()->user()->pelanggan->nama }}</h6>
                         </li>
+
                         <li>
                             <hr class="dropdown-divider">
                         </li>
 
-                        {{-- <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('profil.index') }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -169,7 +177,7 @@
 
                         <li>
                             <hr class="dropdown-divider">
-                        </li> --}}
+                        </li>
 
                         <li>
                             <a class="dropdown-item d-flex align-items-center" onclick="confirmLogout();"
