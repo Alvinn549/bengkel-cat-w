@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
         $this->call([
             AdminSeeder::class,
             PekerjaSeeder::class,
-            PelangganSeeder::class,
+            // PelangganSeeder::class,
         ]);
     }
 }

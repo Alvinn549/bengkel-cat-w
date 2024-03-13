@@ -72,6 +72,7 @@ class PekerjaController extends Controller
             'role' => 'pekerja',
             'email' => $validate['email'],
             'password' => bcrypt($validate['password']),
+            'email_verified_at' => now(),
         ]);
 
         if ($request->hasFile('foto')) {

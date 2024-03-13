@@ -9,6 +9,7 @@ use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\PekerjaController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PerbaikanController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\VerificationController;
@@ -32,15 +33,18 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware('auth')->group(function () {
 
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
     Route::get('/email/verify', [VerificationController::class, 'notice'])->name('verification.notice');
+    Route::post('/email/change-email', [VerificationController::class, 'changeEmail'])->name('verification.change-email');
     Route::get('/email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->middleware('signed')->name('verification.verify');
     Route::post('/email/verification-notification', [VerificationController::class, 'resend'])->middleware('throttle:6,1')->name('verification.send');
 
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
     Route::middleware('verified')->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::post('/profil/change-email', [ProfilController::class, 'changeEmail'])->name('profil.change-email');
+
         Route::get('/admin/data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');
         Route::resource('admin', AdminController::class);
 

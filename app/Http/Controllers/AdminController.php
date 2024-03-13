@@ -71,6 +71,7 @@ class AdminController extends Controller
             'role' => 'admin',
             'email' => $validate['email'],
             'password' => bcrypt($validate['password']),
+            'email_verified_at' => now(),
         ]);
 
         if ($request->hasFile('foto')) {

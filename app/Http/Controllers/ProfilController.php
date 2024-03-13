@@ -4,29 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Auth\Events\Registered;
 
-class VerificationController extends Controller
+class ProfilController extends Controller
 {
-    public function notice(Request $request)
-    {
-        return $request->user()->hasVerifiedEmail()
-            ? redirect()->route('login') : view('emails.verify-notice');
-    }
-
-    public function verify(EmailVerificationRequest $request)
-    {
-        $request->fulfill();
-        return redirect()->route('dashboard')->withSuccess('Your email has been verified.');
-    }
-
-    public function resend(Request $request)
-    {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->withSuccess('A fresh verification link has been sent to your email address.');
-    }
-
     public function changeEmail(Request $request)
     {
         $validate = $request->validate([
