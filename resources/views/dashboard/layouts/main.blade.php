@@ -102,6 +102,12 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/dashboard/js/main.js') }}"></script>
 
+    @if (auth()->user()->role == 'pelanggan')
+        <script>
+            document.querySelector('body').classList.add('toggle-sidebar');
+        </script>
+    @endif
+
     @yield('js')
 </body>
 
