@@ -80,7 +80,7 @@
                                     <tr>
                                         <th>Pemilik</th>
                                         <td>
-                                            {{ $kendaraan->pelanggan->nama ?? '' }}
+                                            {{ $kendaraan->pelanggan->nama ?? '-' }}
                                             <button type="button" data-bs-toggle="modal" class="btn-show-pemilik"
                                                 data-bs-target="#dataPemilik">
                                                 <i class="ri-eye-line"></i>
@@ -93,11 +93,11 @@
                                     </tr>
                                     <tr>
                                         <th>Merek</th>
-                                        <td>{{ $kendaraan->merek }}</td>
+                                        <td>{{ $kendaraan->merek->nama_merek ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Tipe</th>
-                                        <td>{{ $kendaraan->tipe }}</td>
+                                        <td>{{ $kendaraan->tipe->nama_tipe ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Keterangan</th>

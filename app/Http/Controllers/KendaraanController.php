@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
+use App\Models\Merek;
 use App\Models\Pelanggan;
+use App\Models\Tipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -24,7 +26,13 @@ class KendaraanController extends Controller
         return DataTables::of($kendaraans)
             ->addIndexColumn()
             ->addColumn('pemilik', function ($data) {
-                return $data->pelanggan->nama;
+                return $data->pelanggan->nama ?? '-';
+            })
+            ->addColumn('tipe', function ($data) {
+                return $data->tipe->nama_tipe ?? '-';
+            })
+            ->addColumn('merek', function ($data) {
+                return $data->merek->nama_merek ?? '-';
             })
             ->addColumn('aksi', function ($data) {
                 return view('dashboard.pages.admin.kendaraan.components.aksi-data-table', ['id' => $data->id]);
@@ -36,7 +44,9 @@ class KendaraanController extends Controller
     public function create()
     {
         $pelanggans = Pelanggan::get(['id', 'nama']);
-        return view('dashboard.pages.admin.kendaraan.create', compact('pelanggans'));
+        $tipes = Tipe::get(['id', 'nama_tipe']);
+        $mereks = Merek::get(['id', 'nama_merek']);
+        return view('dashboard.pages.admin.kendaraan.create', compact('pelanggans', 'tipes', 'mereks'));
     }
 
     public function store(Request $request)
@@ -45,9 +55,9 @@ class KendaraanController extends Controller
         $validate = $request->validate(
             [
                 'pelanggan_id' => ['required', 'exists:pelanggans,id'],
+                'merek_id' => ['required', 'exists:mereks,id'],
+                'tipe_id' => ['required', 'exists:tipes,id'],
                 'no_plat' => ['required', 'string'],
-                'merek' => ['required', 'string'],
-                'tipe' => ['required', 'string'],
                 'keterangan' => ['nullable', 'string'],
                 'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             ],
@@ -55,8 +65,10 @@ class KendaraanController extends Controller
                 'pelanggan_id.required' => 'Pelanggan tidak boleh kosong',
                 'pelanggan_id.exists' => 'Pelanggan tidak ditemukan',
                 'no_plat.required' => 'Nomor Plat tidak boleh kosong',
-                'merek.required' => 'Merek tidak boleh kosong',
-                'tipe.required' => 'Tipe tidak boleh kosong',
+                'merek_id.required' => 'Merek tidak boleh kosong',
+                'merek_id.exists' => 'Merek tidak ditemukan',
+                'tipe_id.required' => 'Tipe tidak boleh kosong',
+                'tipe_id.exists' => 'Tipe tidak ditemukan',
                 'foto.max' => 'Ukuran gambar terlalu besar',
                 'foto.mimes' => 'Format gambar tidak valid',
             ]
@@ -70,9 +82,9 @@ class KendaraanController extends Controller
 
         $kendaraan = Kendaraan::create([
             'pelanggan_id' => $validate['pelanggan_id'],
+            'tipe_id' => $validate['tipe_id'],
+            'merek_id' => $validate['merek_id'],
             'no_plat' => $validate['no_plat'],
-            'merek' => $validate['merek'],
-            'tipe' => $validate['tipe'],
             'keterangan' => $validate['keterangan'],
             'foto' => $foto,
         ]);
@@ -88,13 +100,23 @@ class KendaraanController extends Controller
     {
         $kendaraan->load('pelanggan');
         $kendaraan->load('perbaikans');
+        $kendaraan->load('tipe');
+        $kendaraan->load('merek');
+
         return view('dashboard.pages.admin.kendaraan.show', compact('kendaraan'));
     }
 
     public function edit(Kendaraan $kendaraan)
     {
         $pelanggans = Pelanggan::get(['id', 'nama']);
-        return view('dashboard.pages.admin.kendaraan.edit', compact('kendaraan', 'pelanggans'));
+        $tipes = Tipe::get(['id', 'nama_tipe']);
+        $mereks = Merek::get(['id', 'nama_merek']);
+
+        $kendaraan->load('pelanggan');
+        $kendaraan->load('tipe');
+        $kendaraan->load('merek');
+
+        return view('dashboard.pages.admin.kendaraan.edit', compact('kendaraan', 'pelanggans', 'tipes', 'mereks'));
     }
 
     public function update(Request $request, Kendaraan $kendaraan)
@@ -103,9 +125,9 @@ class KendaraanController extends Controller
         $validate = $request->validate(
             [
                 'pelanggan_id' => ['required', 'exists:pelanggans,id'],
+                'merek_id' => ['required', 'exists:mereks,id'],
+                'tipe_id' => ['required', 'exists:tipes,id'],
                 'no_plat' => ['required', 'string'],
-                'merek' => ['required', 'string'],
-                'tipe' => ['required', 'string'],
                 'keterangan' => ['nullable', 'string'],
                 'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
             ],
@@ -113,8 +135,10 @@ class KendaraanController extends Controller
                 'pelanggan_id.required' => 'Pelanggan tidak boleh kosong',
                 'pelanggan_id.exists' => 'Pelanggan tidak ditemukan',
                 'no_plat.required' => 'Nomor Plat tidak boleh kosong',
-                'merek.required' => 'Merek tidak boleh kosong',
-                'tipe.required' => 'Tipe tidak boleh kosong',
+                'merek_id.required' => 'Merek tidak boleh kosong',
+                'merek_id.exists' => 'Merek tidak ditemukan',
+                'tipe_id.required' => 'Tipe tidak boleh kosong',
+                'tipe_id.exists' => 'Tipe tidak ditemukan',
                 'foto.max' => 'Ukuran gambar terlalu besar',
                 'foto.mimes' => 'Format gambar tidak valid',
             ]
@@ -122,9 +146,9 @@ class KendaraanController extends Controller
 
         $kendaraan->update([
             'pelanggan_id' => $validate['pelanggan_id'],
+            'merek_id' => $validate['merek_id'],
+            'tipe_id' => $validate['tipe_id'],
             'no_plat' => $validate['no_plat'],
-            'merek' => $validate['merek'],
-            'tipe' => $validate['tipe'],
             'keterangan' => $validate['keterangan'],
         ]);
 

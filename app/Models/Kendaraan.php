@@ -11,9 +11,9 @@ class Kendaraan extends Model
 
     protected $fillable = [
         'pelanggan_id',
+        'merek_id',
+        'tipe_id',
         'no_plat',
-        'merek',
-        'tipe',
         'foto',
         'keterangan',
     ];
@@ -26,5 +26,15 @@ class Kendaraan extends Model
     public function perbaikans()
     {
         return $this->hasMany(Perbaikan::class);
+    }
+
+    public function merek()
+    {
+        return $this->belongsTo(Merek::class);
+    }
+
+    public function tipe()
+    {
+        return $this->belongsTo(Tipe::class);
     }
 }

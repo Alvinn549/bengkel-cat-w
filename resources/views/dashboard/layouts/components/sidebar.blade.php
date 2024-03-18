@@ -62,6 +62,30 @@
                 </li><!-- End Master User Nav -->
 
                 <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs(['tipe*', 'merek*']) ? 'active' : 'collapsed' }}"
+                        data-bs-target="#master-kategori" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-menu-button-wide"></i><span>Master Kategori</span><i
+                            class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="master-kategori"
+                        class="nav-content {{ request()->routeIs(['tipe*', 'merek*']) ? 'active' : 'collapse' }} "
+                        data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="{{ route('tipe.index') }}"
+                                class="{{ request()->routeIs('tipe*') ? 'active' : '' }}">
+                                <i class="bi bi-circle"></i><span>Tipe</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('merek.index') }}"
+                                class="{{ request()->routeIs('merek*') ? 'active' : '' }}">
+                                <i class="bi bi-circle"></i><span>Merek</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Master Kategori Nav -->
+
+                <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('settings*') ? 'active' : 'collapsed' }}"
                         href="{{ route('settings.index') }}">
                         <i class="ri ri-list-settings-fill"></i>

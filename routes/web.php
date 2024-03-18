@@ -6,11 +6,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\MerekController;
 use App\Http\Controllers\PekerjaController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PerbaikanController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TipeController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
@@ -60,6 +62,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('kendaraan', KendaraanController::class);
 
         Route::resource('perbaikan', PerbaikanController::class);
+        Route::resource('tipe', TipeController::class)->only(['index', 'store', 'update', 'destroy']);
+        Route::resource('merek', MerekController::class)->only(['index', 'store', 'update', 'destroy']);
 
         Route::get('/transaksi/data-table', [TransaksiController::class, 'dataTableTransaksi'])->name('transaksi.data-table');
         Route::resource('transaksi', TransaksiController::class);

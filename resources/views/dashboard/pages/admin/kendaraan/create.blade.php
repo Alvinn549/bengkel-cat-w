@@ -21,10 +21,10 @@
                         <form class="row g-3" action="{{ route('kendaraan.store') }}" method="POST" id="form"
                             enctype="multipart/form-data">
                             @csrf
-                            <div class="col-md-12">
+                            <div class="col-md-6">
                                 <label for="inputPelangganId" class="form-label">Pelanggan</label>
                                 <select id="inputPelangganId" name="pelanggan_id"
-                                    class="form-select select2 @error('pelanggan_id') is-invalid @enderror"
+                                    class="form-select select2Pelanggan @error('pelanggan_id') is-invalid @enderror"
                                     data-width="100%">
                                     <option value="">Choose...</option>
                                     @foreach ($pelanggans as $pelanggan)
@@ -35,16 +35,6 @@
                                     @endforeach
                                 </select>
                                 @error('pelanggan_id')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-md-12">
-                                <label for="inputMerek" class="form-label">Merek</label>
-                                <input type="text" class="form-control @error('merek') is-invalid @enderror"
-                                    name="merek" id="inputMerek" value="{{ old('merek') }}">
-                                @error('merek')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -61,24 +51,38 @@
                                 @enderror
                             </div>
                             <div class="col-md-6">
-                                <label for="inputTipe" class="form-label">Tipe</label>
-                                <select id="inputTipe" name="tipe"
-                                    class="form-select @error('tipe') is-invalid @enderror">
-                                    <option>Choose...</option>
-                                    <option value="Mobil" {{ old('tipe') == 'mobil' ? 'selected' : '' }}>Mobil</option>
-                                    <option value="Sepeda Motor" {{ old('tipe') == 'sepeda_motor' ? 'selected' : '' }}>
-                                        Sepeda
-                                        Motor</option>
-                                    <option value="Truk" {{ old('tipe') == 'truk' ? 'selected' : '' }}>Truk</option>
-                                    <option value="Bus" {{ old('tipe') == 'bus' ? 'selected' : '' }}>Bus</option>
-                                    <option value="Mobil Listrik" {{ old('tipe') == 'mobil_listrik' ? 'selected' : '' }}>
-                                        Mobil Listrik</option>
-                                    <option value="Motor Listrik" {{ old('tipe') == 'motor_listrik' ? 'selected' : '' }}>
-                                        Sepeda Motor Listrik</option>
-                                    <option value="Lainnya" {{ old('tipe') == 'lainnya' ? 'selected' : '' }}>
-                                        Lainnya</option>
+                                <label for="inputMerekId" class="form-label">Merek</label>
+                                <select id="inputMerekId" name="merek_id"
+                                    class="form-select select2Merek @error('merek_id') is-invalid @enderror"
+                                    data-width="100%">
+                                    <option value="">Choose...</option>
+                                    @foreach ($mereks as $merek)
+                                        <option value="{{ $merek->id }}"
+                                            {{ old('merek_id') == $merek->id ? 'selected' : '' }}>
+                                            {{ $merek->nama_merek }}
+                                        </option>
+                                    @endforeach
                                 </select>
-                                @error('tipe')
+                                @error('merek_id')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="inputTipeId" class="form-label">Tipe</label>
+                                <select id="inputTipeId" name="tipe_id"
+                                    class="form-select select2Tipe @error('tipe_id') is-invalid @enderror"
+                                    data-width="100%">
+                                    <option value="">Choose...</option>
+                                    @foreach ($tipes as $tipe)
+                                        <option value="{{ $tipe->id }}"
+                                            {{ old('tipe_id') == $tipe->id ? 'selected' : '' }}>
+                                            {{ $tipe->nama_tipe }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('tipe_id')
                                     <div class="invalid-feedback">
                                         {{ $message }}
                                     </div>
@@ -127,7 +131,9 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('.select2').select2();
+            $('.select2Pelanggan').select2();
+            $('.select2Merek').select2();
+            $('.select2Tipe').select2();
         });
     </script>
 
