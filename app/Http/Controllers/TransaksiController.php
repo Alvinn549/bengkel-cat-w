@@ -17,7 +17,7 @@ class TransaksiController extends Controller
 
     public function dataTableTransaksi()
     {
-        $transaksis = Transaksi::get();
+        $transaksis = Transaksi::where('transaction_status', 'Selesai')->get();
 
         return DataTables::of($transaksis)
             ->addIndexColumn()

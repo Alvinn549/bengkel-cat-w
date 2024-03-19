@@ -20,8 +20,8 @@ class KendaraanFactory extends Factory
     {
         return [
             'no_plat' => $this->faker->bothify('?? #### ??'),
-            'merek' => $this->faker->randomElement(['Avanza', 'Kijang', 'Honda', 'Suzuki']),
-            'tipe' => $this->faker->randomElement(['Mobil', 'Motor', 'Truk', 'Sepeda Motor', 'Bus']),
+            'merek_id' => rand(1, 9),
+            'tipe_id' => rand(1, 9),
             'keterangan' => $this->faker->sentence(10),
         ];
     }

@@ -129,3 +129,10 @@ function confirmLogout() {
       }
     });
 }
+
+/**
+   * Search bar toggle
+*/
+function searchToggle() {
+  document.querySelector('.search-bar').classList.toggle('search-bar-show');
+}

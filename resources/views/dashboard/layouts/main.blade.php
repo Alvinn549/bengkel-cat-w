@@ -102,6 +102,24 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/dashboard/js/main.js') }}"></script>
 
+    <script>
+        function resizeSearchBar() {
+            if (window.innerWidth <= 768) {
+                console.log('mobile');
+                document.querySelector('.search-bar').style.width = '100%';
+            } else {
+                console.log('web');
+                document.querySelector('.search-bar').style.width = '800px';
+            }
+        }
+
+        resizeSearchBar();
+
+        window.addEventListener('resize', function() {
+            resizeSearchBar();
+        });
+    </script>
+
     @if (auth()->user()->role == 'pelanggan')
         <script>
             document.querySelector('body').classList.add('toggle-sidebar');

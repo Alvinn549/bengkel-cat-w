@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('verified')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/my-kendaraan/{idPelanggan}', [DashboardController::class, 'myKendaraan'])->name('dashboard.my-kendaraan');
 
         Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
         Route::put('/profil/{id}/change', [ProfilController::class, 'update'])->name('profil.update');

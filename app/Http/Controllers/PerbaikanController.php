@@ -201,8 +201,7 @@ class PerbaikanController extends Controller
         }
 
         if ($validate['status'] == 'Selesai') {
-            Alert::success('Perbaikan Selesai', 'Perbaikan telah selesai <br> Transaksi dengan nomor <strong>' . $transaksi->order_id . '</strong> telah dibuat. <a href="' . route('transaksi.show', $transaksi) . '">Lihat Transaksi</a>')
-                ->toHtml();
+            Alert::success('Perbaikan Selesai', 'Perbaikan telah selesai dan pelanggan akan dihubungi melalui email.');
         } else {
             Alert::toast('<p style="color: white; margin-top: 10px;">' . $perbaikan->nama . ' berhasil diubah!</p>', 'success')
                 ->toHtml()
