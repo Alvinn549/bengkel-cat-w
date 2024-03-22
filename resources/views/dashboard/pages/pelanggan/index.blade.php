@@ -18,7 +18,7 @@
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Transaksi Sekarang</h5>
-                            <a href="#">
+                            <a href="{{ route('dashboard.my-transaksi', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div
                                         class="card-icon {{ $transaksiInProgressCount != 0 ? 'bg-warning text-white' : '' }}  rounded-circle d-flex align-items-center justify-content-center">
@@ -32,11 +32,12 @@
                         </div>
                     </div>
                 </div><!-- End Transaksi Sekarang Card -->
+
                 <div class="col-xxl-6 col-md-6">
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Riwayat Transaksi</h5>
-                            <a href="#">
+                            <a href="{{ route('dashboard.history-transaksi', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-credit-card-2-back-fill"></i>
@@ -49,6 +50,7 @@
                         </div>
                     </div>
                 </div><!-- End Riwayat Transaksi Card -->
+
                 <div class="col-xxl-3 col-md-4">
                     <div class="card info-card sales-card">
                         <div class="card-body">
@@ -66,6 +68,7 @@
                         </div>
                     </div>
                 </div><!-- End Riwayat Perbaikan Card -->
+
                 <div class="col-xxl-3 col-md-4">
                     <div class="card info-card sales-card">
                         <div class="card-body">
@@ -83,6 +86,7 @@
                         </div>
                     </div>
                 </div><!-- End Riwayat Perbaikan Card -->
+
                 <div class="col-xxl-3 col-md-4">
                     <div class="card info-card sales-card">
                         <div class="card-body">

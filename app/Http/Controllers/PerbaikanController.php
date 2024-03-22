@@ -164,12 +164,13 @@ class PerbaikanController extends Controller
             $firstName = $fullName[0];
             $lastName = isset($fullName[1]) ? $fullName[1] : null;
 
-            $transaksi = Transaksi::updateOrCreate(
+            Transaksi::updateOrCreate(
                 ['order_id' => 'tr-' . $perbaikan->kode_unik],
                 [
                     'perbaikan_id' => $perbaikan->id,
                     'pelanggan_id' => $pelanggan->id,
                     'gross_amount' => $biaya,
+                    'transaction_status' => 'New',
                     'first_name' => $firstName,
                     'last_name' => $lastName,
                     'email' => $pelanggan->user->email,

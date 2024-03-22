@@ -3,9 +3,9 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EmailController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\MerekController;
 use App\Http\Controllers\PekerjaController;
 use App\Http\Controllers\PelangganController;
@@ -44,7 +44,13 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('verified')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/my-kendaraan/{idPelanggan}', [DashboardController::class, 'myKendaraan'])->name('dashboard.my-kendaraan');
+        Route::get('/dashboard/my-kendaraan/{idPelanggan}', [DashboardController::class, 'myKendaraan'])->name('dashboard.my-kendaraan');
+
+        Route::get('/dashboard/my-transaksi/{idPelanggan}', [DashboardController::class, 'myTransaksi'])->name('dashboard.my-transaksi');
+        Route::get('/dashboard/my-transaksi/detail/{transaksi}', [DashboardController::class, 'detailMyTransaksi'])->name('dashboard.my-transaksi-detail');
+
+        Route::get('/dashboard/history-transaksi/{idPelanggan}', [DashboardController::class, 'historyTransaksi'])->name('dashboard.history-transaksi');
+        Route::get('/dashboard/history-transaksi/detail/{transaksi}', [DashboardController::class, 'detailHistoryTransaksi'])->name('dashboard.detail-history-transaksi');
 
         Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
         Route::put('/profil/{id}/change', [ProfilController::class, 'update'])->name('profil.update');
@@ -70,5 +76,6 @@ Route::middleware('auth')->group(function () {
         Route::resource('transaksi', TransaksiController::class);
 
         Route::resource('settings', SettingsController::class);
+        Route::resource('laporan', LaporanController::class);
     });
 });

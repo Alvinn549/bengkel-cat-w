@@ -51,4 +51,38 @@ class DashboardController extends Controller
 
         return view('dashboard.pages.pelanggan.my-kendaraan.index', compact('kendaraans'));
     }
+
+    public function myTransaksi($idPelanggan)
+    {
+        $transaksis = Transaksi::where('pelanggan_id', $idPelanggan)
+            ->where('transaction_status', '!=', 'Selesai')
+            ->latest()
+            ->get();
+
+        return view('dashboard.pages.pelanggan.my-transaksi.index', compact('transaksis'));
+    }
+
+    public function detailMyTransaksi(Transaksi $transaksi)
+    {
+        $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
+
+        return view('dashboard.pages.pelanggan.my-transaksi.show', compact('transaksi'));
+    }
+
+    public function historyTransaksi($idPelanggan)
+    {
+        $transaksis = Transaksi::where('pelanggan_id', $idPelanggan)
+            ->where('transaction_status', 'Selesai')
+            ->latest()
+            ->get();
+
+        return view('dashboard.pages.pelanggan.history-transaksi.index', compact('transaksis'));
+    }
+
+    public function detailHistoryTransaksi(Transaksi $transaksi)
+    {
+        $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
+
+        return view('dashboard.pages.pelanggan.history-transaksi.show', compact('transaksi'));
+    }
 }

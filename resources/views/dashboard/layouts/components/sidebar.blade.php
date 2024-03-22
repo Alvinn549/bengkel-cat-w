@@ -37,6 +37,36 @@
                     </a>
                 </li><!-- End Transaksi Page Nav -->
 
+                <li class="nav-item {{ request()->routeIs('laporan*') ? 'active' : 'collapsed' }}">
+                    <a class="nav-link " data-bs-target="#menu-laporan" data-bs-toggle="collapse" href="#">
+                        <i class="bi bi-archive"></i><span>Laporan</span><i class="bi bi-chevron-down ms-auto"></i>
+                    </a>
+                    <ul id="menu-laporan"
+                        class="nav-content {{ request()->routeIs('laporan*') ? 'active' : 'collapse' }} "
+                        data-bs-parent="#sidebar-nav">
+                        <li>
+                            <a href="#" class="">
+                                <i class="bi bi-circle"></i><span>Pelanggan</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                <i class="bi bi-circle"></i><span>Kendaraan</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                <i class="bi bi-circle"></i><span>Transaksi</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" class="">
+                                <i class="bi bi-circle"></i><span>Pekerja</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li><!-- End Menu Laporan Nav -->
+
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs(['admin*', 'pekerja*']) ? 'active' : 'collapsed' }}"
                         data-bs-target="#master-user" data-bs-toggle="collapse" href="#">
@@ -89,7 +119,7 @@
                     <a class="nav-link {{ request()->routeIs('settings*') ? 'active' : 'collapsed' }}"
                         href="{{ route('settings.index') }}">
                         <i class="ri ri-list-settings-fill"></i>
-                        <span>Settings</span>
+                        <span>Pengaturan</span>
                     </a>
                 </li><!-- End Settings Page Nav -->
             @elseif (auth()->user()->role == 'pekerja')
