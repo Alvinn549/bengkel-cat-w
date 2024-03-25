@@ -118,7 +118,7 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('settings*') ? 'active' : 'collapsed' }}"
                         href="{{ route('settings.index') }}">
-                        <i class="ri ri-list-settings-fill"></i>
+                        <i class="bx bxs-store"></i>
                         <span>Pengaturan</span>
                     </a>
                 </li><!-- End Settings Page Nav -->
