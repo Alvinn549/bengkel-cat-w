@@ -11,6 +11,29 @@
         </nav>
     </div><!-- End Page Title -->
 
+    <!-- Modal Bantuan Map -->
+    <div class="modal fade" id="modalBantuanMap" tabindex="-1" aria-labelledby="modalBantuanMapLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="label_warning">Bagaimana mendapatkan link Google map ?</h5>
+                    <button type="button" class="btn-close"data-bs-target="#ubah-kontak-bengkel"
+                        data-bs-toggle="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>langkah untuk mendapatkan link map dari google maps</p>
+                    <li>Buka alamat <a href="https://www.google.com/maps" target="_blank"
+                            class="text-decoration-none">google maps</a>.</li>
+                    <li>Klik tempat yang akan disimpan.</li>
+                    <li>Pilih berbagi/share.</li>
+                    <li>Pilih tab embed a map.</li>
+                    <li>Pilih size <strong>Small / Kecil</strong>.</li>
+                    <li>Salin link yang disediakan lalu masukkan ke dalam form.</li>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
@@ -71,6 +94,24 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="row mb-3">
+                                <label for="inputMap" class="col-sm-2 col-form-label">Lokasi Google</label>
+                                <div class="col-sm-6">
+                                    <input type="text" name="map_google"
+                                        class="form-control @error('map_google') is-invalid @enderror" id="inputMap"
+                                        value="{{ old('map_google') ?? $settings->map_google }}"
+                                        placeholder="Masukkan link yang didapat dari google map">
+                                    <button class="btn btn-info mt-2" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#modalBantuanMap" id="btnBantuanMap">
+                                        <i class="ri-map-pin-2-line"></i>
+                                    </button>
+                                    @error('map_google')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="row mb-3 d-flex">
                                 <label for="inputJamOperasional" class="col-sm-2 col-form-label">Jam Operasional</label>
                                 @php
@@ -114,12 +155,6 @@
                                             @endphp
                                             <input readonly type="text" class="form-control"
                                                 value="{{ $old_foto }}">
-
-                                            {{-- <a href="#" class="btn btn-primary">
-                                                <img src="{{ asset('storage/' . $gallery->foto) }}"
-                                                    class="img-fluid rounded" alt=""
-                                                    onclick="openImage('{{ asset('storage/' . $gallery->foto) }}')">
-                                            </a> --}}
 
                                             <button disabled id="btnShowOldFoto{{ $gallery->id }}" type="button"
                                                 class="btn btn-success ms-2"
@@ -260,16 +295,20 @@
         const submitButton = document.getElementById('submitButton');
         const editButton = document.getElementById('editButton');
         const editBatalButton = document.getElementById('editBatalButton');
+        const btnBantuanMap = document.getElementById('btnBantuanMap');
         const addFileInput = document.getElementById('addFileInput');
 
         formInputs.forEach(input => input.disabled = true);
 
         submitButton.style.display = 'none';
         editBatalButton.style.display = 'none';
+        btnBantuanMap.disabled = true;
+
 
         document.getElementById('editButton').addEventListener('click', function() {
             formInputs.forEach(input => input.disabled = false);
             submitButton.style.display = 'block';
+            btnBantuanMap.disabled = false;
             editButton.style.display = 'none';
             editBatalButton.style.display = 'block';
             addFileInput.style.display = 'block';
@@ -285,6 +324,7 @@
         document.getElementById('editBatalButton').addEventListener('click', function() {
             formInputs.forEach(input => input.disabled = true);
             submitButton.style.display = 'none';
+            btnBantuanMap.disabled = true;
             editButton.style.display = 'block';
             editBatalButton.style.display = 'none';
             addFileInput.style.display = 'none';

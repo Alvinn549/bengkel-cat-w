@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('master_nama')->nullable();
             $table->text('deskripsi')->nullable();
             $table->text('alamat')->nullable();
+            $table->text('map_google')->nullable();
             $table->string('jam_operasional')->nullable();
             $table->string('telepon')->nullable();
             $table->string('email')->nullable();

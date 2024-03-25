@@ -13,6 +13,7 @@ class Settings extends Model
         'master_nama',
         'deskripsi',
         'alamat',
+        'map_google',
         'jam_operasional',
         'telepon',
         'email',
