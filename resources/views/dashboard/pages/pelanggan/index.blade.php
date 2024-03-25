@@ -55,7 +55,7 @@
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Perbaikan Sekarang</h5>
-                            <a href="#">
+                            <a href="{{ route('dashboard.current-perbaikan', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bx bxs-car-crash"></i>
@@ -73,7 +73,7 @@
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Riwayat Perbaikan</h5>
-                            <a href="#">
+                            <a href="{{ route('dashboard.history-perbaikan', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-journal-bookmark"></i>

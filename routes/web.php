@@ -44,13 +44,23 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('verified')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        // ? For Pelanggan
         Route::get('/dashboard/my-kendaraan/{idPelanggan}', [DashboardController::class, 'myKendaraan'])->name('dashboard.my-kendaraan');
+        Route::get('/dashboard/my-kendaraan/detail/{kendaraan}', [DashboardController::class, 'detailMyKendaraan'])->name('dashboard.my-kendaraan-detail');
 
         Route::get('/dashboard/my-transaksi/{idPelanggan}', [DashboardController::class, 'myTransaksi'])->name('dashboard.my-transaksi');
         Route::get('/dashboard/my-transaksi/detail/{transaksi}', [DashboardController::class, 'detailMyTransaksi'])->name('dashboard.my-transaksi-detail');
 
         Route::get('/dashboard/history-transaksi/{idPelanggan}', [DashboardController::class, 'historyTransaksi'])->name('dashboard.history-transaksi');
         Route::get('/dashboard/history-transaksi/detail/{transaksi}', [DashboardController::class, 'detailHistoryTransaksi'])->name('dashboard.detail-history-transaksi');
+
+        Route::get('/dashboard/current-perbaikan/{idPelanggan}', [DashboardController::class, 'currentPerbaikan'])->name('dashboard.current-perbaikan');
+        Route::get('/dashboard/current-perbaikan/detail/{perbaikan}', [DashboardController::class, 'detailCurrentPerbaikan'])->name('dashboard.current-perbaikan-detail');
+
+        Route::get('/dashboard/history-perbaikan/{idPelanggan}', [DashboardController::class, 'historyPerbaikan'])->name('dashboard.history-perbaikan');
+        Route::get('/dashboard/history-perbaikan/detail/{perbaikan}', [DashboardController::class, 'detailHistoryPerbaikan'])->name('dashboard.history-perbaikan-detail');
+        // ? End For Pelanggan
 
         Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
         Route::put('/profil/{id}/change', [ProfilController::class, 'update'])->name('profil.update');

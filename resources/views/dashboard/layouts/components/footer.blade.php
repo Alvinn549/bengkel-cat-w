@@ -3,6 +3,6 @@
         &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
     </div> --}}
     <div class="credits">
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        Designed by <a href="mailto:alvinn549@gmail.com">alvinn549@gmail.com</a>
     </div>
 </footer>

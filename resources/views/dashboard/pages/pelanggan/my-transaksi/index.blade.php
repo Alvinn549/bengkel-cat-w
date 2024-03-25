@@ -84,4 +84,11 @@
 @endsection
 
 @section('js')
+    <script>
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                responsive: true,
+            });
+        })
+    </script>
 @endsection
