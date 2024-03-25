@@ -41,7 +41,7 @@
                             <div class="d-flex justify-content-center py-4">
                                 <a href="{{ route('home') }}" class="logo d-flex align-items-center w-auto">
                                     <img src="{{ asset('assets/dashboard/img/logo.png') }}" alt="">
-                                    <span class="d-none d-lg-block">NiceAdmin</span>
+                                    <span class="d-none d-lg-block">Bengkel Cat W</span>
                                 </a>
                             </div><!-- End Logo -->
 

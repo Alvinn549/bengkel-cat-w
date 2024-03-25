@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Pekerja;
 use App\Models\Pelanggan;
 use App\Models\User;
@@ -53,7 +54,7 @@ class ProfilController extends Controller
         }
 
         if ($user->role == 'admin') {
-            $admin = Pelanggan::where('user_id', $user->id)->first();
+            $admin = Admin::where('user_id', $user->id)->first();
 
             $validate = $request->validate(
                 [
@@ -115,7 +116,7 @@ class ProfilController extends Controller
                 ->toHtml()
                 ->background('#333A73');
 
-            return redirect()->route('dashboard');
+            return redirect()->route('profil.index');
         } elseif ($user->role == 'pekerja') {
             $pekerja = Pekerja::where('user_id', $user->id)->first();
 
@@ -179,7 +180,7 @@ class ProfilController extends Controller
                 ->toHtml()
                 ->background('#333A73');
 
-            return redirect()->route('dashboard');
+            return redirect()->route('profil.index');
         } elseif ($user->role == 'pelanggan') {
             $pelanggan = Pelanggan::where('user_id', $user->id)->first();
 

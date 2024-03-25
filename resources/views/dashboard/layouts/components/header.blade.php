@@ -130,8 +130,8 @@
                             <hr class="dropdown-divider">
                         </li>
 
-                        {{-- <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('profil.index') }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -139,7 +139,7 @@
 
                         <li>
                             <hr class="dropdown-divider">
-                        </li> --}}
+                        </li>
 
                         <li>
                             <a class="dropdown-item d-flex align-items-center" onclick="confirmLogout();"
@@ -224,8 +224,8 @@
                             <hr class="dropdown-divider">
                         </li>
 
-                        {{-- <li>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="{{ route('profil.index') }}">
                                 <i class="bi bi-person"></i>
                                 <span>My Profile</span>
                             </a>
@@ -233,7 +233,7 @@
 
                         <li>
                             <hr class="dropdown-divider">
-                        </li> --}}
+                        </li>
 
                         <li>
                             <a class="dropdown-item d-flex align-items-center" onclick="confirmLogout();"

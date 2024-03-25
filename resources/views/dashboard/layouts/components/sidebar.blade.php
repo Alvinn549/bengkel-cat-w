@@ -37,30 +37,36 @@
                     </a>
                 </li><!-- End Transaksi Page Nav -->
 
-                <li class="nav-item {{ request()->routeIs('laporan*') ? 'active' : 'collapsed' }}">
-                    <a class="nav-link " data-bs-target="#menu-laporan" data-bs-toggle="collapse" href="#">
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('laporan*') ? 'active' : 'collapsed' }}"
+                        data-bs-target="#menu-laporan" data-bs-toggle="collapse" href="#">
                         <i class="bi bi-archive"></i><span>Laporan</span><i class="bi bi-chevron-down ms-auto"></i>
                     </a>
                     <ul id="menu-laporan"
                         class="nav-content {{ request()->routeIs('laporan*') ? 'active' : 'collapse' }} "
                         data-bs-parent="#sidebar-nav">
                         <li>
-                            <a href="#" class="">
+                            <a href="{{ route('laporan.pelanggan') }}" class="">
                                 <i class="bi bi-circle"></i><span>Pelanggan</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="">
+                            <a href="{{ route('laporan.kendaraan') }}" class="">
                                 <i class="bi bi-circle"></i><span>Kendaraan</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="">
+                            <a href="{{ route('laporan.perbaikan') }}" class="">
+                                <i class="bi bi-circle"></i><span>Perbaikan</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('laporan.transaksi') }}" class="">
                                 <i class="bi bi-circle"></i><span>Transaksi</span>
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="">
+                            <a href="{{ route('laporan.pekerja') }}" class="">
                                 <i class="bi bi-circle"></i><span>Pekerja</span>
                             </a>
                         </li>
