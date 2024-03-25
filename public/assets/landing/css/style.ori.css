@@ -25,7 +25,6 @@ body::before {
     top: 0;
     bottom: 0;
     background: rgba(49, 71, 89, 0.6);
-    /* background: rgba(0, 94, 172, 0.6); */
 }
 
 @media (min-width: 1024px) {
@@ -35,13 +34,12 @@ body::before {
 }
 
 a {
-    /* color: #0084f0; */
-    color: #0084f0;
+    color: #24b7a4;
     text-decoration: none;
 }
 
 a:hover {
-    color: #0084f0;
+    color: #36d8c3;
     text-decoration: none;
 }
 
@@ -68,7 +66,7 @@ h6 {
     right: 15px;
     bottom: 15px;
     z-index: 996;
-    background: #0084f0;
+    background: #24b7a4;
     width: 40px;
     height: 40px;
     border-radius: 50px;
@@ -82,7 +80,7 @@ h6 {
 }
 
 .back-to-top:hover {
-    background: #0084f0;
+    background: #2ed6c0;
     color: #fff;
 }
 
@@ -195,7 +193,7 @@ h6 {
     background: none;
     font-size: 16px;
     padding: 0 20px;
-    background: #0084f0;
+    background: #24b7a4;
     color: #fff;
     transition: 0.3s;
     border-radius: 50px;
@@ -216,7 +214,7 @@ h6 {
 
 #header .subscribe .sent-message {
     display: none;
-    color: #0084f0;
+    color: #18d26e;
     text-align: center;
     padding: 15px;
     font-weight: 600;
@@ -235,7 +233,7 @@ h6 {
     width: 24px;
     height: 24px;
     margin: 0 10px -6px 0;
-    border: 3px solid #0084f0;
+    border: 3px solid #18d26e;
     border-top-color: #eee;
     animation: animate-loading-notify 1s linear infinite;
 }
@@ -273,8 +271,8 @@ h6 {
 }
 
 #header .social-links a:hover {
-    background: #0084f0;
-    border-color: #0084f0;
+    background: #24b7a4;
+    border-color: #24b7a4;
 }
 
 /*--------------------------------------------------------------
@@ -324,12 +322,12 @@ h6 {
 .navbar .active,
 .navbar .active:focus,
 .navbar li:hover > a {
-    color: #0084f0;
+    color: #24b7a4;
 }
 
 .navbar .getstarted,
 .navbar .getstarted:focus {
-    background: #0084f0;
+    background: #24b7a4;
     padding: 8px 20px;
     margin-left: 30px;
     border-radius: 4px;
@@ -376,7 +374,7 @@ h6 {
 .navbar .dropdown ul a:hover,
 .navbar .dropdown ul .active:hover,
 .navbar .dropdown ul li:hover > a {
-    color: #0084f0;
+    color: #24b7a4;
 }
 
 .navbar .dropdown:hover > ul {
@@ -475,7 +473,7 @@ h6 {
 .navbar-mobile a:hover,
 .navbar-mobile .active,
 .navbar-mobile li:hover > a {
-    color: #0084f0;
+    color: #24b7a4;
 }
 
 .navbar-mobile .getstarted,
@@ -510,7 +508,7 @@ h6 {
 .navbar-mobile .dropdown ul a:hover,
 .navbar-mobile .dropdown ul .active:hover,
 .navbar-mobile .dropdown ul li:hover > a {
-    color: #0084f0;
+    color: #24b7a4;
 }
 
 .navbar-mobile .dropdown > .dropdown-active {
@@ -549,7 +547,7 @@ section {
     display: block;
     width: 50px;
     height: 2px;
-    background: #0084f0;
+    background: #24b7a4;
     bottom: 0;
     left: calc(50% - 25px);
 }
@@ -599,8 +597,8 @@ section {
 # Contact Us
 --------------------------------------------------------------*/
 .contact .info {
-    border-top: 3px solid #0084f0;
-    border-bottom: 3px solid #0084f0;
+    border-top: 3px solid #24b7a4;
+    border-bottom: 3px solid #24b7a4;
     padding: 30px;
     background: rgba(255, 255, 255, 0.06);
     width: 100%;
@@ -658,21 +656,21 @@ section {
 }
 
 .contact .info .social-links a:hover {
-    background: #0084f0;
+    background: #24b7a4;
     color: #fff;
 }
 
 .contact .info .email:hover i,
 .contact .info .address:hover i,
 .contact .info .phone:hover i {
-    background: #0084f0;
+    background: #24b7a4;
     color: #fff;
 }
 
 .contact .contact-form {
     width: 100%;
-    border-top: 3px solid #0084f0;
-    border-bottom: 3px solid #0084f0;
+    border-top: 3px solid #24b7a4;
+    border-bottom: 3px solid #24b7a4;
     padding: 30px;
     background: rgba(255, 255, 255, 0.06);
     box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.12);
@@ -747,7 +745,7 @@ section {
 }
 
 .contact .contact-form button[type="submit"] {
-    background: #0084f0;
+    background: #24b7a4;
     border: 0;
     padding: 10px 24px;
     color: #fff;
@@ -818,7 +816,7 @@ section {
     left: 0;
     width: 80px;
     height: 80px;
-    background: #0084f0;
+    background: #24b7a4;
     border-radius: 50%;
     transition: all 1s;
     z-index: 4;
@@ -871,7 +869,7 @@ section {
     height: 50px;
     outline: none;
     border: none;
-    background: #0084f0;
+    background: #24b7a4;
     color: white;
     padding: 0 80px 0 20px;
     border-radius: 30px;
