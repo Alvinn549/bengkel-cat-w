@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('transaksis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('perbaikan_id')->nullable()->constrained();
-            $table->foreignId('pelanggan_id')->nullable()->constrained();
+            $table->foreignId('perbaikan_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('pelanggan_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('order_id')->nullable();
             $table->string('gross_amount')->nullable();
             $table->string('payment_type')->nullable();

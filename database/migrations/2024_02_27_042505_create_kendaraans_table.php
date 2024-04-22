@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('kendaraans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pelanggan_id')->nullable()->constrained()->onDelete('set null');
+            $table->foreignId('pelanggan_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('merek_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('tipe_id')->nullable()->constrained()->onDelete('set null');
             $table->string('no_plat')->nullable();

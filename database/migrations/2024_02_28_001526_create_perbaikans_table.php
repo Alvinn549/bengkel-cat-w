@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('perbaikans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kendaraan_id')->nullable()->constrained();
+            $table->foreignId('kendaraan_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('kode_unik')->nullable();
             $table->string('nama')->nullable();
             $table->text('keterangan')->nullable();
