@@ -9,7 +9,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item active"><a
-                        href="{{ route('dashboard.history-transaksi', auth()->user()->pelanggan->id) }}">Transaksi
+                        href="{{ route('dashboard.pelanggan.history-transaksi', auth()->user()->pelanggan->id) }}">Transaksi
                         Saya</a>
                 </li>
                 <li class="breadcrumb-item active">Show</li>
@@ -20,7 +20,7 @@
     <section class="section">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard.history-transaksi', auth()->user()->pelanggan->id) }}"
+                <a href="{{ route('dashboard.pelanggan.history-transaksi', auth()->user()->pelanggan->id) }}"
                     class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>

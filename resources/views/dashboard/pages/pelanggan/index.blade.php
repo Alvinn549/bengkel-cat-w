@@ -18,7 +18,7 @@
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Transaksi Sekarang</h5>
-                            <a href="{{ route('dashboard.my-transaksi', auth()->user()->pelanggan->id) }}">
+                            <a href="{{ route('dashboard.pelanggan.my-transaksi', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div
                                         class="card-icon {{ $transaksiInProgressCount != 0 ? 'bg-warning text-white' : '' }}  rounded-circle d-flex align-items-center justify-content-center">
@@ -37,7 +37,7 @@
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Riwayat Transaksi</h5>
-                            <a href="{{ route('dashboard.history-transaksi', auth()->user()->pelanggan->id) }}">
+                            <a href="{{ route('dashboard.pelanggan.history-transaksi', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-credit-card-2-back-fill"></i>
@@ -55,7 +55,7 @@
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Perbaikan Sekarang</h5>
-                            <a href="{{ route('dashboard.current-perbaikan', auth()->user()->pelanggan->id) }}">
+                            <a href="{{ route('dashboard.pelanggan.current-perbaikan', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bx bxs-car-crash"></i>
@@ -73,7 +73,7 @@
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Riwayat Perbaikan</h5>
-                            <a href="{{ route('dashboard.history-perbaikan', auth()->user()->pelanggan->id) }}">
+                            <a href="{{ route('dashboard.pelanggan.history-perbaikan', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bi bi-journal-bookmark"></i>
@@ -91,7 +91,7 @@
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Kendaraan Saya</h5>
-                            <a href="{{ route('dashboard.my-kendaraan', auth()->user()->pelanggan->id) }}">
+                            <a href="{{ route('dashboard.pelanggan.my-kendaraan', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bx bxs-car"></i>

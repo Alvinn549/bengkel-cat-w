@@ -20,7 +20,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a
-                        href="{{ route('dashboard.current-perbaikan', auth()->user()->pelanggan->id) }}">Perbaikan
+                        href="{{ route('dashboard.pelanggan.current-perbaikan', auth()->user()->pelanggan->id) }}">Perbaikan
                         Sekarang</a></li>
                 <li class="breadcrumb-item active">Show Perbaikan</li>
             </ol>
@@ -30,7 +30,7 @@
     <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard.current-perbaikan', auth()->user()->pelanggan->id) }}"
+                <a href="{{ route('dashboard.pelanggan.current-perbaikan', auth()->user()->pelanggan->id) }}"
                     class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>

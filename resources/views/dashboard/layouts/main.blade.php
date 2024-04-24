@@ -120,7 +120,7 @@
         });
     </script>
 
-    @if (auth()->user()->role == 'pelanggan')
+    @if (auth()->user()->role == 'pelanggan' || auth()->user()->role == 'pekerja')
         <script>
             document.querySelector('body').classList.add('toggle-sidebar');
         </script>

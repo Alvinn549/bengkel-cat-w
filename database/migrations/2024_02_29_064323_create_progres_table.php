@@ -16,9 +16,10 @@ return new class extends Migration
         Schema::create('progres', function (Blueprint $table) {
             $table->id();
             $table->foreignId('perbaikan_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('pekerja_id')->nullable()->constrained()->onDelete('set null');
             $table->text('keterangan')->nullable();
             $table->string('foto')->nullable();
-            $table->enum('status', ['Selesai', 'Dalam Proses'])->nullable();
+            $table->boolean('is_selesai')->default(0);
             $table->timestamps();
         });
     }

@@ -53,7 +53,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="2">
-                                                <a href="{{ route('dashboard.my-kendaraan-detail', $kendaraan->id) }}"
+                                                <a href="{{ route('dashboard.pelanggan.my-kendaraan-detail', $kendaraan->id) }}"
                                                     class="btn btn-secondary w-100">
                                                     Lihat Detail
                                                 </a>

@@ -3,6 +3,8 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardPekerjaController;
+use App\Http\Controllers\DashboardPelangganController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\LaporanController;
@@ -45,52 +47,61 @@ Route::middleware('auth')->group(function () {
     Route::middleware('verified')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-        // ? For Pelanggan
-        Route::get('/dashboard/my-kendaraan/{idPelanggan}', [DashboardController::class, 'myKendaraan'])->name('dashboard.my-kendaraan');
-        Route::get('/dashboard/my-kendaraan/detail/{kendaraan}', [DashboardController::class, 'detailMyKendaraan'])->name('dashboard.my-kendaraan-detail');
+        Route::prefix('dashboard')->group(function () {
+            // ? For Pelanggan
+            Route::get('/pelanggan/my-kendaraan/{idPelanggan}', [DashboardPelangganController::class, 'myKendaraan'])->name('dashboard.pelanggan.my-kendaraan');
+            Route::get('/pelanggan/my-kendaraan/detail/{kendaraan}', [DashboardPelangganController::class, 'detailMyKendaraan'])->name('dashboard.pelanggan.my-kendaraan-detail');
 
-        Route::get('/dashboard/my-transaksi/{idPelanggan}', [DashboardController::class, 'myTransaksi'])->name('dashboard.my-transaksi');
-        Route::get('/dashboard/my-transaksi/detail/{transaksi}', [DashboardController::class, 'detailMyTransaksi'])->name('dashboard.my-transaksi-detail');
+            Route::get('/pelanggan/my-transaksi/{idPelanggan}', [DashboardPelangganController::class, 'myTransaksi'])->name('dashboard.pelanggan.my-transaksi');
+            Route::get('/pelanggan/my-transaksi/detail/{transaksi}', [DashboardPelangganController::class, 'detailMyTransaksi'])->name('dashboard.pelanggan.my-transaksi-detail');
 
-        Route::get('/dashboard/history-transaksi/{idPelanggan}', [DashboardController::class, 'historyTransaksi'])->name('dashboard.history-transaksi');
-        Route::get('/dashboard/history-transaksi/detail/{transaksi}', [DashboardController::class, 'detailHistoryTransaksi'])->name('dashboard.detail-history-transaksi');
+            Route::get('/pelanggan/history-transaksi/{idPelanggan}', [DashboardPelangganController::class, 'historyTransaksi'])->name('dashboard.pelanggan.history-transaksi');
+            Route::get('/pelanggan/history-transaksi/detail/{transaksi}', [DashboardPelangganController::class, 'detailHistoryTransaksi'])->name('dashboard.pelanggan.history-transaksi-detail');
 
-        Route::get('/dashboard/current-perbaikan/{idPelanggan}', [DashboardController::class, 'currentPerbaikan'])->name('dashboard.current-perbaikan');
-        Route::get('/dashboard/current-perbaikan/detail/{perbaikan}', [DashboardController::class, 'detailCurrentPerbaikan'])->name('dashboard.current-perbaikan-detail');
+            Route::get('/pelanggan/current-perbaikan/{idPelanggan}', [DashboardPelangganController::class, 'currentPerbaikan'])->name('dashboard.pelanggan.current-perbaikan');
+            Route::get('/pelanggan/current-perbaikan/detail/{perbaikan}', [DashboardPelangganController::class, 'detailCurrentPerbaikan'])->name('dashboard.pelanggan.current-perbaikan-detail');
 
-        Route::get('/dashboard/history-perbaikan/{idPelanggan}', [DashboardController::class, 'historyPerbaikan'])->name('dashboard.history-perbaikan');
-        Route::get('/dashboard/history-perbaikan/detail/{perbaikan}', [DashboardController::class, 'detailHistoryPerbaikan'])->name('dashboard.history-perbaikan-detail');
-        // ? End For Pelanggan
+            Route::get('/pelanggan/history-perbaikan/{idPelanggan}', [DashboardPelangganController::class, 'historyPerbaikan'])->name('dashboard.pelanggan.history-perbaikan');
+            Route::get('/pelanggan/history-perbaikan/detail/{perbaikan}', [DashboardPelangganController::class, 'detailHistoryPerbaikan'])->name('dashboard.pelanggan.history-perbaikan-detail');
+            // ? End For Pelanggan
+
+            // ? For Pekerja
+            Route::get('/pekerja/proses-perbaikan/{perbaikan}', [DashboardPekerjaController::class, 'prosesPerbaikan'])->name('dashboard.pekerja.proses-perbaikan');
+            Route::post('/pekerja/insert-proses-perbaikan', [DashboardPekerjaController::class, 'insertProgres'])->name('dashboard.pekerja.insert-proses-perbaikan');
+            // ? End For Pekerja
+        });
 
         Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');
         Route::put('/profil/{id}/change', [ProfilController::class, 'update'])->name('profil.update');
         Route::post('/profil/change-email', [ProfilController::class, 'changeEmail'])->name('profil.change-email');
 
-        Route::get('/admin/data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');
-        Route::resource('admin', AdminController::class);
+        Route::prefix('dashboard-admin')->group(function () {
+            Route::get('/admin/data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');
+            Route::resource('admin', AdminController::class);
 
-        Route::get('/pekerja/data-table', [PekerjaController::class, 'dataTablePekerja'])->name('pekerja.data-table');
-        Route::resource('pekerja', PekerjaController::class);
+            Route::get('/pekerja/data-table', [PekerjaController::class, 'dataTablePekerja'])->name('pekerja.data-table');
+            Route::resource('pekerja', PekerjaController::class);
 
-        Route::get('/pelanggan/data-table', [PelangganController::class, 'dataTablePelanggan'])->name('pelanggan.data-table');
-        Route::resource('pelanggan', PelangganController::class);
+            Route::get('/pelanggan/data-table', [PelangganController::class, 'dataTablePelanggan'])->name('pelanggan.data-table');
+            Route::resource('pelanggan', PelangganController::class);
 
-        Route::get('/kendaraan/data-table', [KendaraanController::class, 'dataTableKendaraan'])->name('kendaraan.data-table');
-        Route::resource('kendaraan', KendaraanController::class);
+            Route::get('/kendaraan/data-table', [KendaraanController::class, 'dataTableKendaraan'])->name('kendaraan.data-table');
+            Route::resource('kendaraan', KendaraanController::class);
 
-        Route::resource('perbaikan', PerbaikanController::class);
-        Route::resource('tipe', TipeController::class)->only(['index', 'store', 'update', 'destroy']);
-        Route::resource('merek', MerekController::class)->only(['index', 'store', 'update', 'destroy']);
+            Route::resource('perbaikan', PerbaikanController::class);
+            Route::resource('tipe', TipeController::class)->only(['index', 'store', 'update', 'destroy']);
+            Route::resource('merek', MerekController::class)->only(['index', 'store', 'update', 'destroy']);
 
-        Route::get('/transaksi/data-table', [TransaksiController::class, 'dataTableTransaksi'])->name('transaksi.data-table');
-        Route::resource('transaksi', TransaksiController::class);
+            Route::get('/transaksi/data-table', [TransaksiController::class, 'dataTableTransaksi'])->name('transaksi.data-table');
+            Route::resource('transaksi', TransaksiController::class);
 
-        Route::resource('settings', SettingsController::class);
+            Route::resource('settings', SettingsController::class);
 
-        Route::get('/laporan/pelanggan', [LaporanController::class, 'pelanggan'])->name('laporan.pelanggan');
-        Route::get('/laporan/kendaraan', [LaporanController::class, 'kendaraan'])->name('laporan.kendaraan');
-        Route::get('/laporan/perbaikan', [LaporanController::class, 'perbaikan'])->name('laporan.perbaikan');
-        Route::get('/laporan/transaksi', [LaporanController::class, 'transaksi'])->name('laporan.transaksi');
-        Route::get('/laporan/pekerja', [LaporanController::class, 'pekerja'])->name('laporan.pekerja');
+            Route::get('/laporan/pelanggan', [LaporanController::class, 'pelanggan'])->name('laporan.pelanggan');
+            Route::get('/laporan/kendaraan', [LaporanController::class, 'kendaraan'])->name('laporan.kendaraan');
+            Route::get('/laporan/perbaikan', [LaporanController::class, 'perbaikan'])->name('laporan.perbaikan');
+            Route::get('/laporan/transaksi', [LaporanController::class, 'transaksi'])->name('laporan.transaksi');
+            Route::get('/laporan/pekerja', [LaporanController::class, 'pekerja'])->name('laporan.pekerja');
+        });
     });
 });

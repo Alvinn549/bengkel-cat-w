@@ -17,8 +17,9 @@ class ProgresFactory extends Factory
     public function definition()
     {
         return [
+            'pekerja_id' => $this->faker->numberBetween(1, 5),
             'keterangan' => $this->faker->sentence(10),
-            'status' => 'Dalam Proses',
+            'is_selesai' => false,
             'created_at' => $this->faker->dateTimeBetween('-2 month', 'now'),
         ];
     }

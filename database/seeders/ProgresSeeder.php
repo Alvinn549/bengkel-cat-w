@@ -21,17 +21,5 @@ class ProgresSeeder extends Seeder
                 Progres::factory(rand(1, 15))->create(['perbaikan_id' => $perbaikan->id]);
             }
         });
-
-        // $totalPerbaikanCount = Perbaikan::count();
-
-        // Perbaikan::chunk(100, function ($perbaikans) use ($totalPerbaikanCount) {
-        //     $selectedPerbaikans = Perbaikan::inRandomOrder()->limit(intval($totalPerbaikanCount * 0.5))->get();
-
-        //     foreach ($perbaikans as $perbaikan) {
-        //         if ($selectedPerbaikans->contains('id', $perbaikan->id)) {
-        //             Progres::factory(rand(1, 15))->create(['perbaikan_id' => $perbaikan->id]);
-        //         }
-        //     }
-        // });
     }
 }

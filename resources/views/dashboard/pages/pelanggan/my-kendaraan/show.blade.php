@@ -9,7 +9,8 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
                 <li class="breadcrumb-item"><a
-                        href="{{ route('dashboard.my-kendaraan', auth()->user()->pelanggan->id) }}">Kendaraan Saya</a></li>
+                        href="{{ route('dashboard.pelanggan.my-kendaraan', auth()->user()->pelanggan->id) }}">Kendaraan
+                        Saya</a></li>
                 <li class="breadcrumb-item active">Detail Kendaraan</li>
             </ol>
         </nav>
@@ -18,7 +19,7 @@
     <section class="section">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard.my-kendaraan', auth()->user()->pelanggan->id) }}"
+                <a href="{{ route('dashboard.pelanggan.my-kendaraan', auth()->user()->pelanggan->id) }}"
                     class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>

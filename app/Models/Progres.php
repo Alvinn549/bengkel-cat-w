@@ -11,13 +11,19 @@ class Progres extends Model
 
     protected $fillable = [
         'perbaikan_id',
+        'pekerja_id',
         'keterangan',
         'foto',
-        'status',
+        'is_selesai',
     ];
 
     public function perbaikan()
     {
         return $this->belongsTo(Perbaikan::class);
+    }
+
+    public function pekerja()
+    {
+        return $this->belongsTo(Pekerja::class);
     }
 }

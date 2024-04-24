@@ -124,7 +124,7 @@
                                     </table>
                                 </div>
                             </div>
-                            <a href="{{ route('dashboard.current-perbaikan-detail', $perbaikan->id) }}"
+                            <a href="{{ route('dashboard.pelanggan.current-perbaikan-detail', $perbaikan->id) }}"
                                 class="btn btn-secondary w-100">
                                 Lihat Detail
                             </a>

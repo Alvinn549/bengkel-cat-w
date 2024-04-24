@@ -22,4 +22,9 @@ class Pekerja extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function progres()
+    {
+        return $this->hasMany(Progres::class);
+    }
 }

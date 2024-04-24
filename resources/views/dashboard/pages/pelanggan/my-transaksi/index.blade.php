@@ -68,7 +68,7 @@
                                             </a>
                                             <a class="btn btn-success btn-sm" data-bs-toggle="tooltip"
                                                 data-bs-placement="top" title="Lihat"
-                                                href="{{ route('dashboard.my-transaksi-detail', $transaksi->id) }}">
+                                                href="{{ route('dashboard.pelanggan.my-transaksi-detail', $transaksi->id) }}">
                                                 <i class="ri-eye-line"></i>
                                             </a>
                                         </td>

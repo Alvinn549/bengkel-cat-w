@@ -34,7 +34,7 @@ class PelangganSeeder extends Seeder
             'created_at' => now()
         ]);
 
-        User::factory(20)->create([
+        User::factory(10)->create([
             'role' => 'pelanggan',
         ])->each(function ($user) {
             Pelanggan::factory()->create(['user_id' => $user->id]);
