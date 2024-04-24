@@ -69,6 +69,7 @@ class DashboardPelangganController extends Controller
 
         $perbaikans = Perbaikan::whereIn('kendaraan_id', $kendaraanIds)
             ->where('status', '!=', 'Selesai')
+            ->latest()
             ->get();
         // dd($perbaikans);
 
