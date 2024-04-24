@@ -38,7 +38,7 @@ class DashboardController extends Controller
             ));
         } elseif (auth()->user()->role == 'pekerja') {
             $recentPerbaikans = Perbaikan::with('kendaraan', 'kendaraan.pelanggan')
-                ->where('status', '!=', 'Selesai')
+                ->where('status', 'Dalam Proses')
                 ->latest()
                 ->get();
 

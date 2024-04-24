@@ -29,6 +29,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
+                                            <th>Kode</th>
                                             <th>Preview</th>
                                             <th>Nama Perbaikan</th>
                                             <th>Status</th>
@@ -38,13 +39,15 @@
                                     <tbody>
                                         @foreach ($recentPerbaikans as $key => $perbaikan)
                                             <tr>
+                                                <td>{{ $key + 1 }}</td>
                                                 <td nowrap><strong>{{ $perbaikan->kode_unik }}</strong></td>
                                                 <td class="text-center">
                                                     @if ($perbaikan->foto)
                                                         <a href="javascript:void(0)">
                                                             <img src="{{ asset('storage/' . $perbaikan->foto) }}"
                                                                 class="img-fluid rounded" alt=""
-                                                                onclick="openImage('{{ asset('storage/' . $perbaikan->foto) }}')">
+                                                                onclick="openImage('{{ asset('storage/' . $perbaikan->foto) }}')"
+                                                                style="width: 100px;">
                                                         </a>
                                                     @else
                                                         <a href="javascript:void(0)">

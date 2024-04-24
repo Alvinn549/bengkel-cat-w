@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Perbaikan;
 use App\Models\Progres;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class DashboardPekerjaController extends Controller
 {
@@ -17,14 +18,17 @@ class DashboardPekerjaController extends Controller
         $perbaikan->load('progres');
         $perbaikan->load('progres.pekerja');
 
-        $progres_is_selesai = $perbaikan->progres()->orderByDesc('id')->first()->is_selesai;
+        $latest_progres = [
+            'id' => $perbaikan->progres()->orderByDesc('id')->first()->id ?? null,
+            'is_selesai' => $perbaikan->progres()->orderByDesc('id')->first()->is_selesai ?? null,
+        ];
 
-        // dd($progres_is_selesai);
+        // dd($latest_progres);
 
-        return view('dashboard.pages.pekerja.proses-perbaikan.index', compact('perbaikan', 'progres_is_selesai'));
+        return view('dashboard.pages.pekerja.proses-perbaikan.index', compact('perbaikan', 'latest_progres'));
     }
 
-    public function insertProgres(Request $request)
+    public function storeProgres(Request $request)
     {
         try {
             // dd($request->all());
@@ -67,5 +71,46 @@ class DashboardPekerjaController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => 'error', 'message' => 'Failed to insert progress. ' . $e->getMessage()]);
         }
+    }
+
+    public function updateProgres(Request $request, Progres $progres)
+    {
+        // dd($request->all());
+        $request->validate([
+            'keterangan' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpg,png|max:2048',
+            'is_selesai' => 'nullable',
+        ]);
+
+        $is_selesai = null;
+
+        if ($request->has('is_selesai')) {
+            if ($request->is_selesai == 'on') {
+                $is_selesai = true;
+            } else {
+                $is_selesai = false;
+            }
+        } else {
+            $is_selesai = false;
+        }
+
+        // Update progress data
+        $progres->update([
+            'keterangan' => $request->keterangan,
+            'is_selesai' => $is_selesai,
+        ]);
+
+        if ($request->hasFile('foto')) {
+            if ($progres->foto) {
+                // Delete old photo
+                Storage::delete($progres->foto);
+            }
+
+            // Store new photo
+            $fotoPath = $request->file('foto')->store('foto');
+            $progres->update(['foto' => $fotoPath]);
+        }
+
+        return redirect()->back()->with('success', 'Progress updated successfully');
     }
 }

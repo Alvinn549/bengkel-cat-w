@@ -18,7 +18,7 @@ class AdminController extends Controller
 
     public function dataTableAdmin()
     {
-        $admins = Admin::get();
+        $admins = Admin::latest()->get();
 
         return DataTables::of($admins)
             ->addIndexColumn()

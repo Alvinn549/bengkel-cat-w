@@ -67,7 +67,8 @@ Route::middleware('auth')->group(function () {
 
             // ? For Pekerja
             Route::get('/pekerja/proses-perbaikan/{perbaikan}', [DashboardPekerjaController::class, 'prosesPerbaikan'])->name('dashboard.pekerja.proses-perbaikan');
-            Route::post('/pekerja/insert-proses-perbaikan', [DashboardPekerjaController::class, 'insertProgres'])->name('dashboard.pekerja.insert-proses-perbaikan');
+            Route::post('/pekerja/store-proses-perbaikan', [DashboardPekerjaController::class, 'storeProgres'])->name('dashboard.pekerja.store-proses-perbaikan');
+            Route::put('/pekerja/update-proses-perbaikan/{progres}', [DashboardPekerjaController::class, 'updateProgres'])->name('dashboard.pekerja.update-proses-perbaikan');
             // ? End For Pekerja
         });
 
@@ -76,23 +77,23 @@ Route::middleware('auth')->group(function () {
         Route::post('/profil/change-email', [ProfilController::class, 'changeEmail'])->name('profil.change-email');
 
         Route::prefix('dashboard-admin')->group(function () {
-            Route::get('/admin/data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');
+            Route::get('/admin-data-table', [AdminController::class, 'dataTableAdmin'])->name('admin.data-table');
             Route::resource('admin', AdminController::class);
 
-            Route::get('/pekerja/data-table', [PekerjaController::class, 'dataTablePekerja'])->name('pekerja.data-table');
+            Route::get('/pekerja-data-table', [PekerjaController::class, 'dataTablePekerja'])->name('pekerja.data-table');
             Route::resource('pekerja', PekerjaController::class);
 
-            Route::get('/pelanggan/data-table', [PelangganController::class, 'dataTablePelanggan'])->name('pelanggan.data-table');
+            Route::get('/pelanggan-data-table', [PelangganController::class, 'dataTablePelanggan'])->name('pelanggan.data-table');
             Route::resource('pelanggan', PelangganController::class);
 
-            Route::get('/kendaraan/data-table', [KendaraanController::class, 'dataTableKendaraan'])->name('kendaraan.data-table');
+            Route::get('/kendaraan-data-table', [KendaraanController::class, 'dataTableKendaraan'])->name('kendaraan.data-table');
             Route::resource('kendaraan', KendaraanController::class);
 
             Route::resource('perbaikan', PerbaikanController::class);
             Route::resource('tipe', TipeController::class)->only(['index', 'store', 'update', 'destroy']);
             Route::resource('merek', MerekController::class)->only(['index', 'store', 'update', 'destroy']);
 
-            Route::get('/transaksi/data-table', [TransaksiController::class, 'dataTableTransaksi'])->name('transaksi.data-table');
+            Route::get('/transaksi-data-table', [TransaksiController::class, 'dataTableTransaksi'])->name('transaksi.data-table');
             Route::resource('transaksi', TransaksiController::class);
 
             Route::resource('settings', SettingsController::class);

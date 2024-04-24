@@ -21,7 +21,7 @@ class KendaraanController extends Controller
 
     public function dataTableKendaraan()
     {
-        $kendaraans = Kendaraan::with('pelanggan', 'tipe', 'merek')->get();
+        $kendaraans = Kendaraan::with('pelanggan', 'tipe', 'merek')->latest()->get();
 
         return DataTables::of($kendaraans)
             ->addIndexColumn()

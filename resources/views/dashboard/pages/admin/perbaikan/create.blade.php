@@ -23,6 +23,7 @@
                             enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" value="{{ request('idKendaraan') }}" name="idKendaraan">
+                            <input type="hidden" value="Dalam Proses" name="status">
                             <div class="col-md-12">
                                 <label for="inputNama" class="form-label">Nama</label>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror"

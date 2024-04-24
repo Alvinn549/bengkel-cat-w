@@ -19,7 +19,7 @@ class PekerjaController extends Controller
 
     public function dataTablePekerja()
     {
-        $pekerjas = Pekerja::get();
+        $pekerjas = Pekerja::latest()->get();
 
         return DataTables::of($pekerjas)
             ->addIndexColumn()

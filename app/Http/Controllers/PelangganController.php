@@ -19,7 +19,7 @@ class PelangganController extends Controller
 
     public function dataTablePelanggan()
     {
-        $pelanggans = Pelanggan::get();
+        $pelanggans = Pelanggan::latest()->get();
 
         return DataTables::of($pelanggans)
             ->addIndexColumn()

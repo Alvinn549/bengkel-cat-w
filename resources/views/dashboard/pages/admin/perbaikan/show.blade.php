@@ -49,6 +49,14 @@
                             <div class="col-md-12">
                                 <table class="table">
                                     <tr>
+                                        <th>Kode</th>
+                                        <td>
+                                            <span class="badge bg-secondary" style="font-size: 1rem;">
+                                                {{ $perbaikan->kode_unik ?? '' }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th>Nama</th>
                                         <td>{{ $perbaikan->nama ?? '' }}</td>
                                     </tr>
@@ -104,7 +112,8 @@
                                             }
                                         @endphp
                                         <th>Status</th>
-                                        <td><span class="badge {{ $badge_bg }}">{{ $perbaikan->status ?? '-' }}</span>
+                                        <td><span class="badge {{ $badge_bg }}"
+                                                style="font-size: 1rem;">{{ $perbaikan->status ?? '-' }}</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -118,43 +127,51 @@
                     <div class="card-body">
                         <h5 class="card-title">Progres Perbaikan</h5>
                         <div class="activity">
-                            @forelse ($perbaikan->progres as $progres)
-                                @php
-                                    $date = \Carbon\Carbon::parse($progres->created_at)->locale('id');
-                                    $formattedDate = $date->format('d-m-Y');
-                                    $formattedTime = $date->format('H:i');
-                                    $diffForHumans = $date->diffForHumans();
-                                @endphp
-                                <div class="activity-item d-flex">
-                                    <div class="activite-label" style="width: 150px">
-                                        {{ $diffForHumans ?? '-' }} <br>
-                                        {{ $formattedDate ?? '-' }} <br>
-                                        {{ $formattedTime ?? '-' }}
-                                    </div>
-                                    <i
-                                        class='bi bi-circle-fill activity-badge {{ $progres->status == 'Selesai' ? 'text-success' : 'text-warning' }} align-self-start'></i>
-                                    <div class="activity-content">
-                                        {{ $progres->keterangan }}
-                                        <div class="col-md-4">
-                                            @if ($progres->foto)
-                                                <a href="#">
-                                                    <img src="{{ asset('storage/' . $progres->foto) }}"
-                                                        class="img-fluid rounded" alt=""
-                                                        onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
-                                                </a>
-                                            @else
-                                                <a href="#">
-                                                    <img src="{{ asset('assets/dashboard/img/spray-gun.png') }}"
-                                                        class="img-fluid rounded" alt=""
-                                                        onclick="openImage('{{ asset('assets/dashboard/img/spray-gun.png') }}')">
-                                                </a>
-                                            @endif
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    @forelse ($perbaikan->progres->sortByDesc('id') as $progres)
+                                        @php
+                                            $date = \Carbon\Carbon::parse($progres->created_at)->locale('id');
+                                            $formattedDate = $date->format('d-m-Y');
+                                            $formattedTime = $date->format('H:i');
+                                            $diffForHumans = $date->diffForHumans();
+                                        @endphp
+                                        <div class="activity-item d-flex">
+                                            <div class="activite-label" style="width: 150px">
+                                                {{ $diffForHumans ?? '-' }} <br>
+                                                {{ $formattedDate . ' ' . $formattedTime ?? '-' }} <br>
+                                                Oleh : {{ $progres->pekerja->nama ?? '-' }}
+                                            </div>
+                                            <i
+                                                class='bi bi-circle-fill activity-badge {{ $progres->is_selesai == 1 ? 'text-success' : 'text-warning' }} align-self-start'></i>
+                                            <div class="activity-content">
+                                                {{ $progres->keterangan ?? '-' }}
+                                                <div class="col-md-5 mt-2">
+                                                    @if ($progres->foto)
+                                                        <a href="javascript:void(0)">
+                                                            <img src="{{ asset('storage/' . $progres->foto) }}"
+                                                                class="img-fluid rounded" alt=""
+                                                                onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
+                                                        </a>
+                                                    @else
+                                                        <a href="javascript:void(0)">
+                                                            <img src="{{ asset('assets/dashboard/img/spray-gun.png') }}"
+                                                                class="img-fluid rounded" alt=""
+                                                                onclick="openImage('{{ asset('assets/dashboard/img/spray-gun.png') }}')">
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div><!-- End Progres item-->
+                                    @empty
+                                        <div class="text-center">
+                                            <h5>Tidak ada progres</h5>
+                                            <img src="{{ asset('assets/dashboard/img/hang-around.png') }}"
+                                                class="img-fluid rounded" alt="">
                                         </div>
-                                    </div>
-                                </div><!-- End Progres item-->
-                            @empty
-                                <h5>Belum ada progres</h5>
-                            @endforelse
+                                    @endforelse
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -55,6 +55,14 @@
                             <div class="col-md-12">
                                 <table class="table">
                                     <tr>
+                                        <th>Kode</th>
+                                        <td>
+                                            <span class="badge bg-secondary" style="font-size: 1rem;">
+                                                {{ $perbaikan->kode_unik ?? '' }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <th>Nama</th>
                                         <td>{{ $perbaikan->nama ?? '' }}</td>
                                     </tr>
@@ -106,7 +114,8 @@
                                             }
                                         @endphp
                                         <th>Status</th>
-                                        <td><span class="badge {{ $badge_bg }}">{{ $perbaikan->status ?? '-' }}</span>
+                                        <td><span class="badge {{ $badge_bg }}"
+                                                style="font-size: 1rem;">{{ $perbaikan->status ?? '-' }}</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -190,9 +199,12 @@
                                     <label for="foto" class="col-form-label">Foto</label>
                                     <input required type="file" class="form-control" id="foto" name="foto"
                                         accept=".jpg,.png" required onchange="previewFoto()">
+
                                 </div>
                                 <div class="mb-3 d-none" id="container-preview">
-                                    <img class="preview-foto img-fluid rounded">
+                                    <center>
+                                        <img class="preview-foto img-fluid rounded">
+                                    </center>
                                 </div>
                                 <div class="mb-3">
                                     <label for="keterangan" name="keterangan" class="col-form-label">Keterangan</label>
@@ -220,12 +232,13 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="editProgresLabel">Edit Progres {{ $progres->id }}</h5>
+                                <h5 class="modal-title" id="editProgresLabel">Edit Progres</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form method="POST" enctype="multipart/form-data"
+                                <form action="{{ route('dashboard.pekerja.update-proses-perbaikan', $progres) }}"
+                                    method="POST" enctype="multipart/form-data"
                                     id="editProgresForm{{ $progres->id }}">
                                     @csrf
                                     @method('PUT')
@@ -234,26 +247,38 @@
 
                                     <div class="mb-3">
                                         <label for="foto" class="col-form-label">Foto</label>
-                                        <input required type="file" class="form-control" id="foto"
-                                            name="foto" accept=".jpg,.png" required onchange="previewFoto()">
-                                    </div>
-                                    <div class="mb-3 d-none" id="container-preview">
-                                        <img class="preview-foto img-fluid rounded">
+                                        <input type="file" class="form-control" id="foto{{ $progres->id }}"
+                                            name="foto" accept=".jpg,.png"
+                                            onchange="previewFoto{{ $progres->id }}()">
+                                        <small id="fotoHelp{{ $progres->id }}" class="form-text text-danger"></small>
                                     </div>
                                     <div class="mb-3">
-                                        <label for="keterangan" name="keterangan"
-                                            class="col-form-label">Keterangan</label>
-                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="4" style="align: left">
-                                            {{ $progres->keterangan }}
-                                        </textarea>
+                                        <center>
+                                            @if ($perbaikan->foto)
+                                                <img src="{{ asset('storage/' . $perbaikan->foto) }}"
+                                                    class="preview-foto{{ $progres->id }} img-fluid rounded"
+                                                    alt="">
+                                            @else
+                                                <img class="preview-foto{{ $progres->id }} img-fluid rounded">
+                                            @endif
+                                        </center>
                                     </div>
-                                    <div class="mb-3 form-check">
-                                        <input type="checkbox" class="form-check-input" id="selesaiCheckbox"
-                                            name="is_selesai">
-                                        <label class="form-check-label" for="selesaiCheckbox">Nyatakan sudah
-                                            selesai</label>
+                                    <div class="mb-3">
+                                        <label for="keterangan" class="col-form-label">Keterangan</label>
+                                        <textarea class="form-control" id="keterangan" name="keterangan" rows="4">{{ $progres->keterangan }}</textarea>
                                     </div>
-                                    <button type="button" class="btn btn-primary w-100" id="submitProgressForm">
+                                    @if ($latest_progres['id'] == $progres->id)
+                                        <div class="mb-3 form-check">
+                                            <input type="checkbox" class="form-check-input"
+                                                id="selesaiCheckbox{{ $progres->id }}"
+                                                {{ $progres->is_selesai == true ? 'checked' : '' }} name="is_selesai">
+                                            <label class="form-check-label"
+                                                for="selesaiCheckbox{{ $progres->id }}">Nyatakan sudah
+                                                selesai</label>
+                                        </div>
+                                    @endif
+                                    <button type="submit" class="btn btn-primary w-100"
+                                        id="editProgresButton{{ $progres->id }}">
                                         <i class="bi bi-save me-1"></i> Submit
                                     </button>
                                 </form>
@@ -269,7 +294,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Progres Perbaikan</h5>
                         <div class="activity">
-                            @if ($progres_is_selesai != true)
+                            @if ($latest_progres['is_selesai'] != true)
                                 <div class="row">
                                     <div class="col-md-12">
                                         <button type="button" class="btn btn-outline-primary w-100"
@@ -298,8 +323,7 @@
                                                 class='bi bi-circle-fill activity-badge {{ $progres->is_selesai == 1 ? 'text-success' : 'text-warning' }} align-self-start'></i>
                                             <div class="activity-content">
                                                 {{ $progres->keterangan ?? '-' }}
-                                                {{ $progres->is_selesai ?? '-' }}
-                                                <div class="col-md-4">
+                                                <div class="col-md-4 mt-2">
                                                     @if ($progres->foto)
                                                         <a href="javascript:void(0)">
                                                             <img src="{{ asset('storage/' . $progres->foto) }}"
@@ -315,13 +339,20 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                data-bs-target="#editProgres{{ $progres->id }}" style="height: 40px;"><i
-                                                    class="ri-pencil-line"></i>
-                                            </button>
+                                            @if ($latest_progres['is_selesai'] != true || $latest_progres['id'] == $progres->id)
+                                                <button type="button" class="btn btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editProgres{{ $progres->id }}"
+                                                    style="height: 40px;"><i class="ri-pencil-line"></i>
+                                                </button>
+                                            @endif
                                         </div><!-- End Progres item-->
                                     @empty
-                                        <h5>Belum ada progres</h5>
+                                        <div class="text-center">
+                                            <h5>Tidak ada progres</h5>
+                                            <img src="{{ asset('assets/dashboard/img/hang-around.png') }}"
+                                                class="img-fluid rounded" alt="">
+                                        </div>
                                     @endforelse
                                 </div>
                             </div>
@@ -360,6 +391,7 @@
             }
         }
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const selesaiCheckbox = document.getElementById('selesaiCheckbox');
@@ -380,9 +412,7 @@
                 }
             });
         });
-    </script>
 
-    <script>
         $(document).ready(function() {
             $('#submitProgressForm').on('click', function(e) {
                 e.preventDefault();
@@ -394,13 +424,21 @@
                     showCancelButton: true,
                     confirmButtonText: 'Yes, submit it!',
                     cancelButtonText: 'No, cancel!',
-                    reverseButtons: true
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        showLoadingModal();
                         submitFormInsertProgres();
                     }
                 });
             });
+
+            function showLoadingModal() {
+                Swal.fire({
+                    title: 'Loading',
+                    html: 'Please wait...',
+                    allowOutsideClick: false
+                });
+            }
 
             function submitFormInsertProgres() {
                 var formData = new FormData($('#progressForm')[0]);
@@ -410,11 +448,12 @@
 
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('dashboard.pekerja.insert-proses-perbaikan') }}",
+                    url: "{{ route('dashboard.pekerja.store-proses-perbaikan') }}",
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function(response) {
+                        Swal.close(); // Close loading modal
                         if (response.status === 'success') {
                             location.reload();
                         } else if (response.status === 'error_validation') {
@@ -424,7 +463,6 @@
                                     value[0] + '</div>');
                             });
                         } else {
-                            // alert('Error occurred while inserting progress: ' + response.message);
                             Swal.fire({
                                 title: 'Error',
                                 text: 'Error occurred while inserting progress: ' + response
@@ -435,6 +473,7 @@
                         }
                     },
                     error: function(xhr, status, error) {
+                        Swal.close(); // Close loading modal
                         Swal.fire({
                             title: 'Error',
                             text: 'Error occurred while inserting progress: ' + error,
@@ -446,4 +485,70 @@
             }
         });
     </script>
+
+    @forelse ($perbaikan->progres->sortByDesc('created_at') as $progres)
+        @if ($latest_progres['id'] == $progres->id)
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const selesaiCheckbox{{ $progres->id }} = document.getElementById(
+                        'selesaiCheckbox{{ $progres->id }}');
+
+                    selesaiCheckbox{{ $progres->id }}.addEventListener('change', function() {
+                        if (selesaiCheckbox{{ $progres->id }}.checked) {
+                            Swal.fire({
+                                title: 'Apakah Anda yakin ingin menyatakan sudah selesai ?',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Ya',
+                                cancelButtonText: 'Tidak',
+                            }).then((result) => {
+                                if (!result.isConfirmed) {
+                                    selesaiCheckbox{{ $progres->id }}.checked = false;
+                                }
+                            });
+                        }
+                    });
+                });
+            </script>
+        @endif
+        <script>
+            function previewFoto{{ $progres->id }}() {
+                const fileInput{{ $progres->id }} = document.getElementById('foto{{ $progres->id }}');
+                const fileSize{{ $progres->id }} = fileInput{{ $progres->id }}.files[0].size;
+                const fileTypes{{ $progres->id }} = ['image/jpeg', 'image/png'];
+
+                // Check file type
+                if (!fileTypes{{ $progres->id }}.includes(fileInput{{ $progres->id }}.files[0].type)) {
+                    document.getElementById('fotoHelp{{ $progres->id }}').textContent =
+                        'File harus berupa gambar JPG atau PNG.';
+                    fileInput{{ $progres->id }}.value = '';
+                    return;
+                }
+
+                // Check file size
+                const maxSize{{ $progres->id }} = 3 * 1024 * 1024;
+                if (fileSize{{ $progres->id }} > maxSize{{ $progres->id }}) {
+                    document.getElementById('fotoHelp{{ $progres->id }}').textContent =
+                        'Ukuran file tidak boleh melebihi 3MB.';
+                    fileInput{{ $progres->id }}.value = '';
+                    return;
+                }
+
+                document.getElementById('fotoHelp{{ $progres->id }}').textContent = '';
+
+                const image{{ $progres->id }} = document.querySelector('#foto{{ $progres->id }}');
+                const imgPreview{{ $progres->id }} = document.querySelector('.preview-foto{{ $progres->id }}');
+
+                imgPreview{{ $progres->id }}.style.display = 'block';
+
+                const oFReader{{ $progres->id }} = new FileReader();
+                oFReader{{ $progres->id }}.readAsDataURL(image{{ $progres->id }}.files[0]);
+
+                oFReader{{ $progres->id }}.onload = function(oFREvent) {
+                    imgPreview{{ $progres->id }}.src = oFREvent.target.result;
+                }
+            }
+        </script>
+    @empty
+    @endforelse
 @endsection
