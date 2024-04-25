@@ -25,16 +25,14 @@
                     <div class="card info-card">
                         <div class="card-body">
                             <h5 class="card-title">Dalam Proses Perbaikan</h5>
-                            <a href="#">
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bx bxs-car-crash"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>3478</h6>
-                                    </div>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bx bxs-car-crash"></i>
                                 </div>
-                            </a>
+                                <div class="ps-3">
+                                    <h6>{{ $perbaikanBerlangsungCount ?? 0 }}</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div><!-- End Transaksi Sekarang Card -->
@@ -42,16 +40,14 @@
                     <div class="card info-card ">
                         <div class="card-body">
                             <h5 class="card-title">Dalam Proses Transaksi</h5>
-                            <a href="#">
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-cart"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>3478</h6>
-                                    </div>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bi bi-cart"></i>
                                 </div>
-                            </a>
+                                <div class="ps-3">
+                                    <h6>{{ $transaksiBerlangsungCount ?? 0 }}</h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div><!-- End Transaksi Sekarang Card -->
@@ -65,7 +61,7 @@
                                     <i class="bx bxs-car"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>3478</h6>
+                                    <h6>{{ $kendaraanCount ?? 0 }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +76,7 @@
                                     <i class="bi bi-people"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>3478</h6>
+                                    <h6>{{ $pelangganCount ?? 0 }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -95,7 +91,7 @@
                                     <i class="bx bx-badge-check"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>3478</h6>
+                                    <h6>{{ $perbaikanSelesaiCount ?? 0 }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -110,13 +106,21 @@
                                     <i class="bi bi-credit-card-2-back-fill"></i>
                                 </div>
                                 <div class="ps-3">
-                                    <h6>3478</h6>
+                                    <h6>{{ $transaksiSelesaiCount ?? 0 }}</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div><!-- End Transaksi Sekarang Card -->
             </div>
-        </div>
+            <div class="row">
+                <div class="col-xxl-12 col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Current Activity</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
     </section>
 @endsection

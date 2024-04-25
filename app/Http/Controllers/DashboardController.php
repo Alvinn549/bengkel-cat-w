@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kendaraan;
 use App\Models\Pelanggan;
 use App\Models\Perbaikan;
 use App\Models\Transaksi;
@@ -12,7 +13,23 @@ class DashboardController extends Controller
     public function index()
     {
         if (auth()->user()->role == 'admin') {
-            return view('dashboard.pages.admin.index');
+            $perbaikanBerlangsungCount = Perbaikan::where('status', '!=', 'Selesai')->count();
+            $transaksiBerlangsungCount = Transaksi::where('transaction_status', '!=', 'Selesai')->count();
+
+            $kendaraanCount = Kendaraan::count();
+            $pelangganCount = Pelanggan::count();
+
+            $perbaikanSelesaiCount = Perbaikan::where('status', 'Selesai')->count();
+            $transaksiSelesaiCount = Transaksi::where('transaction_status', 'Selesai')->count();
+
+            return view('dashboard.pages.admin.index', compact(
+                'perbaikanBerlangsungCount',
+                'transaksiBerlangsungCount',
+                'kendaraanCount',
+                'pelangganCount',
+                'perbaikanSelesaiCount',
+                'transaksiSelesaiCount'
+            ));
         } elseif (auth()->user()->role == 'pelanggan') {
             $pelanggan = Pelanggan::with('kendaraans', 'transaksis')
                 ->where('id', auth()->user()->pelanggan->id)
