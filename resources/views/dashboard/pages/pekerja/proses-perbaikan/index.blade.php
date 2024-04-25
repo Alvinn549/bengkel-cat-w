@@ -63,7 +63,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Nama</th>
+                                        <th>Nama Perbaikan</th>
                                         <td>{{ $perbaikan->nama ?? '' }}</td>
                                     </tr>
                                     <tr>

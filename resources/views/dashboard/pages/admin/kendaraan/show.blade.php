@@ -8,9 +8,10 @@
             background-color: transparent;
         }
 
-        .btn-show-pemilik:hover {
-            color: #007bff;
-        }
+        /*
+                            .btn-show-pemilik:hover {
+                                color: #007bff;
+                            } */
     </style>
 @endsection
 @section('content')
@@ -81,7 +82,8 @@
                                         <th>Pemilik</th>
                                         <td>
                                             {{ $kendaraan->pelanggan->nama ?? '-' }}
-                                            <button type="button" data-bs-toggle="modal" class="btn-show-pemilik"
+                                            <button type="button" data-bs-toggle="modal"
+                                                class="btn-show-pemilik btn btn-outline-primary btn-sm ms-2"
                                                 data-bs-target="#dataPemilik">
                                                 <i class="ri-eye-line"></i>
                                             </button>

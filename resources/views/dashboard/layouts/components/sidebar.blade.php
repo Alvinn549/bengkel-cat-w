@@ -44,27 +44,32 @@
                 <ul id="menu-laporan" class="nav-content {{ request()->routeIs('laporan*') ? 'active' : 'collapse' }} "
                     data-bs-parent="#sidebar-nav">
                     <li>
-                        <a href="{{ route('laporan.pelanggan') }}" class="">
+                        {{-- <a href="{{ route('laporan.pelanggan') }}" class=""> --}}
+                        <a href="#" class="">
                             <i class="bi bi-circle"></i><span>Pelanggan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('laporan.kendaraan') }}" class="">
+                        {{-- <a href="{{ route('laporan.kendaraan') }}" class=""> --}}
+                        <a href="#" class="">
                             <i class="bi bi-circle"></i><span>Kendaraan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('laporan.perbaikan') }}" class="">
+                        {{-- <a href="{{ route('laporan.perbaikan') }}" class=""> --}}
+                        <a href="#" class="">
                             <i class="bi bi-circle"></i><span>Perbaikan</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('laporan.transaksi') }}" class="">
+                        {{-- <a href="{{ route('laporan.transaksi') }}" class=""> --}}
+                        <a href="# class="">
                             <i class="bi bi-circle"></i><span>Transaksi</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{ route('laporan.pekerja') }}" class="">
+                        {{-- <a href="{{ route('laporan.pekerja') }}" class=""> --}}
+                        <a href="#" class="">
                             <i class="bi bi-circle"></i><span>Pekerja</span>
                         </a>
                     </li>

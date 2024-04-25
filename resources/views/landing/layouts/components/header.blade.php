@@ -25,8 +25,9 @@
         <div class="row mt-5">
             <div class="col-lg-12">
                 <div class="container-search">
-                    <form action="">
-                        <input id="inputSearch" type="text" placeholder="Kode Perbaikan">
+                    <form action="{{ route('home') }}" method="GET">
+                        <input id="inputSearch" name="kode_unik" type="text" placeholder="Kode Perbaikan"
+                            value="{{ request('kode_unik') }}">
                         <div class="search"></div>
                     </form>
                 </div>
