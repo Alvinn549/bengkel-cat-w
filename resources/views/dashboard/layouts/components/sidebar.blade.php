@@ -63,7 +63,7 @@
                     </li>
                     <li>
                         {{-- <a href="{{ route('laporan.transaksi') }}" class=""> --}}
-                        <a href="# class="">
+                        <a href="#"class="">
                             <i class="bi bi-circle"></i><span>Transaksi</span>
                         </a>
                     </li>

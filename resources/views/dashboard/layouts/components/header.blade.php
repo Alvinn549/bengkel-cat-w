@@ -10,25 +10,8 @@
         @endif
     </div><!-- End Logo -->
 
-    @if (auth()->user()->role == 'pelanggan')
-        <div class="search-bar">
-            <form class="search-form d-flex align-items-center" method="POST" action="#">
-                <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-            </form>
-        </div><!-- End Search Bar -->
-    @endif
-
     <nav class="header-nav ms-auto">
         <ul class="d-flex align-items-center">
-
-            @if (auth()->user()->role == 'pelanggan')
-                <li class="nav-item d-block d-lg-none">
-                    <a class="nav-link nav-icon search-bar-toggle " href="#" onclick="searchToggle();">
-                        <i class="bi bi-search"></i>
-                    </a>
-                </li><!-- End Search Icon-->
-            @endif
 
             @if (auth()->user()->role == 'admin')
                 <li class="nav-item dropdown pe-3">

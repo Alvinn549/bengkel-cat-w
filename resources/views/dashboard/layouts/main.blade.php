@@ -102,26 +102,6 @@
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/dashboard/js/main.js') }}"></script>
 
-    @if (auth()->user()->role == 'pelanggan')
-        <script>
-            function resizeSearchBar() {
-                if (window.innerWidth <= 768) {
-                    console.log('mobile');
-                    document.querySelector('.search-bar').style.width = '100%';
-                } else {
-                    console.log('web');
-                    document.querySelector('.search-bar').style.width = '800px';
-                }
-            }
-
-            resizeSearchBar();
-
-            window.addEventListener('resize', function() {
-                resizeSearchBar();
-            });
-        </script>
-    @endif
-
     @if (auth()->user()->role == 'pelanggan' || auth()->user()->role == 'pekerja')
         <script>
             document.querySelector('body').classList.add('toggle-sidebar');

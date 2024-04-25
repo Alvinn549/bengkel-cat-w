@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="pagetitle">
-        <h1>Howdy {{ auth()->user()->pelanggan->nama }}</h1>
+        <h1>Dashboard</h1>
     </div><!-- End Page Title -->
     <hr>
     <section class="section dashboard">
