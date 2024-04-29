@@ -91,6 +91,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/admin/list-perbaikan-menunggu-bayar', [DashboardAdminController::class, 'listPerbaikanMenungguBayar'])->name('dashboard.admin.list-perbaikan-menunggu-bayar');
 
             Route::get('/admin/detail-perbaikan-dalam-proses/{perbaikan}', [DashboardAdminController::class, 'detailPerbaikanDalamProses'])->name('dashboard.admin.detail-perbaikan-dalam-proses');
+            Route::get('/admin/detail-perbaikan-selesai-di-proses/{perbaikan}', [DashboardAdminController::class, 'detailPerbaikanSelesaiDiProses'])->name('dashboard.admin.detail-perbaikan-selesai-di-proses');
+
             Route::get('/admin/proses-perbaikan-selesai/{perbaikan}', [DashboardAdminController::class, 'prosesPerbaikanSelesai'])->name('dashboard.admin.proses-perbaikan-selesai');
             Route::put('/admin/proses-perbaikan/{perbaikan}', [DashboardAdminController::class, 'prosesPerbaikanSelesaiPut'])->name('dashboard.admin.proses-perbaikan-selesai-put');
 

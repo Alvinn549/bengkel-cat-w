@@ -100,6 +100,11 @@
                                                         onclick="confirmProses('{{ $perbaikan->id }}')">
                                                         <i class="ri-tools-line me-1"></i>Proses
                                                     </button>
+                                                    <a class="btn btn-success btn-sm" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Lihat"
+                                                        href="{{ route('dashboard.admin.detail-perbaikan-selesai-di-proses', $perbaikan->id) }}">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach

@@ -50,7 +50,15 @@ class DashboardAdminController extends Controller
             ->where('status', 'Proses Selesai')
             ->get();
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-selesai.index', compact('perbaikans'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.index', compact('perbaikans'));
+    }
+
+    public function detailPerbaikanSelesaiDiProses(Perbaikan $perbaikan)
+    {
+        $perbaikan->load('kendaraan');
+        $perbaikan->load('progres');
+
+        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.show', compact('perbaikan'));
     }
 
     public function listPerbaikanMenungguBayar()
