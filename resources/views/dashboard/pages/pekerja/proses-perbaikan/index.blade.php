@@ -317,7 +317,16 @@
                                             <div class="activite-label" style="width: 150px">
                                                 {{ $diffForHumans ?? '-' }} <br>
                                                 {{ $formattedDate . ' ' . $formattedTime ?? '-' }} <br>
-                                                {{ $progres->pekerja_id == auth()->user()->pekerja->id ? 'oleh : Saya' : 'oleh : ' . $progres->pekerja->nama ?? '-' }}
+                                                @php
+
+                                                    if ($progres->pekerja_id == auth()->user()->pekerja->id) {
+                                                        echo 'oleh : Saya';
+                                                    } elseif ($progres->pekerja) {
+                                                        echo 'oleh : ' . $progres->pekerja->nama ?? '-';
+                                                    } else {
+                                                        echo 'oleh : -';
+                                                    }
+                                                @endphp
                                             </div>
                                             <i
                                                 class='bi bi-circle-fill activity-badge {{ $progres->is_selesai == 1 ? 'text-success' : 'text-warning' }} align-self-start'></i>
