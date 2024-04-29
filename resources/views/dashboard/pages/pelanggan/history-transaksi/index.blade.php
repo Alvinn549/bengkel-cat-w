@@ -13,6 +13,11 @@
 
     <section class="section">
         <div class="row">
+            <div class="mb-4">
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="ri-arrow-go-back-line"></i> Kembali
+                </a>
+            </div>
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">

@@ -15,7 +15,7 @@
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Lihat Kendaraan</h1>
+        <h1>Lihat Perbaikan</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
@@ -98,17 +98,33 @@
                                     <tr>
                                         @php
                                             $badge_bg = null;
+                                            $btn_color = null;
 
-                                            if ($perbaikan->status == 'Selesai') {
-                                                $badge_bg = 'bg-success';
-                                            } elseif ($perbaikan->status == 'Dalam Proses') {
-                                                $badge_bg = 'bg-info';
-                                            } elseif ($perbaikan->status == 'Ditunda') {
-                                                $badge_bg = 'bg-secondary';
-                                            } elseif ($perbaikan->status == 'Dibatalkan') {
-                                                $badge_bg = 'bg-warning';
-                                            } elseif ($perbaikan->status == 'Tidak Dapat Diperbaiki') {
-                                                $badge_bg = 'bg-danger';
+                                            switch ($perbaikan->status) {
+                                                case 'Selesai':
+                                                    $badge_bg = 'bg-success';
+                                                    $btn_color = 'success';
+                                                    break;
+                                                case 'Baru':
+                                                    $badge_bg = 'bg-info';
+                                                    $btn_color = 'info';
+                                                    break;
+                                                case 'Antrian':
+                                                    $badge_bg = 'bg-primary';
+                                                    $btn_color = 'primary';
+                                                    break;
+                                                case 'Dalam Proses':
+                                                    $badge_bg = 'bg-secondary';
+                                                    $btn_color = 'secondary';
+                                                    break;
+                                                case 'Menunggu Bayar':
+                                                    $badge_bg = 'bg-warning';
+                                                    $btn_color = 'warning';
+                                                    break;
+                                                default:
+                                                    $badge_bg = 'bg-dark';
+                                                    $btn_color = 'dark';
+                                                    break;
                                             }
                                         @endphp
                                         <th>Status</th>
@@ -152,12 +168,6 @@
                                                             <img src="{{ asset('storage/' . $progres->foto) }}"
                                                                 class="img-fluid rounded" alt=""
                                                                 onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
-                                                        </a>
-                                                    @else
-                                                        <a href="javascript:void(0)">
-                                                            <img src="{{ asset('assets/dashboard/img/spray-gun.png') }}"
-                                                                class="img-fluid rounded" alt=""
-                                                                onclick="openImage('{{ asset('assets/dashboard/img/spray-gun.png') }}')">
                                                         </a>
                                                     @endif
                                                 </div>

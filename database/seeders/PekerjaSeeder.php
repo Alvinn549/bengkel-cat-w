@@ -35,10 +35,10 @@ class PekerjaSeeder extends Seeder
             'created_at' => now()
         ]);
 
-        User::factory(5)->create([
-            'role' => 'admin',
-        ])->each(function ($user) {
-            Pekerja::factory()->create(['user_id' => $user->id]);
-        });
+        // User::factory(5)->create([
+        //     'role' => 'admin',
+        // ])->each(function ($user) {
+        //     Pekerja::factory()->create(['user_id' => $user->id]);
+        // });
     }
 }

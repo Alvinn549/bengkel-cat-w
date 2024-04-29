@@ -51,7 +51,7 @@
                     </div>
                 </div><!-- End Riwayat Transaksi Card -->
 
-                <div class="col-xxl-3 col-md-4">
+                <div class="col-xxl-6 col-md-6">
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Perbaikan Sekarang</h5>
@@ -69,7 +69,7 @@
                     </div>
                 </div><!-- End Riwayat Perbaikan Card -->
 
-                <div class="col-xxl-3 col-md-4">
+                <div class="col-xxl-6 col-md-6">
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Riwayat Perbaikan</h5>
@@ -87,7 +87,7 @@
                     </div>
                 </div><!-- End Riwayat Perbaikan Card -->
 
-                <div class="col-xxl-3 col-md-4">
+                <div class="col-xxl-12 col-md-12">
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Kendaraan Saya</h5>

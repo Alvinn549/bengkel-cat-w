@@ -23,7 +23,7 @@ return new class extends Migration
             $table->integer('biaya')->nullable();
             $table->string('durasi')->nullable();
             $table->dateTime('tgl_selesai')->nullable();
-            $table->enum('status', ['Selesai', 'Dalam Proses', 'Ditunda', 'Dibatalkan', 'Tidak Dapat Diperbaiki'])->nullable();
+            $table->enum('status', ['Baru', 'Antrian', 'Dalam Proses', 'Proses Selesai', 'Menunggu Bayar', 'Selesai'])->nullable();
             $table->timestamps();
         });
     }

@@ -27,7 +27,7 @@
     <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
+                <a href="{{ route('dashboard.pekerja.list-perbaikan-dalam-proses') }}" class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>
             </div>
@@ -100,17 +100,33 @@
                                     <tr>
                                         @php
                                             $badge_bg = null;
+                                            $btn_color = null;
 
-                                            if ($perbaikan->status == 'Selesai') {
-                                                $badge_bg = 'bg-success';
-                                            } elseif ($perbaikan->status == 'Dalam Proses') {
-                                                $badge_bg = 'bg-info';
-                                            } elseif ($perbaikan->status == 'Ditunda') {
-                                                $badge_bg = 'bg-secondary';
-                                            } elseif ($perbaikan->status == 'Dibatalkan') {
-                                                $badge_bg = 'bg-warning';
-                                            } elseif ($perbaikan->status == 'Tidak Dapat Diperbaiki') {
-                                                $badge_bg = 'bg-danger';
+                                            switch ($perbaikan->status) {
+                                                case 'Selesai':
+                                                    $badge_bg = 'bg-success';
+                                                    $btn_color = 'success';
+                                                    break;
+                                                case 'Baru':
+                                                    $badge_bg = 'bg-info';
+                                                    $btn_color = 'info';
+                                                    break;
+                                                case 'Antrian':
+                                                    $badge_bg = 'bg-primary';
+                                                    $btn_color = 'primary';
+                                                    break;
+                                                case 'Dalam Proses':
+                                                    $badge_bg = 'bg-secondary';
+                                                    $btn_color = 'secondary';
+                                                    break;
+                                                case 'Menunggu Bayar':
+                                                    $badge_bg = 'bg-warning';
+                                                    $btn_color = 'warning';
+                                                    break;
+                                                default:
+                                                    $badge_bg = 'bg-dark';
+                                                    $btn_color = 'dark';
+                                                    break;
                                             }
                                         @endphp
                                         <th>Status</th>
@@ -267,16 +283,6 @@
                                         <label for="keterangan" class="col-form-label">Keterangan</label>
                                         <textarea class="form-control" id="keterangan" name="keterangan" rows="4">{{ $progres->keterangan }}</textarea>
                                     </div>
-                                    @if ($latest_progres['id'] == $progres->id)
-                                        <div class="mb-3 form-check">
-                                            <input type="checkbox" class="form-check-input"
-                                                id="selesaiCheckbox{{ $progres->id }}"
-                                                {{ $progres->is_selesai == true ? 'checked' : '' }} name="is_selesai">
-                                            <label class="form-check-label"
-                                                for="selesaiCheckbox{{ $progres->id }}">Nyatakan sudah
-                                                selesai</label>
-                                        </div>
-                                    @endif
                                     <button type="submit" class="btn btn-primary w-100"
                                         id="editProgresButton{{ $progres->id }}">
                                         <i class="bi bi-save me-1"></i> Submit
@@ -339,22 +345,21 @@
                                                                 class="img-fluid rounded" alt=""
                                                                 onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
                                                         </a>
-                                                    @else
-                                                        <a href="javascript:void(0)">
-                                                            <img src="{{ asset('assets/dashboard/img/spray-gun.png') }}"
-                                                                class="img-fluid rounded" alt=""
-                                                                onclick="openImage('{{ asset('assets/dashboard/img/spray-gun.png') }}')">
-                                                        </a>
                                                     @endif
                                                 </div>
+                                                @if ($progres->foto)
+                                                    <div class="col-md-4 mt-2">
+                                                        @if ($latest_progres['is_selesai'] != true || $latest_progres['id'] == $progres->id)
+                                                            <button type="button" class="btn btn-outline-primary"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#editProgres{{ $progres->id }}"
+                                                                style="height: 40px;"><i class="ri-pencil-line"></i>
+                                                            </button>
+                                                        @endif
+                                                    </div>
+                                                @endif
                                             </div>
-                                            @if ($latest_progres['is_selesai'] != true || $latest_progres['id'] == $progres->id)
-                                                <button type="button" class="btn btn-outline-primary"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#editProgres{{ $progres->id }}"
-                                                    style="height: 40px;"><i class="ri-pencil-line"></i>
-                                                </button>
-                                            @endif
+
                                         </div><!-- End Progres item-->
                                     @empty
                                         <div class="text-center">
@@ -463,8 +468,10 @@
                     contentType: false,
                     success: function(response) {
                         Swal.close(); // Close loading modal
-                        if (response.status === 'success') {
+                        if (response.status === 'success-insert-new-progress') {
                             location.reload();
+                        } else if (response.status === 'success-update-to-selesai') {
+                            window.location.href = "{{ route('dashboard') }}";
                         } else if (response.status === 'error_validation') {
                             $.each(response.errors, function(key, value) {
                                 $('#' + key).after(

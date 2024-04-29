@@ -13,8 +13,13 @@
 
     <section class="section dashboard">
         <div class="row">
+            <div class="mb-4">
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
+                    <i class="ri-arrow-go-back-line"></i> Kembali
+                </a>
+            </div>
             @forelse ($kendaraans as $kendaraan)
-                <div class="col-lg-12">
+                <div class="col-lg-6">
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Data Kendaraan</h5>

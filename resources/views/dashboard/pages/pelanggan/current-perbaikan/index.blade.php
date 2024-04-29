@@ -103,17 +103,26 @@
                                         <tr>
                                             @php
                                                 $badge_bg = null;
+                                                $btn_color = null;
 
                                                 if ($perbaikan->status == 'Selesai') {
                                                     $badge_bg = 'bg-success';
-                                                } elseif ($perbaikan->status == 'Dalam Proses') {
+                                                    $btn_color = 'success';
+                                                } elseif (
+                                                    $perbaikan->status == 'Baru' ||
+                                                    $perbaikan->status == 'Antrian'
+                                                ) {
                                                     $badge_bg = 'bg-info';
-                                                } elseif ($perbaikan->status == 'Ditunda') {
+                                                    $btn_color = 'info';
+                                                } elseif ($perbaikan->status == 'Dalam Proses') {
                                                     $badge_bg = 'bg-secondary';
-                                                } elseif ($perbaikan->status == 'Dibatalkan') {
+                                                    $btn_color = 'secondary';
+                                                } elseif ($perbaikan->status == 'Menunggu Bayar') {
                                                     $badge_bg = 'bg-warning';
-                                                } elseif ($perbaikan->status == 'Tidak Dapat Diperbaiki') {
-                                                    $badge_bg = 'bg-danger';
+                                                    $btn_color = 'warning';
+                                                } else {
+                                                    $badge_bg = 'bg-dark';
+                                                    $btn_color = 'dark';
                                                 }
                                             @endphp
                                             <th>Status</th>

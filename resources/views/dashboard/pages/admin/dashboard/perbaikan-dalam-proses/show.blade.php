@@ -15,13 +15,14 @@
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Detail Perbaikan</h1>
+        <h1>Lihat Perbaikan</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a
-                        href="{{ route('dashboard.pelanggan.history-perbaikan', auth()->user()->pelanggan->id) }}">Perbaikan
-                        Sekarang</a></li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('dashboard.admin.list-perbaikan-dalam-proses') }}">Perbaikan Dalam Proses
+                    </a>
+                </li>
                 <li class="breadcrumb-item active">Show Perbaikan</li>
             </ol>
         </nav>
@@ -30,8 +31,7 @@
     <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard.pelanggan.history-perbaikan', auth()->user()->pelanggan->id) }}"
-                    class="btn btn-outline-secondary">
+                <a href="{{ route('dashboard.admin.list-perbaikan-dalam-proses') }}" class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>
             </div>
@@ -60,7 +60,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Nama</th>
+                                        <th>Nama Perbaikan</th>
                                         <td>{{ $perbaikan->nama ?? '' }}</td>
                                     </tr>
                                     <tr>
@@ -171,12 +171,6 @@
                                                             <img src="{{ asset('storage/' . $progres->foto) }}"
                                                                 class="img-fluid rounded" alt=""
                                                                 onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
-                                                        </a>
-                                                    @else
-                                                        <a href="javascript:void(0)">
-                                                            <img src="{{ asset('assets/dashboard/img/spray-gun.png') }}"
-                                                                class="img-fluid rounded" alt=""
-                                                                onclick="openImage('{{ asset('assets/dashboard/img/spray-gun.png') }}')">
                                                         </a>
                                                     @endif
                                                 </div>

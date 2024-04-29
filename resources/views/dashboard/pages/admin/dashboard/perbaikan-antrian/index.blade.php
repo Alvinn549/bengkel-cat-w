@@ -1,95 +1,63 @@
 @extends('dashboard.layouts.main')
 
 @section('css')
+    <style>
+        .btn-show-pemilik {
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+        }
+
+        .btn-show-pemilik:hover {
+            color: #007bff;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Detail Kendaraan</h1>
+        <h1>Perbaikan Antrian</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a
-                        href="{{ route('dashboard.pelanggan.my-kendaraan', auth()->user()->pelanggan->id) }}">Kendaraan
-                        Saya</a></li>
-                <li class="breadcrumb-item active">Detail Kendaraan</li>
+                <li class="breadcrumb-item active">Perbaikan Antrian</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section">
+    <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard.pelanggan.my-kendaraan', auth()->user()->pelanggan->id) }}"
-                    class="btn btn-outline-secondary">
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>
             </div>
-            <div class="col-lg-5">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Data Kendaraan</h5>
+        </div>
 
-                        <div class="row">
-                            <div class="col-md-12 d-flex justify-content-center">
-                                @if ($kendaraan->foto)
-                                    <img src="{{ asset('storage/' . $kendaraan->foto) }}" class="img-fluid rounded"
-                                        alt="">
-                                @else
-                                    <img src="{{ asset('assets/dashboard/img/hatchback.png') }}" alt="Default"
-                                        class="col-md-12 img-fluid">
-                                @endif
-                            </div>
-                            <div class="col-md-12 mt-3 align-self-center">
-                                <table class="table">
-                                    <tr>
-                                        <th nowrap>No Plat</th>
-                                        <td>{{ $kendaraan->no_plat }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Merek</th>
-                                        <td>{{ $kendaraan->merek->nama_merek ?? '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Tipe</th>
-                                        <td>{{ $kendaraan->tipe->nama_tipe ?? '-' }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Keterangan</th>
-                                        <td>{{ $kendaraan->keterangan }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th nowrap>Terdaftar Sejak</th>
-                                        <td>{{ $kendaraan->created_at }}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-7">
+        <div class="row">
+            <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Perbaikan</h5>
+                        <h5 class="card-title">Data Perbaikan Antrian</h5>
+
                         <div class="row">
                             <div class="col-md-12">
                                 <table id="datatable" class="table table-bordered " style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Kode</th>
-                                            <th>Masuk</th>
-                                            <th>Selesai</th>
+                                            <th>Kode Perbaikan</th>
+                                            <th>Nama Perbaikan</th>
+                                            <th>Tgl Masuk</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($kendaraan->perbaikans->sortByDesc('created_at') as $perbaikan)
+                                        @foreach ($perbaikans->sortByDesc('created_at') as $perbaikan)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $perbaikan->kode_unik }}</td>
+                                                <td>{{ $perbaikan->nama }}</td>
                                                 <td>{{ $perbaikan->created_at ?? '-' }}</td>
-                                                <td>{{ $perbaikan->tgl_selesai ?? '-' }}</td>
                                                 <td>
                                                     @php
                                                         $badge_bg = null;
@@ -146,5 +114,16 @@
                 responsive: true,
             });
         })
+    </script>
+
+    <script>
+        function openImage(imageUrl) {
+            Swal.fire({
+                imageUrl: imageUrl,
+                imageWidth: 450,
+                imageAlt: 'Foto Progres',
+                showConfirmButton: false,
+            });
+        }
     </script>
 @endsection

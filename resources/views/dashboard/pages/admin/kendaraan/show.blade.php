@@ -9,9 +9,9 @@
         }
 
         /*
-                            .btn-show-pemilik:hover {
-                                color: #007bff;
-                            } */
+                                                                        .btn-show-pemilik:hover {
+                                                                            color: #007bff;
+                                                                        } */
     </style>
 @endsection
 @section('content')
@@ -133,7 +133,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Kode</th>
-                                            <th>Nama</th>
+                                            <th>Nama Perbaikan</th>
                                             <th>Masuk</th>
                                             <th>Selesai</th>
                                             <th>Status</th>
@@ -151,19 +151,33 @@
                                                 <td>
                                                     @php
                                                         $badge_bg = null;
+                                                        $btn_color = null;
 
-                                                        if ($perbaikan->status == 'Selesai') {
-                                                            $badge_bg = 'bg-success';
-                                                        } elseif ($perbaikan->status == 'Dalam Proses') {
-                                                            $badge_bg = 'bg-info';
-                                                        } elseif ($perbaikan->status == 'Ditunda') {
-                                                            $badge_bg = 'bg-secondary';
-                                                        } elseif ($perbaikan->status == 'Dibatalkan') {
-                                                            $badge_bg = 'bg-warning';
-                                                        } elseif ($perbaikan->status == 'Tidak Dapat Diperbaiki') {
-                                                            $badge_bg = 'bg-danger';
-                                                        } else {
-                                                            $badge_bg = 'text-dark';
+                                                        switch ($perbaikan->status) {
+                                                            case 'Selesai':
+                                                                $badge_bg = 'bg-success';
+                                                                $btn_color = 'success';
+                                                                break;
+                                                            case 'Baru':
+                                                                $badge_bg = 'bg-info';
+                                                                $btn_color = 'info';
+                                                                break;
+                                                            case 'Antrian':
+                                                                $badge_bg = 'bg-primary';
+                                                                $btn_color = 'primary';
+                                                                break;
+                                                            case 'Dalam Proses':
+                                                                $badge_bg = 'bg-secondary';
+                                                                $btn_color = 'secondary';
+                                                                break;
+                                                            case 'Menunggu Bayar':
+                                                                $badge_bg = 'bg-warning';
+                                                                $btn_color = 'warning';
+                                                                break;
+                                                            default:
+                                                                $badge_bg = 'bg-dark';
+                                                                $btn_color = 'dark';
+                                                                break;
                                                         }
                                                     @endphp
                                                     <span class="badge {{ $badge_bg }}">

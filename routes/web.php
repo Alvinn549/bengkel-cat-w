@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardPekerjaController;
 use App\Http\Controllers\DashboardPelangganController;
@@ -67,10 +68,33 @@ Route::middleware('auth')->group(function () {
             // ? End For Pelanggan
 
             // ? For Pekerja
-            Route::get('/pekerja/proses-perbaikan/{perbaikan}', [DashboardPekerjaController::class, 'prosesPerbaikan'])->name('dashboard.pekerja.proses-perbaikan');
+
+            Route::get('/pekerja/list-perbaikan-baru', [DashboardPekerjaController::class, 'listPerbaikanBaru'])->name('dashboard.pekerja.list-perbaikan-baru');
+            Route::get('/pekerja/proses-perbaikan-baru/{perbaikan}', [DashboardPekerjaController::class, 'prosesPerbaikanBaru'])->name('dashboard.pekerja.proses-perbaikan-baru');
+
+            Route::get('/pekerja/list-perbaikan-antrian', [DashboardPekerjaController::class, 'listPerbaikanAntrian'])->name('dashboard.pekerja.list-perbaikan-antrian');
+            Route::get('/pekerja/proses-perbaikan-antrian/{perbaikan}', [DashboardPekerjaController::class, 'prosesPerbaikanAntrian'])->name('dashboard.pekerja.proses-perbaikan-antrian');
+
+            Route::get('/pekerja/list-perbaikan-dalam-proses', [DashboardPekerjaController::class, 'listPerbaikanDalamProses'])->name('dashboard.pekerja.list-perbaikan-dalam-proses');
+            Route::get('/pekerja/proses-perbaikan-dalam-proses/{perbaikan}', [DashboardPekerjaController::class, 'prosesPerbaikanDalamProses'])->name('dashboard.pekerja.proses-perbaikan-dalam-proses');
+
             Route::post('/pekerja/store-proses-perbaikan', [DashboardPekerjaController::class, 'storeProgres'])->name('dashboard.pekerja.store-proses-perbaikan');
+
             Route::put('/pekerja/update-proses-perbaikan/{progres}', [DashboardPekerjaController::class, 'updateProgres'])->name('dashboard.pekerja.update-proses-perbaikan');
             // ? End For Pekerja
+
+            // ? For Admin
+            Route::get('/admin/list-perbaikan-baru', [DashboardAdminController::class, 'listPerbaikanBaru'])->name('dashboard.admin.list-perbaikan-baru');
+            Route::get('/admin/list-perbaikan-antrian', [DashboardAdminController::class, 'listPerbaikanAntrian'])->name('dashboard.admin.list-perbaikan-antrian');
+            Route::get('/admin/list-perbaikan-dalam-proses', [DashboardAdminController::class, 'listPerbaikanDalamProses'])->name('dashboard.admin.list-perbaikan-dalam-proses');
+            Route::get('/admin/list-perbaikan-selesai-di-proses', [DashboardAdminController::class, 'listPerbaikanSelesaiDiProses'])->name('dashboard.admin.list-perbaikan-selesai-di-proses');
+            Route::get('/admin/list-perbaikan-menunggu-bayar', [DashboardAdminController::class, 'listPerbaikanMenungguBayar'])->name('dashboard.admin.list-perbaikan-menunggu-bayar');
+
+            Route::get('/admin/detail-perbaikan-dalam-proses/{perbaikan}', [DashboardAdminController::class, 'detailPerbaikanDalamProses'])->name('dashboard.admin.detail-perbaikan-dalam-proses');
+            Route::get('/admin/proses-perbaikan-selesai/{perbaikan}', [DashboardAdminController::class, 'prosesPerbaikanSelesai'])->name('dashboard.admin.proses-perbaikan-selesai');
+            Route::put('/admin/proses-perbaikan/{perbaikan}', [DashboardAdminController::class, 'prosesPerbaikanSelesaiPut'])->name('dashboard.admin.proses-perbaikan-selesai-put');
+
+            // ? End For Admin
         });
 
         Route::get('/profil', [ProfilController::class, 'index'])->name('profil.index');

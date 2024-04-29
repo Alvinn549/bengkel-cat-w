@@ -15,7 +15,7 @@
 <body>
     <div class="container mt-3">
         <div class="row">
-            <div class="col-lg-5">
+            <div class="col-lg-6 mb-3">
                 <div class="card shadow">
                     <div class="card-body">
                         <h5 class="card-title">Detail Perbaikan</h5>
@@ -80,17 +80,33 @@
                             <tr>
                                 @php
                                     $badge_bg = null;
+                                    $btn_color = null;
 
-                                    if ($perbaikan->status == 'Selesai') {
-                                        $badge_bg = 'bg-success';
-                                    } elseif ($perbaikan->status == 'Dalam Proses') {
-                                        $badge_bg = 'bg-info';
-                                    } elseif ($perbaikan->status == 'Ditunda') {
-                                        $badge_bg = 'bg-secondary';
-                                    } elseif ($perbaikan->status == 'Dibatalkan') {
-                                        $badge_bg = 'bg-warning';
-                                    } elseif ($perbaikan->status == 'Tidak Dapat Diperbaiki') {
-                                        $badge_bg = 'bg-danger';
+                                    switch ($perbaikan->status) {
+                                        case 'Selesai':
+                                            $badge_bg = 'bg-success';
+                                            $btn_color = 'success';
+                                            break;
+                                        case 'Baru':
+                                            $badge_bg = 'bg-info';
+                                            $btn_color = 'info';
+                                            break;
+                                        case 'Antrian':
+                                            $badge_bg = 'bg-primary';
+                                            $btn_color = 'primary';
+                                            break;
+                                        case 'Dalam Proses':
+                                            $badge_bg = 'bg-secondary';
+                                            $btn_color = 'secondary';
+                                            break;
+                                        case 'Menunggu Bayar':
+                                            $badge_bg = 'bg-warning';
+                                            $btn_color = 'warning';
+                                            break;
+                                        default:
+                                            $badge_bg = 'bg-dark';
+                                            $btn_color = 'dark';
+                                            break;
                                     }
                                 @endphp
                                 <th>Status</th>
@@ -102,7 +118,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-7">
+            <div class="col-lg-6 mb-3">
                 <div class="card shadow">
                     <div class="card-body">
                         <svg display="none">
@@ -156,9 +172,6 @@
 
                                                 @if ($progres->foto)
                                                     <img src="{{ asset('storage/' . $progres->foto) }}"
-                                                        class="img-fluid rounded" alt="">
-                                                @else
-                                                    <img src="{{ asset('assets/dashboard/img/spray-gun.png') }}"
                                                         class="img-fluid rounded" alt="">
                                                 @endif
                                             </div>

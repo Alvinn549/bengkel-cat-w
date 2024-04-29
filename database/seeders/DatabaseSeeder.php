@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             MerekSeeder::class,
             TipeSeeder::class,
-            KendaraanSeeder::class,
-            PerbaikanSeeder::class,
-            ProgresSeeder::class,
+            // KendaraanSeeder::class,
+            // PerbaikanSeeder::class,
+            // ProgresSeeder::class,
             SettingsSeeder::class
         ]);
     }

@@ -133,7 +133,6 @@ class PerbaikanController extends Controller
                 'nama' => ['required', 'string'],
                 'keterangan' => ['required', 'string'],
                 'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
-                'status' => ['nullable', 'string'],
                 'durasi' => ['required', 'string'],
             ],
             [
@@ -149,43 +148,42 @@ class PerbaikanController extends Controller
         $biaya  = null;
         $tgl_selesai = null;
 
-        if ($validate['status'] == 'Selesai') {
-            $request->validate([
-                'biaya' => ['required', 'string'],
-            ], [
-                'biaya.required' => 'Biaya tidak boleh kosong',
-            ]);
+        // if ($validate['status'] == 'Selesai') {
+        //     $request->validate([
+        //         'biaya' => ['required', 'string'],
+        //     ], [
+        //         'biaya.required' => 'Biaya tidak boleh kosong',
+        //     ]);
 
-            $biaya = (int) str_replace(',', '', $request->biaya);
+        //     $biaya = (int) str_replace(',', '', $request->biaya);
 
-            $pelanggan = $perbaikan->kendaraan->pelanggan;
+        //     $pelanggan = $perbaikan->kendaraan->pelanggan;
 
-            $fullName = explode(' ', $pelanggan->nama);
-            $firstName = $fullName[0];
-            $lastName = isset($fullName[1]) ? $fullName[1] : null;
+        //     $fullName = explode(' ', $pelanggan->nama);
+        //     $firstName = $fullName[0];
+        //     $lastName = isset($fullName[1]) ? $fullName[1] : null;
 
-            Transaksi::updateOrCreate(
-                ['order_id' => 'tr-' . $perbaikan->kode_unik],
-                [
-                    'perbaikan_id' => $perbaikan->id,
-                    'pelanggan_id' => $pelanggan->id,
-                    'gross_amount' => $biaya,
-                    'transaction_status' => 'New',
-                    'first_name' => $firstName,
-                    'last_name' => $lastName,
-                    'email' => $pelanggan->user->email,
-                    'phone' => $pelanggan->no_telp,
-                ]
-            );
+        //     Transaksi::updateOrCreate(
+        //         ['order_id' => 'tr-' . $perbaikan->kode_unik],
+        //         [
+        //             'perbaikan_id' => $perbaikan->id,
+        //             'pelanggan_id' => $pelanggan->id,
+        //             'gross_amount' => $biaya,
+        //             'transaction_status' => 'New',
+        //             'first_name' => $firstName,
+        //             'last_name' => $lastName,
+        //             'email' => $pelanggan->user->email,
+        //             'phone' => $pelanggan->no_telp,
+        //         ]
+        //     );
 
-            $tgl_selesai = now();
-        }
+        //     $tgl_selesai = now();
+        // }
 
         $perbaikan->update([
             'nama' => $validate['nama'],
             'keterangan' => $validate['keterangan'],
             'biaya' => $biaya,
-            'status' => $validate['status'],
             'durasi' => $validate['durasi'],
             'tgl_selesai' => $tgl_selesai,
         ]);
@@ -201,13 +199,10 @@ class PerbaikanController extends Controller
             $perbaikan->update(['foto' => $fotoPath]);
         }
 
-        if ($validate['status'] == 'Selesai') {
-            Alert::success('Perbaikan Selesai', 'Perbaikan telah selesai dan pelanggan akan dihubungi melalui email.');
-        } else {
-            Alert::toast('<p style="color: white; margin-top: 10px;">' . $perbaikan->nama . ' berhasil diubah!</p>', 'success')
-                ->toHtml()
-                ->background('#333A73');
-        }
+
+        Alert::toast('<p style="color: white; margin-top: 10px;">' . $perbaikan->nama . ' berhasil diubah!</p>', 'success')
+            ->toHtml()
+            ->background('#333A73');
 
         return redirect()->route('kendaraan.show', $perbaikan->kendaraan_id);
     }

@@ -22,13 +22,24 @@ class DashboardController extends Controller
             $perbaikanSelesaiCount = Perbaikan::where('status', 'Selesai')->count();
             $transaksiSelesaiCount = Transaksi::where('transaction_status', 'Selesai')->count();
 
+            $countPerbaikansBaru = Perbaikan::where('status', 'Baru')->count();
+            $countPerbaikansAntrian = Perbaikan::where('status', 'Antrian')->count();
+            $countPerbaikansProses = Perbaikan::where('status', 'Dalam Proses')->count();
+            $countPerbaikansProsesSelesai = Perbaikan::where('status', 'Proses Selesai')->count();
+            $countPerbaikansMenungguBayar = Perbaikan::where('status', 'Menunggu Bayar')->count();
+
             return view('dashboard.pages.admin.index', compact(
                 'perbaikanBerlangsungCount',
                 'transaksiBerlangsungCount',
                 'kendaraanCount',
                 'pelangganCount',
                 'perbaikanSelesaiCount',
-                'transaksiSelesaiCount'
+                'transaksiSelesaiCount',
+                'countPerbaikansBaru',
+                'countPerbaikansAntrian',
+                'countPerbaikansProses',
+                'countPerbaikansProsesSelesai',
+                'countPerbaikansMenungguBayar'
             ));
         } elseif (auth()->user()->role == 'pelanggan') {
             $pelanggan = Pelanggan::with('kendaraans', 'transaksis')
@@ -54,12 +65,16 @@ class DashboardController extends Controller
                 'transaksiDoneCount'
             ));
         } elseif (auth()->user()->role == 'pekerja') {
-            $recentPerbaikans = Perbaikan::with('kendaraan', 'kendaraan.pelanggan')
-                ->where('status', 'Dalam Proses')
-                ->latest()
-                ->get();
+            $countPerbaikansBaru = Perbaikan::where('status', 'Baru')->count();
+            $countPerbaikansAntrian = Perbaikan::where('status', 'Antrian')->count();
+            $countPerbaikansProses = Perbaikan::where('status', 'Dalam Proses')->count();
 
-            return view('dashboard.pages.pekerja.index', compact('recentPerbaikans'));
+
+            return view('dashboard.pages.pekerja.index', compact(
+                'countPerbaikansBaru',
+                'countPerbaikansAntrian',
+                'countPerbaikansProses'
+            ));
         } else {
             // unauthorized
             abort(403);

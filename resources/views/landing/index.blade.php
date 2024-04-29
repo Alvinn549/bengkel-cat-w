@@ -15,7 +15,7 @@
                         <div class="col-lg-4 d-flex align-items-stretch">
                             <div class="info">
                                 <div class="">
-                                    <i class="bi bi-geo-alt"></i>
+                                    <i class="bi bi-key-fill"></i>
                                     <h4>Kode</h4>
                                     <p>{{ $perbaikan->kode_unik }}</p>
                                 </div>
@@ -23,6 +23,11 @@
                                     <i class="bi bi-car-front"></i>
                                     <h4>Nama Perbaikan</h4>
                                     <p>{{ $perbaikan->nama }}</p>
+                                </div>
+                                <div class="">
+                                    <i class="bi bi-hourglass-split"></i>
+                                    <h4>Status</h4>
+                                    <p>{{ $perbaikan->status }}</p>
                                 </div>
                                 <div class="">
                                     <i class="bi bi-calendar-date"></i>
