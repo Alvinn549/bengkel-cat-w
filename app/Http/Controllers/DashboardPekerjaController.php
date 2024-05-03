@@ -35,7 +35,8 @@ class DashboardPekerjaController extends Controller
             ->toHtml()
             ->background('#333A73');
 
-        return redirect()->route('dashboard.pekerja.list-perbaikan-antrian');
+        return redirect()->route('dashboard.pekerja.list-perbaikan-baru');
+        // return redirect()->route('dashboard.pekerja.list-perbaikan-antrian');
     }
 
     public function listPerbaikanAntrian()
@@ -62,7 +63,8 @@ class DashboardPekerjaController extends Controller
             ->toHtml()
             ->background('#333A73');
 
-        return redirect()->route('dashboard.pekerja.list-perbaikan-dalam-proses');
+        return redirect()->route('dashboard.pekerja.list-perbaikan-antrian');
+        // return redirect()->route('dashboard.pekerja.list-perbaikan-dalam-proses');
     }
 
     public function listPerbaikanDalamProses()

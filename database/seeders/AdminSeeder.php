@@ -35,10 +35,10 @@ class AdminSeeder extends Seeder
             'created_at' => now()
         ]);
 
-        User::factory(20)->create([
-            'role' => 'admin',
-        ])->each(function ($user) {
-            Admin::factory()->create(['user_id' => $user->id]);
-        });
+        // User::factory(20)->create([
+        //     'role' => 'admin',
+        // ])->each(function ($user) {
+        //     Admin::factory()->create(['user_id' => $user->id]);
+        // });
     }
 }

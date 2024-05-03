@@ -10,7 +10,8 @@
             @endauth
         </div>
 
-        <h1 class="text-center">Bengkel Cat Wijayanto</h1>
+        <h1 class="text-center"><a href="{{ route('home') }}" style="color: white;"><span style="color: white;">Bengkel
+                    Cat Wijayanto</span></a></h1>
         <h2 class="text-center">Menghadirkan Kecantikan dalam Setiap Warna, Menjaga Kendaraan Anda Seperti Baru</h2>
 
         <div class="social-links text-center mb-5">
