@@ -11,6 +11,20 @@ use Illuminate\Support\Facades\Storage;
 class DashboardPekerjaController extends Controller
 {
 
+    public function index()
+    {
+        $countPerbaikansBaru = Perbaikan::where('status', 'Baru')->count();
+        $countPerbaikansAntrian = Perbaikan::where('status', 'Antrian')->count();
+        $countPerbaikansProses = Perbaikan::where('status', 'Dalam Proses')->count();
+
+
+        return view('dashboard.pages.pekerja.index', compact(
+            'countPerbaikansBaru',
+            'countPerbaikansAntrian',
+            'countPerbaikansProses'
+        ));
+    }
+
     public function listPerbaikanBaru()
     {
         $perbaikans = Perbaikan::with('kendaraan')
@@ -101,7 +115,7 @@ class DashboardPekerjaController extends Controller
                 'perbaikan_id' => 'required|exists:perbaikans,id',
                 'pekerja_id' => 'required|exists:pekerjas,id',
                 'keterangan' => 'required|string',
-                'foto' => 'required|image|mimes:jpg,png|max:2048',
+                'foto' => 'nullable|image|mimes:jpg,png|max:2048',
                 'is_selesai' => 'nullable',
             ]);
 
@@ -165,7 +179,7 @@ class DashboardPekerjaController extends Controller
         // dd($request->all());
         $request->validate([
             'keterangan' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpg,png|max:2048',
+            'foto' => 'nullable|image|mimes:jpg,png|max:5000',
             'is_selesai' => 'nullable',
         ]);
 

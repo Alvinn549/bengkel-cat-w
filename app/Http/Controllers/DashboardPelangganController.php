@@ -11,6 +11,32 @@ use Illuminate\Http\Request;
 
 class DashboardPelangganController extends Controller
 {
+    public function index()
+    {
+        $pelanggan = Pelanggan::with('kendaraans', 'transaksis')
+            ->where('id', auth()->user()->pelanggan->id)
+            ->first();
+
+        $kendaraanIds = $pelanggan->kendaraans->pluck('id');
+
+        $perbaikans = Perbaikan::whereIn('kendaraan_id', $kendaraanIds)->get();
+        $transaksis = Transaksi::where('pelanggan_id', $pelanggan->id)->get();
+
+        $kendaraanCount = $pelanggan->kendaraans->count();
+        $perbaikanInProgressCount = $perbaikans->where('status', '!=', 'Selesai')->count();
+        $perbaikanDoneCount = $perbaikans->where('status', 'Selesai')->count();
+        $transaksiInProgressCount = $transaksis->where('transaction_status', '!=', 'Selesai')->count();
+        $transaksiDoneCount = $transaksis->where('transaction_status', 'Selesai')->count();
+
+        return view('dashboard.pages.pelanggan.index', compact(
+            'kendaraanCount',
+            'perbaikanInProgressCount',
+            'perbaikanDoneCount',
+            'transaksiInProgressCount',
+            'transaksiDoneCount'
+        ));
+    }
+
     public function myKendaraan($idPelanggan)
     {
         $kendaraans = Kendaraan::where('pelanggan_id', $idPelanggan)->get();
@@ -67,7 +93,8 @@ class DashboardPelangganController extends Controller
         $kendaraans = Kendaraan::where('pelanggan_id', $idPelanggan)->get();
         $kendaraanIds = $kendaraans->pluck('id');
 
-        $perbaikans = Perbaikan::whereIn('kendaraan_id', $kendaraanIds)
+        $perbaikans = Perbaikan::with('transaksi')
+            ->whereIn('kendaraan_id', $kendaraanIds)
             ->where('status', '!=', 'Selesai')
             ->latest()
             ->get();

@@ -14,50 +14,14 @@
             {{-- End Form Complete Profil --}}
         @else
             <div class="row">
-                <div class="col-xxl-6 col-md-6">
+                <div class="col-xxl-4 col-md-4">
                     <div class="card info-card sales-card">
                         <div class="card-body">
-                            <h5 class="card-title">Transaksi Sekarang</h5>
-                            <a href="{{ route('dashboard.pelanggan.my-transaksi', auth()->user()->pelanggan->id) }}">
-                                <div class="d-flex align-items-center">
-                                    <div
-                                        class="card-icon {{ $transaksiInProgressCount != 0 ? 'bg-warning text-white' : '' }}  rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-cart"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>{{ $transaksiInProgressCount }}</h6>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div><!-- End Transaksi Sekarang Card -->
-
-                <div class="col-xxl-6 col-md-6">
-                    <div class="card info-card sales-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Riwayat Transaksi</h5>
-                            <a href="{{ route('dashboard.pelanggan.history-transaksi', auth()->user()->pelanggan->id) }}">
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-credit-card-2-back-fill"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>{{ $transaksiDoneCount }}</h6>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div><!-- End Riwayat Transaksi Card -->
-
-                <div class="col-xxl-6 col-md-6">
-                    <div class="card info-card sales-card">
-                        <div class="card-body">
-                            <h5 class="card-title">Perbaikan Sekarang</h5>
+                            <h5 class="card-title">Perbaikan Saat Ini</h5>
                             <a href="{{ route('dashboard.pelanggan.current-perbaikan', auth()->user()->pelanggan->id) }}">
                                 <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <div
+                                        class="card-icon {{ $perbaikanInProgressCount != 0 ? 'bg-warning text-white' : '' }} rounded-circle d-flex align-items-center justify-content-center">
                                         <i class="bx bxs-car-crash"></i>
                                     </div>
                                     <div class="ps-3">
@@ -69,7 +33,7 @@
                     </div>
                 </div><!-- End Riwayat Perbaikan Card -->
 
-                <div class="col-xxl-6 col-md-6">
+                <div class="col-xxl-4 col-md-4">
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Riwayat Perbaikan</h5>
@@ -87,7 +51,7 @@
                     </div>
                 </div><!-- End Riwayat Perbaikan Card -->
 
-                <div class="col-xxl-12 col-md-12">
+                <div class="col-xxl-4 col-md-4">
                     <div class="card info-card sales-card">
                         <div class="card-body">
                             <h5 class="card-title">Kendaraan Saya</h5>

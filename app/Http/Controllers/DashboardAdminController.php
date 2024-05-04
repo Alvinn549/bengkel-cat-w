@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kendaraan;
+use App\Models\Pelanggan;
 use App\Models\Perbaikan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -9,6 +11,38 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class DashboardAdminController extends Controller
 {
+    public function index()
+    {
+        $perbaikanBerlangsungCount = Perbaikan::where('status', '!=', 'Selesai')->count();
+        $transaksiBerlangsungCount = Transaksi::where('transaction_status', '!=', 'Selesai')->count();
+
+        $kendaraanCount = Kendaraan::count();
+        $pelangganCount = Pelanggan::count();
+
+        $perbaikanSelesaiCount = Perbaikan::where('status', 'Selesai')->count();
+        $transaksiSelesaiCount = Transaksi::where('transaction_status', 'Selesai')->count();
+
+        $countPerbaikansBaru = Perbaikan::where('status', 'Baru')->count();
+        $countPerbaikansAntrian = Perbaikan::where('status', 'Antrian')->count();
+        $countPerbaikansProses = Perbaikan::where('status', 'Dalam Proses')->count();
+        $countPerbaikansProsesSelesai = Perbaikan::where('status', 'Proses Selesai')->count();
+        $countPerbaikansMenungguBayar = Perbaikan::where('status', 'Menunggu Bayar')->count();
+
+        return view('dashboard.pages.admin.index', compact(
+            'perbaikanBerlangsungCount',
+            'transaksiBerlangsungCount',
+            'kendaraanCount',
+            'pelangganCount',
+            'perbaikanSelesaiCount',
+            'transaksiSelesaiCount',
+            'countPerbaikansBaru',
+            'countPerbaikansAntrian',
+            'countPerbaikansProses',
+            'countPerbaikansProsesSelesai',
+            'countPerbaikansMenungguBayar'
+        ));
+    }
+
     public function listPerbaikanBaru()
     {
         $perbaikans = Perbaikan::with('kendaraan')

@@ -38,26 +38,28 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
-                            <div class="d-flex justify-content-center py-4">
-                                <a href="{{ route('home') }}" class="logo d-flex align-items-center w-auto">
+                            @php
+                                $profil_bengkel = \App\Models\Settings::first();
+                            @endphp
+                            <div class="d-flex text-center justify-content-center py-4">
+                                <a href="{{ route('home') }}" class="logo  align-items-center w-auto">
                                     <img src="{{ asset('assets/dashboard/img/logo.png') }}" alt="">
-                                    <span class="d-none d-lg-block">Bengkel Cat W</span>
+                                    <span class="d-none d-lg-block mt-3">{{ $profil_bengkel->master_nama ?? '' }}</span>
                                 </a>
                             </div><!-- End Logo -->
 
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="pt-4 pb-2">
-                                        <h5 class="card-title text-center pb-0 fs-4">Create an Account</h5>
-                                        <p class="text-center small">Enter your personal details to create account</p>
+                                        <h5 class="card-title text-center pb-0 fs-4">Buat Akun</h5>
+                                        <p class="text-center small">Masukkan data diri Anda untuk membuat akun</p>
                                     </div>
 
                                     <form class="row g-3" action="{{ route('doRegister') }}" method="POST">
                                         @csrf()
 
                                         <div class="col-12">
-                                            <label for="yourName" class="form-label">Your Name</label>
+                                            <label for="yourName" class="form-label">Nama Lengkap</label>
                                             <input type="text" name="nama"
                                                 class="form-control @error('nama') is-invalid @enderror" id="yourName">
                                             @error('nama')
@@ -68,7 +70,7 @@
                                         </div>
 
                                         <div class="col-12">
-                                            <label for="yourEmail" class="form-label">Your Email</label>
+                                            <label for="yourEmail" class="form-label">Alamat Email Anda</label>
                                             <input type="email" name="email"
                                                 class="form-control @error('email') is-invalid @enderror"
                                                 id="yourEmail">
@@ -95,18 +97,22 @@
                                             <div class="form-check">
                                                 <input class="form-check-input @error('terms') is-invalid @enderror"
                                                     name="terms" type="checkbox" value="true" id="acceptTerms">
-                                                <label class="form-check-label" for="acceptTerms">I agree and accept the
-                                                    <a href="#">terms and conditions</a></label>
+                                                <label class="form-check-label" for="acceptTerms">Saya setuju dan
+                                                    menyetujui
+                                                    <a href="#">syarat dan ketentuan</a>
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit">
                                                 <i class="bi bi-person me-1"></i>
-                                                Create Account</button>
+                                                Buat Akun
+                                            </button>
                                         </div>
                                         <div class="col-12">
-                                            <p class="small mb-0">Already have an account? <a
-                                                    href="{{ route('login') }}">Log in</a></p>
+                                            <p class="small mb-0">Sudah punya akun? <a
+                                                    href="{{ route('login') }}">Masuk</a>
+                                            </p>
                                         </div>
                                     </form>
 

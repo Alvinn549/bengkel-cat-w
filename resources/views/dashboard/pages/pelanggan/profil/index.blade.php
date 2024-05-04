@@ -57,19 +57,19 @@
 
                             <li class="nav-item">
                                 <button class="nav-link active" data-bs-toggle="tab"
-                                    data-bs-target="#profile-overview">Overview</button>
+                                    data-bs-target="#profile-overview">Tinjauan</button>
                             </li>
 
                             <li class="nav-item">
-                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
-                                    Profile</button>
+                                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Ubah Profil
+                                    Saya</button>
                             </li>
 
                         </ul>
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title">Profile Details</h5>
+                                <h5 class="card-title">Detail Profil</h5>
 
                                 <div class="row">
                                     <div class="col-lg-3 col-md-4 label ">Nama</div>
@@ -103,8 +103,8 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="row mb-3">
-                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile
-                                            Image</label>
+                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Foto
+                                            Profil</label>
                                         <div class="col-md-8 col-lg-9">
                                             @if (auth()->user()->pelanggan->foto)
                                                 <img src="{{ asset('storage/' . auth()->user()->pelanggan->foto) }}"

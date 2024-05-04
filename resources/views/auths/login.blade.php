@@ -37,11 +37,13 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
-                            <div class="d-flex justify-content-center py-4">
-                                <a href="{{ route('home') }}" class="logo d-flex align-items-center w-auto">
+                            @php
+                                $profil_bengkel = \App\Models\Settings::first();
+                            @endphp
+                            <div class="d-flex text-center justify-content-center py-4">
+                                <a href="{{ route('home') }}" class="logo align-items-center w-auto">
                                     <img src="{{ asset('assets/dashboard/img/logo.png') }}" alt="">
-                                    <span class="d-none d-lg-block">Bengkel Cat W</span>
+                                    <span class="d-none d-lg-block mt-3">{{ $profil_bengkel->master_nama ?? '' }}</span>
                                 </a>
                             </div><!-- End Logo -->
 
@@ -57,8 +59,8 @@
                                                     aria-label="Close"></button>
                                             </div>
                                         @endif
-                                        <h5 class="card-title text-center pb-0 fs-4">Login to Your Account</h5>
-                                        <p class="text-center small">Enter your email & password to login</p>
+                                        <h5 class="card-title text-center pb-0 fs-4">Masuk ke Akun Anda</h5>
+                                        <p class="text-center small">Masukkan email dan kata sandi Anda untuk masuk</p>
                                     </div>
 
                                     <form method="POST" action="{{ route('do-login') }}" class="row g-3" novalidate>
@@ -93,7 +95,7 @@
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="remember"
                                                     value="true" id="rememberMe">
-                                                <label class="form-check-label" for="rememberMe">Remember me</label>
+                                                <label class="form-check-label" for="rememberMe">Ingat saya</label>
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -101,8 +103,9 @@
                                                     class="bi bi-box-arrow-in-right me-1"></i> Login</button>
                                         </div>
                                         <div class="col-12">
-                                            <p class="small mb-0">Don't have account? <a
-                                                    href="{{ route('register') }}">Create an account</a></p>
+                                            <p class="small mb-0">Tidak punya akun? <a
+                                                    href="{{ route('register') }}">Buat akun</a>
+                                            </p>
                                         </div>
                                     </form>
 

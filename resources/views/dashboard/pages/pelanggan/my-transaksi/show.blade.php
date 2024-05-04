@@ -8,9 +8,10 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active"><a
-                        href="{{ route('dashboard.pelanggan.my-transaksi', auth()->user()->pelanggan->id) }}">Transaksi
-                        Saya</a>
+                <li class="breadcrumb-item active">
+                    <a href="{{ route('dashboard.pelanggan.current-perbaikan', auth()->user()->pelanggan->id) }}">Perbaikan
+                        Saat Ini
+                    </a>
                 </li>
                 <li class="breadcrumb-item active">Show</li>
             </ol>
@@ -20,7 +21,7 @@
     <section class="section">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard.pelanggan.my-transaksi', auth()->user()->pelanggan->id) }}"
+                <a href="{{ route('dashboard.pelanggan.current-perbaikan', auth()->user()->pelanggan->id) }}"
                     class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>
@@ -31,7 +32,10 @@
                         <div class="panel-body mt-4">
                             <div class="clearfix">
                                 <div class="float-start">
-                                    <h3>Bengkel Cat W</h3>
+                                    @php
+                                        $profil_bengkel = \App\Models\Settings::first();
+                                    @endphp
+                                    <h3>{{ $profil_bengkel->master_nama ?? '' }}</h3>
                                 </div>
                                 <div class="float-end">
                                     <h4>Invoice # <br>
@@ -44,11 +48,9 @@
                                 <div class="col-md-12">
                                     <div class="float-start mt-3">
                                         <address>
-                                            <strong>Bengkel Cat W</strong><br>
-                                            Jl. AR Hakim No.25<br>
-                                            Krajan IV, Semanten, Kec. Pacitan, Kabupaten Pacitan,<br>
-                                            Jawa Timur 63518<br>
-                                            <abbr title="Phone">P:</abbr> (+62) 89-696-764-576
+                                            <strong>{{ $profil_bengkel->master_nama ?? '' }}</strong><br>
+                                            {{ $profil_bengkel->alamat ?? '' }}<br>
+                                            <abbr title="Phone">P:</abbr> {{ $profil_bengkel->telepon ?? '' }}
                                         </address>
                                     </div>
                                     <div class="float-end mt-3">
@@ -114,7 +116,7 @@
                                         </tr>
                                         <tr>
                                             <th>Unit Cost</th>
-                                            <td>: Rp. {{ number_format($transaksi->gross_amount) ?? '-' }}</td>
+                                            <td>: Rp. {{ number_format($transaksi->gross_amount, 2) ?? '-' }}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -135,18 +137,31 @@
                                 </div>
                                 <div class="col-md-6" style="text-align: right">
                                     <h2>Total</h2>
-                                    <h4><strong>Rp. {{ number_format($transaksi->gross_amount) ?? '-' }}</strong></h4>
+                                    <h4><strong>Rp. {{ number_format($transaksi->gross_amount, 2) ?? '-' }}</strong></h4>
                                 </div>
                             </div>
                             <hr>
-                            {{-- <div class="d-print-none">
+                            <div class="d-print-none">
                                 <div class="float-end">
-                                    <a href="#" class="btn btn-dark">
+                                    {{-- <a href="#" class="btn btn-dark">
                                         <i class="bi bi-printer-fill"></i>
                                         Cetak
-                                    </a>
+                                    </a> --}}
+                                    <form action="#" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $transaksi->id }}">
+
+                                        <select class="form-select" name="payment_method" style="width: 100%">
+                                            <option value="">Pilih Metode Pembayaran</option>
+                                            <option value="cash">Cash</option>
+                                            <option value="virtual">Virtual</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-primary w-100 mt-3">
+                                            <i class="bi bi-credit-card me-2"></i>Pilih
+                                        </button>
+                                    </form>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
                 </div>

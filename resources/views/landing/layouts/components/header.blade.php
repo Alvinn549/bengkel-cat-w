@@ -1,14 +1,18 @@
 <header id="header" class="d-flex align-items-center">
     <div class="container d-flex flex-column align-items-center">
 
-        <div class="social-links text-center mb-5" style="margin-top: -50px;">
+        <div class="text-center mb-5" style="margin-top: -50px;">
             @auth()
-                <a href="{{ route('dashboard') }}" style="background-color: #24b7a4;"><i
-                        class="bi bi-file-person-fill"></i></a>
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-primary text-white">
+                    <i class="bi bi-speedometer2"></i> Dashboard
+                </a>
             @else
-                <a href="{{ route('login') }}"><i class="bi bi-person"></i></a>
+                <a href="{{ route('login') }}" class="btn btn-outline-primary text-white">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                </a>
             @endauth
         </div>
+
 
         <h1 class="text-center"><a href="{{ route('home') }}" style="color: white;"><span style="color: white;">Bengkel
                     Cat Wijayanto</span></a></h1>

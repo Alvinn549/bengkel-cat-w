@@ -2,62 +2,48 @@
 
 @section('css')
     <style>
-        .card-deck {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
 
-        .card {
-            flex: 1 1 300px;
-            margin: 0 10px 20px;
-        }
-
-        .card-body {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-body .btn {
-            margin-top: auto;
-        }
     </style>
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Perbaikan Sekarang</h1>
+        <h1>Perbaikan Saat Ini</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">Perbaikan Sekarang</li>
+                <li class="breadcrumb-item active">Perbaikan Saat Ini</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-        <div class="row card-deck">
+        <div class="row justify-content-center">
             <div class="mb-4">
                 <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
                     <i class="ri-arrow-go-back-line"></i> Kembali
                 </a>
             </div>
-            <div class="card-deck">
-                @forelse ($perbaikans as $perbaikan)
-                    <div class="card">
+
+            @forelse ($perbaikans as $perbaikan)
+                <div class="col-md-4">
+                    <div class="card" style=" height: 100%;">
                         <div class="card-body">
-                            <h5 class="card-title text-center">{{ $perbaikan->kode_unik }}</h5>
+                            <h5 class="card-title text-center">
+                                <span class="badge bg-secondary text-white rounded-pill"
+                                    style="font-size: 16px">{{ $perbaikan->kode_unik }}</span>
+                            </h5>
                             <div class="row g-3">
-                                <div class="col-md-12 d-flex justify-content-center">
+                                <div class="col-md-12 d-flex justify-content-center" style="height: 200px;">
                                     @if ($perbaikan->foto)
                                         <img src="{{ asset('storage/' . $perbaikan->foto) }}" class="img-fluid rounded"
-                                            alt="">
+                                            alt="" style="object-fit: cover; height: 100%; width: auto;">
                                     @else
                                         <img src="{{ asset('assets/dashboard/img/repair.png') }}" alt="Default"
                                             class="col-md-6 img-fluid">
                                     @endif
                                 </div>
                                 <div class="col-md-12">
-                                    <table class="table">
+                                    <table class="table table-borderless">
                                         <tr>
                                             <th>Nama</th>
                                             <td>{{ $perbaikan->nama ?? '' }}</td>
@@ -133,28 +119,35 @@
                                     </table>
                                 </div>
                             </div>
+
+                        </div>
+                        <div class="card-footer">
+                            @if ($perbaikan->transaksi)
+                                <p class="text-center">Silahkan lakukan pembayaran</p>
+                                <a href="{{ route('dashboard.pelanggan.my-transaksi-detail', $perbaikan->transaksi->id) }}"
+                                    class="btn btn-warning text-white mb-2 w-100"><i class="bi bi-cash me-2"></i>
+                                    Proses Pembayaran
+                                </a>
+                            @endif
                             <a href="{{ route('dashboard.pelanggan.current-perbaikan-detail', $perbaikan->id) }}"
-                                class="btn btn-secondary w-100">
-                                Lihat Detail
+                                class="btn btn-secondary w-100"><i class="bi bi-eye me-2"></i>
+                                Lihat Detail Perbaikan
                             </a>
                         </div>
                     </div>
-                @empty
-            </div><!-- End Data Perbaikan-->
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Data Perbaikan</h5>
-                        <div class="alert alert-danger" role="alert">
-                            Tidak ada data perbaikan
+                </div>
+            @empty
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Data Perbaikan</h5>
+                            <div class="alert alert-danger" role="alert">
+                                Tidak ada data perbaikan
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
             @endforelse
         </div>
     </section>
-@endsection
-
-@section('js')
 @endsection

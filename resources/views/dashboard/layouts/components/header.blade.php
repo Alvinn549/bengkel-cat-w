@@ -2,8 +2,22 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{ route('home') }}" target="_blank" class="logo d-flex align-items-center">
-            <img src="{{ asset('assets/dashboard/img/logo.png') }}" alt="">
-            <span class="d-none d-lg-block">Bengkel Cat W</span>
+            <img src="{{ asset('assets/dashboard/img/logo.png') }}" class="me-3" alt="">
+            @php
+                $profil_bengkel = \App\Models\Settings::first();
+                $master_nama = $profil_bengkel->master_nama ?? '';
+                $words = explode(' ', $master_nama);
+                $acronym = '';
+
+                foreach ($words as $w) {
+                    $acronym .= strtoupper($w[0]);
+                }
+            @endphp
+            <span class="d-none d-lg-block">
+                @if (auth()->user()->role == 'admin')
+                    {{ $acronym }}
+                @endif
+            </span>
         </a>
         @if (auth()->user()->role == 'admin')
             <i class="bi bi-list toggle-sidebar-btn"></i>
@@ -41,7 +55,7 @@
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('profil.index') }}">
                                 <i class="bi bi-person"></i>
-                                <span>My Profile</span>
+                                <span>Profile Saya</span>
                             </a>
                         </li>
 
@@ -53,7 +67,7 @@
                             <a class="dropdown-item d-flex align-items-center" onclick="confirmLogout();"
                                 href="#">
                                 <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
+                                <span>Keluar</span>
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
@@ -92,7 +106,7 @@
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('profil.index') }}">
                                 <i class="bi bi-person"></i>
-                                <span>My Profile</span>
+                                <span>Profile Saya</span>
                             </a>
                         </li>
 
@@ -104,7 +118,7 @@
                             <a class="dropdown-item d-flex align-items-center" onclick="confirmLogout();"
                                 href="#">
                                 <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
+                                <span>Keluar</span>
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
@@ -141,7 +155,7 @@
                         <li>
                             <a class="dropdown-item d-flex align-items-center" href="{{ route('profil.index') }}">
                                 <i class="bi bi-person"></i>
-                                <span>My Profile</span>
+                                <span>Profile Saya</span>
                             </a>
                         </li>
                         <li>
@@ -151,7 +165,7 @@
                             <a class="dropdown-item d-flex align-items-center" onclick="confirmLogout();"
                                 href="#">
                                 <i class="bi bi-box-arrow-right"></i>
-                                <span>Sign Out</span>
+                                <span>Keluar</span>
                             </a>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                 style="display: none;">

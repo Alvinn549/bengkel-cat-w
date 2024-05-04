@@ -270,8 +270,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <center>
-                                            @if ($perbaikan->foto)
-                                                <img src="{{ asset('storage/' . $perbaikan->foto) }}"
+                                            @if ($progres->foto)
+                                                <img src="{{ asset('storage/' . $progres->foto) }}"
                                                     class="preview-foto{{ $progres->id }} img-fluid rounded"
                                                     alt="">
                                             @else
@@ -312,7 +312,7 @@
                             @endif
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                    @forelse ($perbaikan->progres->sortByDesc('id') as $progres)
+                                    @forelse ($perbaikan->progres->sortByDesc('id') as $key => $progres)
                                         @php
                                             $date = \Carbon\Carbon::parse($progres->created_at)->locale('id');
                                             $formattedDate = $date->format('d-m-Y');
@@ -347,7 +347,7 @@
                                                         </a>
                                                     @endif
                                                 </div>
-                                                @if ($progres->foto)
+                                                @if (!in_array($key, [0, 1]))
                                                     <div class="col-md-4 mt-2">
                                                         @if ($latest_progres['is_selesai'] != true || $latest_progres['id'] == $progres->id)
                                                             <button type="button" class="btn btn-outline-primary"
@@ -432,12 +432,12 @@
                 e.preventDefault();
 
                 Swal.fire({
-                    title: 'Are you sure?',
-                    text: 'You are about to submit the form',
+                    title: 'Apakah Anda yakin?',
+                    text: 'Anda akan mengirimkan formulir ini',
                     icon: 'warning',
                     showCancelButton: true,
-                    confirmButtonText: 'Yes, submit it!',
-                    cancelButtonText: 'No, cancel!',
+                    confirmButtonText: 'Ya , kirim !',
+                    cancelButtonText: 'Batal !',
                 }).then((result) => {
                     if (result.isConfirmed) {
                         showLoadingModal();
