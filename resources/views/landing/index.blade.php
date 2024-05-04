@@ -78,14 +78,17 @@
         <!-- ======= Gallery Section ======= -->
         <section>
             <div class="section-title">
-                <h2 id="title">Our Works</h2>
+                <h2 id="title">Gallery Kami</h2>
             </div>
             <div class="owl-carousel">
-                @foreach ($galleries as $gallery)
+                @forelse ($galleries as $gallery)
                     <div>
                         <img src="{{ asset('storage/' . $gallery->foto) }}" class="rounded" alt="">
                     </div>
-                @endforeach
+                @empty
+                    <p class="text-center">Tidak ada data</p>
+                @endforelse
+
             </div>
         </section>
         <!-- End Gallery Section -->
@@ -94,14 +97,14 @@
         <section id="contact" class="contact">
             <div class="container">
                 <div class="section-title">
-                    <h2 id="title">Contact Us</h2>
+                    <h2 id="title">Kontak Kami</h2>
                 </div>
                 <div class="row">
                     <div class="col-lg-5 d-flex align-items-stretch">
                         <div class="info">
                             <div class="address">
                                 <i class="bi bi-geo-alt"></i>
-                                <h4>Location:</h4>
+                                <h4>Lokasi:</h4>
                                 <p>{{ $settings->alamat }}</p>
                             </div>
                             <div class="email">
@@ -111,37 +114,35 @@
                             </div>
                             <div class="phone">
                                 <i class="bi bi-phone"></i>
-                                <h4>Call:</h4>
+                                <h4>Telepon:</h4>
                                 <p>{{ $settings->telepon }}</p>
                             </div>
                             {!! $settings->map_google !!}
                         </div>
                     </div>
                     <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-                        <form action="" method="post" role="form" class="contact-form">
+                        <form action="{{ route('send.contact.form') }}" method="post" role="form" class="contact-form"
+                            id="contactForm">
+                            @csrf
                             <div class="row">
                                 <div class="form-group col-md-6">
-                                    <label for="name">Your Name</label>
+                                    <label for="name">Nama</label>
                                     <input type="text" name="name" class="form-control rounded" id="name"
                                         required>
                                 </div>
                                 <div class="form-group col-md-6 mt-3 mt-md-0">
-                                    <label for="name">Your Email</label>
+                                    <label for="name">Email</label>
                                     <input type="email" class="form-control rounded" name="email" id="email"
                                         required>
                                 </div>
                             </div>
                             <div class="form-group mt-3">
-                                <label for="name">Message</label>
-                                <textarea class="form-control rounded" name="message" rows="10" required></textarea>
+                                <label for="name">Pesan</label>
+                                <textarea class="form-control rounded" name="pesan" id="message" rows="10" required></textarea>
                             </div>
-                            <div class="my-3">
-                                <div class="loading">Loading</div>
-                                <div class="error-message"></div>
-                                <div class="sent-message">Your message has been sent. Thank you!</div>
-                            </div>
-                            <div class="text-center"><button type="submit">Send Message</button></div>
+                            <div class="text-center"><button type="submit" id="submitForm">Send Message</button></div>
                         </form>
+
                     </div>
                 </div>
             </div>
@@ -150,6 +151,51 @@
 @endsection
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
+        $(document).ready(function() {
+            $('#contactForm').submit(function(e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
+                Swal.fire({
+                    title: 'Sedang mengirim pesan...',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false,
+                });
+
+                $.ajax({
+                    type: 'POST',
+                    url: '{{ route('send.contact.form') }}',
+                    data: formData,
+                    success: function(response) {
+                        Swal.close();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: response.message,
+                        });
+
+                        $('#contactForm')[0].reset();
+                    },
+                    error: function(xhr, status, error) {
+                        Swal.close();
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'Error: ' + xhr.responseText,
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
     <script>
         $(document).ready(function() {
             $('.owl-carousel').owlCarousel({

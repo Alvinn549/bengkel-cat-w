@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingPageController::class, 'index'])->name('home');
 Route::get('/detail-perbaikan/{perbaikan}', [LandingPageController::class, 'detailPerbaikan'])->name('home.detail-perbaikan');
+Route::post('/send-contact-form', [LandingPageController::class, 'sendContactForm'])->name('send.contact.form');
 
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
