@@ -91,24 +91,31 @@
                                                 $badge_bg = null;
                                                 $btn_color = null;
 
-                                                if ($perbaikan->status == 'Selesai') {
-                                                    $badge_bg = 'bg-success';
-                                                    $btn_color = 'success';
-                                                } elseif (
-                                                    $perbaikan->status == 'Baru' ||
-                                                    $perbaikan->status == 'Antrian'
-                                                ) {
-                                                    $badge_bg = 'bg-info';
-                                                    $btn_color = 'info';
-                                                } elseif ($perbaikan->status == 'Dalam Proses') {
-                                                    $badge_bg = 'bg-secondary';
-                                                    $btn_color = 'secondary';
-                                                } elseif ($perbaikan->status == 'Menunggu Bayar') {
-                                                    $badge_bg = 'bg-warning';
-                                                    $btn_color = 'warning';
-                                                } else {
-                                                    $badge_bg = 'bg-dark';
-                                                    $btn_color = 'dark';
+                                                switch ($perbaikan->status) {
+                                                    case 'Selesai':
+                                                        $badge_bg = 'bg-success';
+                                                        $btn_color = 'success';
+                                                        break;
+                                                    case 'Baru':
+                                                        $badge_bg = 'bg-info';
+                                                        $btn_color = 'info';
+                                                        break;
+                                                    case 'Antrian':
+                                                        $badge_bg = 'bg-primary';
+                                                        $btn_color = 'primary';
+                                                        break;
+                                                    case 'Dalam Proses':
+                                                        $badge_bg = 'bg-secondary';
+                                                        $btn_color = 'secondary';
+                                                        break;
+                                                    case 'Menunggu Bayar':
+                                                        $badge_bg = 'bg-warning';
+                                                        $btn_color = 'warning';
+                                                        break;
+                                                    default:
+                                                        $badge_bg = 'bg-dark';
+                                                        $btn_color = 'dark';
+                                                        break;
                                                 }
                                             @endphp
                                             <th>Status</th>

@@ -49,6 +49,7 @@
                                             <th>Nama Perbaikan</th>
                                             <th>Tgl Masuk</th>
                                             <th>Status</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -93,6 +94,9 @@
                                                     <span class="badge {{ $badge_bg }}">
                                                         {{ $perbaikan->status ?? '-' }}
                                                     </span>
+                                                </td>
+                                                <td>
+
                                                 </td>
                                             </tr>
                                         @endforeach
