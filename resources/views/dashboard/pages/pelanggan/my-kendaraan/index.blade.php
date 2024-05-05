@@ -12,30 +12,34 @@
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-        <div class="row">
+        <div class="row justify-content-center">
             <div class="mb-4">
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
             @forelse ($kendaraans as $kendaraan)
-                <div class="col-lg-6">
-                    <div class="card">
+                <div class="col-md-4">
+                    <div class="card" style=" height: 100%;">
                         <div class="card-body">
-                            <h5 class="card-title">Data Kendaraan</h5>
+                            <h5 class="card-title text-center">
+                                <span class="badge bg-secondary text-white rounded-pill"
+                                    style="font-size: 16px">{{ $kendaraan->no_plat }}</span>
+                            </h5>
 
-                            <div class="row">
-                                <div class="col-md-6 d-flex justify-content-center">
+                            <div class="row g-3">
+                                <div class="col-md-12 d-flex justify-content-center" style="height: 200px;">
                                     @if ($kendaraan->foto)
                                         <img src="{{ asset('storage/' . $kendaraan->foto) }}" class="img-fluid rounded"
-                                            alt="">
+                                            alt="" style="object-fit: cover; height: 100%; width: auto;">
                                     @else
                                         <img src="{{ asset('assets/dashboard/img/hatchback.png') }}" alt="Default"
                                             class="col-md-6 img-fluid">
                                     @endif
                                 </div>
-                                <div class="col-md-6 align-self-center">
-                                    <table class="table">
+                                <div class="col-md-12">
+                                    <table class="table table-borderless">
                                         <tr>
                                             <th nowrap>No Plat</th>
                                             <td>{{ $kendaraan->no_plat }}</td>
@@ -56,17 +60,15 @@
                                             <th nowrap>Terdaftar Sejak</th>
                                             <td>{{ $kendaraan->created_at }}</td>
                                         </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <a href="{{ route('dashboard.pelanggan.my-kendaraan-detail', $kendaraan->id) }}"
-                                                    class="btn btn-secondary w-100">
-                                                    Lihat Detail
-                                                </a>
-                                            </td>
-                                        </tr>
                                     </table>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ route('dashboard.pelanggan.my-kendaraan-detail', $kendaraan->id) }}"
+                                class="btn btn-secondary w-100">
+                                <i class="ri-eye-line me-2"></i> Lihat Detail
+                            </a>
                         </div>
                     </div>
                 </div>

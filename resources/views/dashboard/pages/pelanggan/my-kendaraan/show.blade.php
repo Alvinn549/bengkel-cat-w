@@ -20,8 +20,8 @@
         <div class="row">
             <div class="mb-4">
                 <a href="{{ route('dashboard.pelanggan.my-kendaraan', auth()->user()->pelanggan->id) }}"
-                    class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                    class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
             <div class="col-lg-5">
@@ -40,7 +40,7 @@
                                 @endif
                             </div>
                             <div class="col-md-12 mt-3 align-self-center">
-                                <table class="table">
+                                <table class="table table-borderless">
                                     <tr>
                                         <th nowrap>No Plat</th>
                                         <td>{{ $kendaraan->no_plat }}</td>
@@ -122,7 +122,7 @@
                                                                 break;
                                                         }
                                                     @endphp
-                                                    <span class="badge {{ $badge_bg }}">
+                                                    <span class="badge {{ $badge_bg }} w-100">
                                                         {{ $perbaikan->status ?? '-' }}
                                                     </span>
                                                 </td>

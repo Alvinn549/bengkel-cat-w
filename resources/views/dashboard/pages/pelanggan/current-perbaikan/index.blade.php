@@ -19,8 +19,9 @@
     <section class="section dashboard">
         <div class="row justify-content-center">
             <div class="mb-4">
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
 
@@ -54,7 +55,7 @@
                                         </tr>
                                         <tr>
                                             <th>Biaya</th>
-                                            <td>Rp. {{ number_format($perbaikan->biaya) ?? '-' }}</td>
+                                            <td>Rp. {{ number_format($perbaikan->biaya, 2) ?? '-' }}</td>
                                         </tr>
                                         <tr>
                                             @php
@@ -126,7 +127,6 @@
                                     </table>
                                 </div>
                             </div>
-
                         </div>
                         <div class="card-footer">
                             @if ($perbaikan->transaksi)

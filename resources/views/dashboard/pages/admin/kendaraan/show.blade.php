@@ -9,9 +9,9 @@
         }
 
         /*
-                                                                        .btn-show-pemilik:hover {
-                                                                            color: #007bff;
-                                                                        } */
+                                                                                            .btn-show-pemilik:hover {
+                                                                                                color: #007bff;
+                                                                                            } */
     </style>
 @endsection
 @section('content')
@@ -29,12 +29,12 @@
     <div class="modal fade" id="dataPemilik" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">Data Pemilik</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <table class="table">
+                    <table class="table table-borderless">
                         <tr>
                             <th>Nama</th>
                             <td>{{ $kendaraan->pelanggan->nama ?? '' }}</td>
@@ -57,8 +57,9 @@
     <section class="section">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('kendaraan.index') }}" class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                <a href="{{ route('kendaraan.index') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
             <div class="col-lg-12">
@@ -77,7 +78,7 @@
                                 @endif
                             </div>
                             <div class="col-md-6 align-self-center">
-                                <table class="table">
+                                <table class="table table-borderless">
                                     <tr>
                                         <th>Pemilik</th>
                                         <td>
@@ -180,7 +181,7 @@
                                                                 break;
                                                         }
                                                     @endphp
-                                                    <span class="badge {{ $badge_bg }}">
+                                                    <span class="badge {{ $badge_bg }} w-100">
                                                         {{ $perbaikan->status ?? '-' }}
                                                     </span>
                                                 </td>

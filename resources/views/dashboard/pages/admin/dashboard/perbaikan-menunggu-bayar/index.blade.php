@@ -15,11 +15,11 @@
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Perbaikan Menunggu Bayar</h1>
+        <h1>Perbaikan menunggu bayar</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">Perbaikan Menunggu Bayar</li>
+                <li class="breadcrumb-item active">Perbaikan menunggu bayar</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -27,8 +27,9 @@
     <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
         </div>
@@ -37,7 +38,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Perbaikan Menunggu Bayar</h5>
+                        <h5 class="card-title">Data perbaikan menunggu bayar</h5>
 
                         <div class="row">
                             <div class="col-md-12">
@@ -91,12 +92,21 @@
                                                                 break;
                                                         }
                                                     @endphp
-                                                    <span class="badge {{ $badge_bg }}">
+                                                    <span class="badge {{ $badge_bg }} w-100">
                                                         {{ $perbaikan->status ?? '-' }}
                                                     </span>
                                                 </td>
                                                 <td>
-
+                                                    <a class="btn btn-{{ $btn_color }} text-white btn-sm"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Proses"
+                                                        href="{{ route('dashboard.admin.proses-menunggu-bayar', $perbaikan->id) }}">
+                                                        <i class="ri-tools-line me-1"></i>Proses
+                                                    </a>
+                                                    <a class="btn btn-success btn-sm" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Lihat"
+                                                        href="{{ route('dashboard.admin.detail-perbaikan-menunggu-bayar', $perbaikan->id) }}">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -118,9 +128,7 @@
                 responsive: true,
             });
         })
-    </script>
 
-    <script>
         function openImage(imageUrl) {
             Swal.fire({
                 imageUrl: imageUrl,

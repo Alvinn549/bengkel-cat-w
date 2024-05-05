@@ -90,12 +90,12 @@
                 <div class="col-xxl-6 col-md-6">
                     <div class="card info-card sales-card">
                         <div class="card-body">
-                            <h5 class="card-title">Perbaikan Menunggu Bayar</h5>
+                            <h5 class="card-title">Perbaikan menunggu bayar</h5>
                             <a href="{{ route('dashboard.admin.list-perbaikan-menunggu-bayar') }}">
                                 <div class="d-flex align-items-center">
                                     <div
                                         class="card-icon {{ $countPerbaikansMenungguBayar != 0 ? 'bg-warning text-white' : '' }}  rounded-circle d-flex align-items-center justify-content-center">
-                                        + <i class="bi bi-cash-stack"></i>
+                                        <i class="bi bi-cash-stack"></i>
                                     </div>
                                     <div class="ps-3">
                                         <h6>{{ $countPerbaikansMenungguBayar }}</h6>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
             </div>
-            <hr>
+            {{-- <hr>
             <div class="row mt-3">
                 <div class="col-xxl-3 col-md-3">
                     <div class="card info-card ">
@@ -168,6 +168,6 @@
                         </div>
                     </div>
                 </div><!-- End Transaksi Sekarang Card -->
-            </div>
+            </div> --}}
     </section>
 @endsection

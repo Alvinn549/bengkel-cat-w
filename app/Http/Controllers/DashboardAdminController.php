@@ -104,14 +104,100 @@ class DashboardAdminController extends Controller
         return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.index', compact('perbaikans'));
     }
 
-    public function prosesPerbaikanSelesai(Perbaikan $perbaikan)
+    public function detailPerbaikanMenungguBayar(Perbaikan $perbaikan)
+    {
+        $perbaikan->load('kendaraan');
+        $perbaikan->load('progres');
+
+        return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.show', compact('perbaikan'));
+    }
+
+    public function prosesPerbaikanSelesaiDiProses(Perbaikan $perbaikan)
     {
         $perbaikan->load('kendaraan');
 
-        return view('dashboard.pages.admin.dashboard.proses-perbaikan-selesai.index', compact('perbaikan'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.proses-perbaikan', compact('perbaikan'));
     }
 
-    public function prosesPerbaikanSelesaiPut(Request $request, Perbaikan $perbaikan)
+    public function prosesPerbaikanSelesaiDiProsesPut(Request $request, Perbaikan $perbaikan)
+    {
+        // dd($request->all());
+
+        $request->validate([
+            'biaya' => ['required', 'string'],
+        ], [
+            'biaya.required' => 'Biaya tidak boleh kosong',
+        ]);
+
+
+        $biaya = (int) str_replace(',', '', $request->biaya);
+
+        $perbaikan->update([
+            'status' => 'Menunggu Bayar',
+            'biaya' => $biaya
+        ]);
+
+        $pelanggan = $perbaikan->kendaraan->pelanggan;
+
+        $fullName = explode(' ', $pelanggan->nama);
+        $firstName = $fullName[0];
+        $lastName = isset($fullName[1]) ? $fullName[1] : null;
+
+        Transaksi::updateOrCreate(
+            ['order_id' => 'tr-' . $perbaikan->kode_unik],
+            [
+                'perbaikan_id' => $perbaikan->id,
+                'pelanggan_id' => $pelanggan->id,
+                'gross_amount' => $biaya,
+                'transaction_status' => 'Menunggu Konfirmasi Pelanggan',
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'email' => $pelanggan->user->email,
+                'phone' => $pelanggan->no_telp,
+            ]
+        );
+
+        Alert::success('Perbaikan Selesai', 'Perbaikan telah selesai dan transaksi telah dibuat');
+
+        return redirect()->route('dashboard.admin.list-perbaikan-selesai-di-proses');
+    }
+
+    public function prosesPerbaikanMenungguBayar(Perbaikan $perbaikan)
+    {
+        $perbaikan->load('kendaraan');
+        $perbaikan->load('transaksi');
+
+        return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.proses-perbaikan', compact('perbaikan'));
+    }
+
+    public function konfirmasiPembayaranCash(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'konfirmasi_sudah_bayar' => ['required', 'string'],
+        ], [
+            'konfirmasi_sudah_bayar.required' => 'Konfirmasi sudah bayar tidak boleh kosong',
+        ]);
+
+        $transaksi = Transaksi::find($request->transaksi_id);
+
+        $transaksi->update([
+            'transaction_status' => 'Selesai',
+        ]);
+
+        $perbaikan = Perbaikan::find($transaksi->perbaikan_id);
+
+        $perbaikan->update([
+            'status' => 'Selesai',
+            'tgl_selesai' => now(),
+        ]);
+
+        Alert::success('Perbaikan dan Transaksi Selesai', 'Perbaikan dan transaksi telah selesai');
+
+        return redirect()->route('dashboard.admin.list-perbaikan-menunggu-bayar');
+    }
+
+    public function prosesPerbaikanMenungguBayarPut(Request $request, Perbaikan $perbaikan)
     {
         // dd($request->all());
 
@@ -149,6 +235,6 @@ class DashboardAdminController extends Controller
 
         Alert::success('Perbaikan Selesai', 'Perbaikan telah selesai dan transaksi telah dibuat');
 
-        return redirect()->route('dashboard.admin.list-perbaikan-selesai-di-proses');
+        return redirect()->route('dashboard.admin.list-perbaikan-menunggu-bayar');
     }
 }

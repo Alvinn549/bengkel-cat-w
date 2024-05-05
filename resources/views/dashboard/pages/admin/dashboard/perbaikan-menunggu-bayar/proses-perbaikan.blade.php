@@ -1,44 +1,85 @@
 @extends('dashboard.layouts.main')
 
-@section('css')
-    <style>
-        .btn-show-pemilik {
-            cursor: pointer;
-            border: none;
-            background-color: transparent;
-        }
-
-        .btn-show-pemilik:hover {
-            color: #007bff;
-        }
-    </style>
-@endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Detail Perbaikan</h1>
+        <h1>Proses Perbaikan</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a
-                        href="{{ route('dashboard.pelanggan.history-perbaikan', auth()->user()->pelanggan->id) }}">Riwayat
-                        Perbaikan</a></li>
-                <li class="breadcrumb-item active">Lihat Perbaikan</li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('dashboard.admin.list-perbaikan-menunggu-bayar') }}">Perbaikan menunggu
+                        bayar</a>
+                </li>
+                <li class="breadcrumb-item active">Proses Perbaikan</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section dashboard">
-        <div class="row">
-            <div class="mb-4">
-                <a href="{{ route('dashboard.pelanggan.history-perbaikan', auth()->user()->pelanggan->id) }}"
-                    class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="Kembali">
-                    <i class="ri-arrow-go-back-line"></i>
-                </a>
+    <section class="section">
+        <div class="mb-4">
+            <a href="{{ route('dashboard.admin.list-perbaikan-menunggu-bayar') }}" class="btn btn-outline-secondary">
+                <i class="ri-arrow-go-back-line"></i>
+            </a>
+        </div>
+
+        <!-- Modal Data Kendaraan -->
+        <div class="modal fade" id="dataKendaraan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="exampleModalLabel">Data Kendaraan</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row justify-content-center">
+                            <div class="col-sm-6">
+                                @if ($perbaikan->kendaraan->foto)
+                                    <img src="{{ asset('storage/' . $perbaikan->kendaraan->foto) }}"
+                                        class="img-fluid rounded" alt="">
+                                @else
+                                    <img src="{{ asset('assets/dashboard/img/hatchback.png') }}" alt="Default"
+                                        class="img-fluid">
+                                @endif
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-sm-12">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <th>No Plat</th>
+                                        <td>{{ $perbaikan->kendaraan->no_plat ?? '' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Tipe</th>
+                                        <td>{{ $perbaikan->kendaraan->tipe->nama_tipe ?? '' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Merek</th>
+                                        <td>{{ $perbaikan->kendaraan->merek->nama_merek ?? '' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Terdaftar Sejak</th>
+                                        <td>{{ $perbaikan->kendaraan->created_at ?? '' }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <div class="row">
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Perbaikan</h5>
+                        <div class="d-flex align-items-center">
+                            <h5 class="card-title flex-grow-1">Data Perbaikan</h5>
+                            <button type="button" class="btn btn-outline-primary" style="height: 38px"
+                                data-bs-toggle="modal" data-bs-target="#dataKendaraan">
+                                <i class="ri-car-line"></i>
+                            </button>
+                        </div>
                         <div class="row g-3">
                             <div class="col-md-12 d-flex justify-content-center">
                                 @if ($perbaikan->foto)
@@ -60,7 +101,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <th>Nama</th>
+                                        <th>Nama Perbaikan</th>
                                         <td>{{ $perbaikan->nama ?? '' }}</td>
                                     </tr>
                                     <tr>
@@ -140,7 +181,7 @@
                         </div>
                     </div>
                 </div>
-            </div><!-- End Data Perbaikan-->
+            </div>
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
@@ -173,7 +214,40 @@
                                 </table>
                             </div>
                         </div>
-                        <hr>
+                        @if ($perbaikan->transaksi->transaction_status == 'Menunggu Konfirmasi Admin')
+                            <form class="row g-3 justify-content-center"
+                                action="{{ route('dashboard.admin.konfirmasi-pembayaran-cash') }}" method="POST"
+                                id="form_konfirmasi_pembayaran" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="transaksi_id" value="{{ $perbaikan->transaksi->id }}">
+                                <input type="hidden" name="perbaikan_id" value="{{ $perbaikan->id }}">
+
+                                <div class="col-md-12" id="konfirmasiPembayaran">
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" name="konfirmasi_sudah_bayar"
+                                            id="konfirmasi_sudah_bayar">
+                                        <label class="form-check-label" for="konfirmasi_sudah_bayar">Nyatakan pelanggan
+                                            <strong>sudah bayar</strong></label>
+                                    </div>
+                                    @error('biaya')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="text-center">
+                                        <button type="button" class="btn btn-primary w-100" onclick="submitForm()">
+                                            <i class="ri-save-line me-1"></i>Submit
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <h5 class="card-title">Data Pelanggan</h5>
                         <div class="row">
                             <div class="col-md-12">
@@ -198,83 +272,45 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer">
-                        <a href="{{ route('dashboard.pelanggan.history-perbaikan-detail-transaksi', $perbaikan->transaksi->id) }}"
-                            class="btn btn-primary w-100"><i class="bi bi-eye me-2"></i> Lihat Detail</a>
-                    </div>
                 </div>
             </div>
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Progres Perbaikan</h5>
-                        <div class="activity">
-                            <div class="row mt-3">
-                                <div class="col-md-12">
-                                    @forelse ($perbaikan->progres->sortByDesc('id') as $progres)
-                                        @php
-                                            $date = \Carbon\Carbon::parse($progres->created_at)->locale('id');
-                                            $formattedDate = $date->format('d-m-Y');
-                                            $formattedTime = $date->format('H:i');
-                                            $diffForHumans = $date->diffForHumans();
-                                        @endphp
-                                        <div class="activity-item d-flex">
-                                            <div class="activite-label" style="width: 150px">
-                                                {{ $diffForHumans ?? '-' }} <br>
-                                                {{ $formattedDate . ' ' . $formattedTime ?? '-' }} <br>
-                                                Oleh : {{ $progres->pekerja->nama ?? '-' }}
-                                            </div>
-                                            <i
-                                                class='bi bi-circle-fill activity-badge {{ $progres->is_selesai == 1 ? 'text-success' : 'text-warning' }} align-self-start'></i>
-                                            <div class="activity-content">
-                                                {{ $progres->keterangan ?? '-' }}
-                                                <div class="col-md-2 mt-2">
-                                                    @if ($progres->foto)
-                                                        <a href="javascript:void(0)">
-                                                            <img src="{{ asset('storage/' . $progres->foto) }}"
-                                                                class="img-fluid rounded" alt=""
-                                                                onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
-                                                        </a>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div><!-- End Progres item-->
-                                    @empty
-                                        <div class="text-center">
-                                            <h5>Tidak ada progres</h5>
-                                            <img src="{{ asset('assets/dashboard/img/hang-around.png') }}"
-                                                class="img-fluid rounded" alt="">
-                                        </div>
-                                    @endforelse
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- End Progres -->
         </div>
     </section>
 @endsection
 
 @section('js')
     <script>
-        $(document).ready(function() {
-            $('#datatable').DataTable({
-                lengthMenu: [
-                    [5, 10, 25, 50, -1],
-                    [5, 10, 25, 50, "All"]
-                ],
-            });
-        })
-    </script>
-    <script>
-        function openImage(imageUrl) {
-            Swal.fire({
-                imageUrl: imageUrl,
-                imageWidth: 450,
-                imageAlt: 'Foto Progres',
-                showConfirmButton: false,
-            });
+        function formatNumberInput(value) {
+            let formatedValue = value.replace(/[^0-9]/g, '').slice(0, 8);
+            formatedValue = formatedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return formatedValue;
+        }
+
+        function submitForm() {
+            const konfirmasi_sudah_bayar = document.getElementById('konfirmasi_sudah_bayar');
+            if (konfirmasi_sudah_bayar.checked) {
+                Swal.fire({
+                    title: 'Apakah anda yakin untuk menyelesaikan perbaikan ini?',
+                    text: "Setelah dikonfirmasi, perbaikan dan transaksi akan dinyatakan selesai!",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, simpan!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        document.getElementById('form_konfirmasi_pembayaran').submit()
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Anda harus melakukan konfirmasi pembayaran terlebih dahulu!',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
         }
     </script>
 @endsection

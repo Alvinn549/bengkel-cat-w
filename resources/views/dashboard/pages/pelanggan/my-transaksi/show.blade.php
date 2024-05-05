@@ -22,8 +22,8 @@
         <div class="row">
             <div class="mb-4">
                 <a href="{{ route('dashboard.pelanggan.current-perbaikan', auth()->user()->pelanggan->id) }}"
-                    class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                    class="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
             <div class="col-lg-12">
@@ -63,6 +63,10 @@
                                             <tr>
                                                 <th>Order Status</th>
                                                 <td>: {{ $transaksi->transaction_status ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Payment Method</th>
+                                                <td>: {{ $transaksi->payment_type ?? '-' }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -141,27 +145,41 @@
                                 </div>
                             </div>
                             <hr>
-                            <div class="d-print-none">
-                                <div class="float-end">
-                                    {{-- <a href="#" class="btn btn-dark">
-                                        <i class="bi bi-printer-fill"></i>
-                                        Cetak
-                                    </a> --}}
-                                    <form action="#" method="POST">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $transaksi->id }}">
-
-                                        <select class="form-select" name="payment_method" style="width: 100%">
-                                            <option value="">Pilih Metode Pembayaran</option>
-                                            <option value="cash">Cash</option>
-                                            <option value="virtual">Virtual</option>
-                                        </select>
-                                        <button type="submit" class="btn btn-primary w-100 mt-3">
-                                            <i class="bi bi-credit-card me-2"></i>Pilih
-                                        </button>
-                                    </form>
+                            @if ($transaksi->transaction_status == 'Menunggu Konfirmasi Pelanggan')
+                                <div class="d-print-none">
+                                    <div class="float-end">
+                                        <form id="myForm"
+                                            action="{{ route('dashboard.pelanggan.proses-my-transaksi') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
+                                            <input type="hidden" name="pelanggan_id"
+                                                value="{{ $transaksi->pelanggan->id }}">
+                                            <select class="form-select @error('payment_type') is-invalid @enderror"
+                                                name="payment_type" style="width: 100%">
+                                                <option value="">Pilih Metode Pembayaran</option>
+                                                <option value="cash">Cash</option>
+                                                <option value="virtual">Virtual</option>
+                                            </select>
+                                            @error('payment_type')
+                                                <div class="invalid-feedback">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                            <button type="button" class="btn btn-primary w-100 mt-3"
+                                                onclick="confirmSubmit()">
+                                                <i class="bi bi-credit-card me-2"></i>Pilih
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
+                            @elseif ($transaksi->transaction_status == 'Menunggu Konfirmasi Admin')
+                                <div class="d-print-none">
+                                    <div class="float-end">
+                                        <span class="badge bg-warning" style="font-size: 16px">Menunggu Konfirmasi
+                                            Admin</span>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -171,4 +189,22 @@
 @endsection
 
 @section('js')
+    <script>
+        function confirmSubmit() {
+            Swal.fire({
+                title: 'Konfirmasi',
+                text: "Apakah Anda yakin ingin memilih metode pembayaran ini ?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Lanjutkan',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('myForm').submit();
+                }
+            });
+        }
+    </script>
 @endsection

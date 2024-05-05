@@ -32,8 +32,9 @@
     <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard.admin.list-perbaikan-selesai-di-proses') }}" class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                <a href="{{ route('dashboard.admin.list-perbaikan-selesai-di-proses') }}" class="btn btn-outline-secondary"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
             <div class="col-lg-6">
@@ -51,7 +52,7 @@
                                 @endif
                             </div>
                             <div class="col-md-12">
-                                <table class="table">
+                                <table class="table table-borderless">
                                     <tr>
                                         <th>Kode</th>
                                         <td>
@@ -70,7 +71,7 @@
                                     </tr>
                                     <tr>
                                         <th>Biaya</th>
-                                        <td>Rp. {{ number_format($perbaikan->biaya) ?? '-' }}</td>
+                                        <td>Rp. {{ number_format($perbaikan->biaya, 2) ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         @php

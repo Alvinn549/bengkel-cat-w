@@ -15,11 +15,11 @@
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Perbaikan Selesai Di Proses Pekerja</h1>
+        <h1>Perbaikan selesai di proses pekerja</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">Perbaikan Selesai Di Proses Pekerja</li>
+                <li class="breadcrumb-item active">Perbaikan selesai di proses pekerja</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -27,8 +27,9 @@
     <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
         </div>
@@ -37,7 +38,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Perbaikan Selesai Di Proses Pekerja</h5>
+                        <h5 class="card-title">Data perbaikan selesai di proses pekerja</h5>
 
                         <div class="row">
                             <div class="col-md-12">
@@ -91,12 +92,13 @@
                                                                 break;
                                                         }
                                                     @endphp
-                                                    <span class="badge {{ $badge_bg }}">
+                                                    <span class="badge {{ $badge_bg }} w-100">
                                                         {{ $perbaikan->status ?? '-' }}
                                                     </span>
                                                 </td>
                                                 <td nowrap>
-                                                    <button class="btn btn-{{ $btn_color }} btn-sm"
+                                                    <button class="btn btn-{{ $btn_color }} text-white btn-sm"
+                                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Proses"
                                                         onclick="confirmProses('{{ $perbaikan->id }}')">
                                                         <i class="ri-tools-line me-1"></i>Proses
                                                     </button>

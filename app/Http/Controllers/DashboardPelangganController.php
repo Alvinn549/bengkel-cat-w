@@ -7,7 +7,7 @@ use App\Models\Pelanggan;
 use App\Models\Perbaikan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
-
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DashboardPelangganController extends Controller
 {
@@ -71,6 +71,32 @@ class DashboardPelangganController extends Controller
         return view('dashboard.pages.pelanggan.my-transaksi.show', compact('transaksi'));
     }
 
+    public function prosesMyTransaksi(Request $request)
+    {
+        $request->validate([
+            'payment_type' => 'required',
+        ], [
+            'payment_type.required' => 'Pilih metode pembayaran',
+        ]);
+
+        if ($request->payment_type == 'virtual') {
+            dd('virtual');
+        } elseif ($request->payment_type == 'cash') {
+            $transaksi = Transaksi::find($request->transaksi_id);
+
+            $transaksi->update([
+                'payment_type' => $request->payment_type,
+                'transaction_status' => 'Menunggu Konfirmasi Admin',
+            ]);
+
+            Alert::success('Success', 'Transaksi sedang diproses, menunggu konfirmasi dari admin');
+
+            return redirect()->route('dashboard.pelanggan.my-transaksi-detail', $request->transaksi_id);
+        } else {
+            abort(404);
+        }
+    }
+
     public function historyTransaksi($idPelanggan)
     {
         $transaksis = Transaksi::where('pelanggan_id', $idPelanggan)
@@ -128,5 +154,12 @@ class DashboardPelangganController extends Controller
         $perbaikan->load('kendaraan');
         $perbaikan->load('progres');
         return view('dashboard.pages.pelanggan.history-perbaikan.show', compact('perbaikan'));
+    }
+
+    public function detailHistoryPerbaikanTransaksi(Transaksi $transaksi)
+    {
+        $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
+
+        return view('dashboard.pages.pelanggan.history-perbaikan.detail-transaksi', compact('transaksi'));
     }
 }

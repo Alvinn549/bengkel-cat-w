@@ -27,8 +27,9 @@
     <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard.pekerja.list-perbaikan-dalam-proses') }}" class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                <a href="{{ route('dashboard.pekerja.list-perbaikan-dalam-proses') }}" class="btn btn-outline-secondary"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
             <div class="col-lg-6">
@@ -53,7 +54,7 @@
                                 @endif
                             </div>
                             <div class="col-md-12">
-                                <table class="table">
+                                <table class="table table-borderless">
                                     <tr>
                                         <th>Kode</th>
                                         <td>
@@ -146,13 +147,13 @@
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header bg-primary text-white">
                             <h5 class="modal-title" id="exampleModalLabel">Data Kendaraan</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <div class="row justify-content-center">
-                                <div class="col-sm-5">
+                                <div class="col-sm-6">
                                     @if ($perbaikan->kendaraan->foto)
                                         <img src="{{ asset('storage/' . $perbaikan->kendaraan->foto) }}"
                                             class="img-fluid rounded" alt="">
@@ -176,6 +177,10 @@
                                         <tr>
                                             <th>Merek</th>
                                             <td>{{ $perbaikan->kendaraan->merek->nama_merek ?? '' }}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Terdaftar Sejak</th>
+                                            <td>{{ $perbaikan->kendaraan->created_at ?? '' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Pemilik</th>
@@ -202,7 +207,7 @@
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
-                        <div class="modal-header">
+                        <div class="modal-header bg-primary text-white">
                             <h5 class="modal-title" id="exampleModalLabel">Tambahkan Progres Perbaikan</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -247,7 +252,7 @@
                     aria-labelledby="editProgresLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header">
+                            <div class="modal-header bg-primary text-white">
                                 <h5 class="modal-title" id="editProgresLabel">Edit Progres</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>

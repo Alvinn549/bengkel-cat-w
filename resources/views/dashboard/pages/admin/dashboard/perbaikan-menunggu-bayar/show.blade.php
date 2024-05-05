@@ -1,23 +1,41 @@
 @extends('dashboard.layouts.main')
 
+@section('css')
+    <style>
+        .btn-show-pemilik {
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+        }
+
+        .btn-show-pemilik:hover {
+            color: #007bff;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="pagetitle">
-        <h1>Proses Perbaikan</h1>
+        <h1>Lihat Perbaikan</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">List Perbaikan Selesai</a></li>
-                <li class="breadcrumb-item active">Proses Perbaikan</li>
+                <li class="breadcrumb-item">
+                    <a href="{{ route('dashboard.admin.list-perbaikan-menunggu-bayar') }}">List perbaikan menunggu bayar
+                    </a>
+                </li>
+                <li class="breadcrumb-item active">Lihat perbaikan</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
-    <section class="section">
-        <form class="row g-3 justify-content-center"
-            action="{{ route('dashboard.admin.proses-perbaikan-selesai-put', $perbaikan) }}" method="POST" id="form"
-            enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+    <section class="section dashboard">
+        <div class="row">
+            <div class="mb-4">
+                <a href="{{ route('dashboard.admin.list-perbaikan-menunggu-bayar') }}" class="btn btn-outline-secondary"
+                    data-bs-toggle="tooltip" data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
+                </a>
+            </div>
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
@@ -33,7 +51,7 @@
                                 @endif
                             </div>
                             <div class="col-md-12">
-                                <table class="table">
+                                <table class="table table-borderless">
                                     <tr>
                                         <th>Kode</th>
                                         <td>
@@ -52,7 +70,7 @@
                                     </tr>
                                     <tr>
                                         <th>Biaya</th>
-                                        <td>Rp. {{ number_format($perbaikan->biaya) ?? '-' }}</td>
+                                        <td>Rp. {{ number_format($perbaikan->biaya, 2) ?? '-' }}</td>
                                     </tr>
                                     <tr>
                                         @php
@@ -123,74 +141,77 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
+            </div><!-- End Data Perbaikan-->
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Biaya</h5>
-                        <div class="row g-3">
-                            <div class="col-md-12" id="inputBiayaContainer">
-                                <label for="inputBiaya" class="form-label">Biaya</label>
-                                <input type="text" class="form-control @error('biaya') is-invalid @enderror"
-                                    name="biaya" id="inputBiaya" placeholder="Rp. "
-                                    value="{{ old('biaya') ?? $perbaikan->biaya }}" pattern="\d+"
-                                    oninput="this.value = formatNumberInput(this.value)" inputmode="numeric">
-                                @error('biaya')
-                                    <div class="invalid-feedback">
-                                        {{ $message }}
-                                    </div>
-                                @enderror
-                            </div>
-                            <div class="col-md-12">
-                                <div class="text-center">
-                                    <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
-                                    <a href="{{ route('dashboard.admin.list-perbaikan-selesai-di-proses') }}"
-                                        class="btn btn-secondary">Kembali</a></a>
+                        <h5 class="card-title">Progres Perbaikan</h5>
+                        <div class="activity">
+                            <div class="row mt-3">
+                                <div class="col-md-12">
+                                    @forelse ($perbaikan->progres->sortByDesc('id') as $progres)
+                                        @php
+                                            $date = \Carbon\Carbon::parse($progres->created_at)->locale('id');
+                                            $formattedDate = $date->format('d-m-Y');
+                                            $formattedTime = $date->format('H:i');
+                                            $diffForHumans = $date->diffForHumans();
+                                        @endphp
+                                        <div class="activity-item d-flex">
+                                            <div class="activite-label" style="width: 150px">
+                                                {{ $diffForHumans ?? '-' }} <br>
+                                                {{ $formattedDate . ' ' . $formattedTime ?? '-' }} <br>
+                                                Oleh : {{ $progres->pekerja->nama ?? '-' }}
+                                            </div>
+                                            <i
+                                                class='bi bi-circle-fill activity-badge {{ $progres->is_selesai == 1 ? 'text-success' : 'text-warning' }} align-self-start'></i>
+                                            <div class="activity-content">
+                                                {{ $progres->keterangan ?? '-' }}
+                                                <div class="col-md-5 mt-2">
+                                                    @if ($progres->foto)
+                                                        <a href="javascript:void(0)">
+                                                            <img src="{{ asset('storage/' . $progres->foto) }}"
+                                                                class="img-fluid rounded" alt=""
+                                                                onclick="openImage('{{ asset('storage/' . $progres->foto) }}')">
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div><!-- End Progres item-->
+                                    @empty
+                                        <div class="text-center">
+                                            <h5>Tidak ada progres</h5>
+                                            <img src="{{ asset('assets/dashboard/img/hang-around.png') }}"
+                                                class="img-fluid rounded" alt="">
+                                        </div>
+                                    @endforelse
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </div><!-- End Progres -->
+        </div>
     </section>
 @endsection
 
 @section('js')
     <script>
-        function formatNumberInput(value) {
-            let formatedValue = value.replace(/[^0-9]/g, '').slice(0, 8);
-            formatedValue = formatedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            return formatedValue;
-        }
-
-        function submitForm() {
-            // Check if the biaya field is empty
-            const biayaValue = document.getElementById('inputBiaya').value.trim();
-            if (biayaValue === '') {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Biaya tidak boleh kosong!',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-                return;
-            }
-
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                lengthMenu: [
+                    [5, 10, 25, 50, -1],
+                    [5, 10, 25, 50, "All"]
+                ],
+            });
+        })
+    </script>
+    <script>
+        function openImage(imageUrl) {
             Swal.fire({
-                title: 'Apakah anda yakin untuk menyelesaikan perbaikan ini ?',
-                text: "Setelah dikonfirmasi, maka status perbaikan akan diupdate dan transaksi akan di buat !",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, simpan!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('form').submit()
-                }
+                imageUrl: imageUrl,
+                imageWidth: 450,
+                imageAlt: 'Foto Progres',
+                showConfirmButton: false,
             });
         }
     </script>

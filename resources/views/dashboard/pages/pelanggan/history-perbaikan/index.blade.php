@@ -25,143 +25,111 @@
 @endsection
 @section('content')
     <div class="pagetitle">
-        <h1>History Perbaikan</h1>
+        <h1>Riwayat Perbaikan</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">History Perbaikan</li>
+                <li class="breadcrumb-item active">Riwayat perbaikan</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
 
     <section class="section dashboard">
-        <div class="row card-deck">
+        <div class="row">
             <div class="mb-4">
-                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
-                    <i class="ri-arrow-go-back-line"></i> Kembali
+                <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Kembali">
+                    <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>
-            <div class="card-deck">
-                @forelse ($perbaikans as $perbaikan)
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title text-center">{{ $perbaikan->kode_unik }}</h5>
-                            <div class="row g-3">
-                                <div class="col-md-12 d-flex justify-content-center">
-                                    @if ($perbaikan->foto)
-                                        <img src="{{ asset('storage/' . $perbaikan->foto) }}" class="img-fluid rounded"
-                                            alt="">
-                                    @else
-                                        <img src="{{ asset('assets/dashboard/img/repair.png') }}" alt="Default"
-                                            class="col-md-6 img-fluid">
-                                    @endif
-                                </div>
-                                <div class="col-md-12">
-                                    <table class="table">
-                                        <tr>
-                                            <th>Nama</th>
-                                            <td>{{ $perbaikan->nama ?? '' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Keterangan</th>
-                                            <td>{{ $perbaikan->keterangan ?? '' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Biaya</th>
-                                            <td>Rp. {{ number_format($perbaikan->biaya) ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            @php
-                                                if ($perbaikan->durasi) {
-                                                    $durations = explode(' to ', $perbaikan->durasi);
-                                                    $startDate = \Carbon\Carbon::createFromFormat(
-                                                        'd-m-Y',
-                                                        $durations[0],
-                                                    );
-                                                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[1]);
-
-                                                    $days = $startDate->diffInDays($endDate);
-                                                }
-                                            @endphp
-                                            <th>Durasi</th>
-                                            <td>
-                                                @if ($perbaikan->durasi)
-                                                    {{ $days ?? '-' }} Hari <br> {{ $perbaikan->durasi ?? '-' }}
-                                                @else
-                                                    {{ $perbaikan->durasi ?? '-' }}
-                                                @endif
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>Masuk</th>
-                                            <td>{{ $perbaikan->created_at ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Selesai</th>
-                                            <td>{{ $perbaikan->tgl_selesai ?? '-' }}</td>
-                                        </tr>
-                                        <tr>
-                                            @php
-                                                $badge_bg = null;
-                                                $btn_color = null;
-
-                                                switch ($perbaikan->status) {
-                                                    case 'Selesai':
-                                                        $badge_bg = 'bg-success';
-                                                        $btn_color = 'success';
-                                                        break;
-                                                    case 'Baru':
-                                                        $badge_bg = 'bg-info';
-                                                        $btn_color = 'info';
-                                                        break;
-                                                    case 'Antrian':
-                                                        $badge_bg = 'bg-primary';
-                                                        $btn_color = 'primary';
-                                                        break;
-                                                    case 'Dalam Proses':
-                                                        $badge_bg = 'bg-secondary';
-                                                        $btn_color = 'secondary';
-                                                        break;
-                                                    case 'Menunggu Bayar':
-                                                        $badge_bg = 'bg-warning';
-                                                        $btn_color = 'warning';
-                                                        break;
-                                                    default:
-                                                        $badge_bg = 'bg-dark';
-                                                        $btn_color = 'dark';
-                                                        break;
-                                                }
-                                            @endphp
-                                            <th>Status</th>
-                                            <td><span
-                                                    class="badge {{ $badge_bg }}">{{ $perbaikan->status ?? '-' }}</span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            <a href="{{ route('dashboard.pelanggan.history-perbaikan-detail', $perbaikan->id) }}"
-                                class="btn btn-secondary w-100">
-                                Lihat Detail
-                            </a>
-                        </div>
-                    </div>
-                @empty
-            </div><!-- End Data Perbaikan-->
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Perbaikan</h5>
-                        <div class="alert alert-danger" role="alert">
-                            Tidak ada data perbaikan
+                        <h5 class="card-title">Data Riwayat Perbaikan</h5>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table id="datatable" class="table table-bordered " style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Kode</th>
+                                            <th>Nama Perbaikan</th>
+                                            <th>Masuk</th>
+                                            <th>Selesai</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($perbaikans as $perbaikan)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $perbaikan->kode_unik }}</td>
+                                                <td>{{ $perbaikan->nama }}</td>
+                                                <td>{{ $perbaikan->created_at ?? '-' }}</td>
+                                                <td>{{ $perbaikan->tgl_selesai ?? '-' }}</td>
+                                                <td>
+                                                    @php
+                                                        $badge_bg = null;
+                                                        $btn_color = null;
+
+                                                        switch ($perbaikan->status) {
+                                                            case 'Selesai':
+                                                                $badge_bg = 'bg-success';
+                                                                $btn_color = 'success';
+                                                                break;
+                                                            case 'Baru':
+                                                                $badge_bg = 'bg-info';
+                                                                $btn_color = 'info';
+                                                                break;
+                                                            case 'Antrian':
+                                                                $badge_bg = 'bg-primary';
+                                                                $btn_color = 'primary';
+                                                                break;
+                                                            case 'Dalam Proses':
+                                                                $badge_bg = 'bg-secondary';
+                                                                $btn_color = 'secondary';
+                                                                break;
+                                                            case 'Menunggu Bayar':
+                                                                $badge_bg = 'bg-warning';
+                                                                $btn_color = 'warning';
+                                                                break;
+                                                            default:
+                                                                $badge_bg = 'bg-dark';
+                                                                $btn_color = 'dark';
+                                                                break;
+                                                        }
+                                                    @endphp
+                                                    <span class="badge {{ $badge_bg }} w-100">
+                                                        {{ $perbaikan->status ?? '-' }}
+                                                    </span>
+                                                </td>
+                                                <td nowrap>
+                                                    <a class="btn btn-success btn-sm" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Lihat"
+                                                        href="{{ route('dashboard.pelanggan.history-perbaikan-detail', $perbaikan->id) }}">
+                                                        <i class="ri-eye-line"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            @endforelse
         </div>
     </section>
 @endsection
 
 @section('js')
+    <script>
+        $(document).ready(function() {
+            $('#datatable').DataTable({
+                responsive: true,
+            });
+        })
+    </script>
 @endsection

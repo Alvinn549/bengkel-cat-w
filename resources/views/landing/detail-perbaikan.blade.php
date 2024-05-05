@@ -48,7 +48,7 @@
                             </tr>
                             <tr>
                                 <th>Biaya</th>
-                                <td>Rp. {{ number_format($perbaikan->biaya) ?? '-' }}</td>
+                                <td>Rp. {{ number_format($perbaikan->biaya, 2) ?? '-' }}</td>
                             </tr>
                             <tr>
                                 @php

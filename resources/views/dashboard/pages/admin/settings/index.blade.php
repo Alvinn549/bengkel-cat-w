@@ -6,7 +6,7 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">Settings</li>
+                <li class="breadcrumb-item active">Pengaturan</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -15,7 +15,7 @@
     <div class="modal fade" id="modalBantuanMap" tabindex="-1" aria-labelledby="modalBantuanMapLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title" id="label_warning">Bagaimana mendapatkan link Google map ?</h5>
                     <button type="button" class="btn-close"data-bs-target="#ubah-kontak-bengkel"
                         data-bs-toggle="modal"></button>
@@ -40,15 +40,20 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Settings</h5>
+                        <h5 class="card-title">Pengaturan Landing Page</h5>
 
                         <div class="d-flex gap-2 justify-content-end">
 
                             <button type="button" class="btn btn-success" id="submitButton" onclick="confirmSubmit()"
-                                style="display: none;">Submit</button>
-                            <button type="button" id="editButton" class="btn btn-primary">Edit</button>
-                            <button type="button" id="editBatalButton" class="btn btn-secondary"
-                                style="display: none;">Batal</button>
+                                style="display: none;">
+                                <i class="bi bi-save me-1"></i>Submit
+                            </button>
+                            <button type="button" id="editButton" class="btn btn-primary">
+                                <i class="bi bi-pencil-square me-1"></i>Edit
+                            </button>
+                            <button type="button" id="editBatalButton" class="btn btn-secondary" style="display: none;">
+                                <i class="bi bi-arrow-counterclockwise me-1"></i>Batal
+                            </button>
                         </div>
 
                         <form class="mt-3" action="{{ route('settings.store') }}" method="POST" id="form"
@@ -101,8 +106,9 @@
                                         class="form-control @error('map_google') is-invalid @enderror" id="inputMap"
                                         value="{{ old('map_google') ?? $settings->map_google }}"
                                         placeholder="Masukkan link yang didapat dari google map">
-                                    <button class="btn btn-info mt-2" type="button" data-bs-toggle="modal"
-                                        data-bs-target="#modalBantuanMap" id="btnBantuanMap">
+                                    <button class="btn btn-outline-info mt-2" type="button" data-bs-toggle="modal"
+                                        data-bs-target="#modalBantuanMap" data-bs-toggle="tooltip" data-bs-placement="right"
+                                        title="Bantuan" id="btnBantuanMap">
                                         <i class="ri-map-pin-2-line"></i>
                                     </button>
                                     @error('map_google')
@@ -174,7 +180,7 @@
                                     <div id="fileInputs">
                                         <!-- File input elements will be added here -->
                                     </div>
-                                    <button style="display:none;" type="button" class="btn btn-primary"
+                                    <button style="display:none;" type="button" class="btn btn-outline-primary"
                                         id="addFileInput">
                                         <i class="ri-image-add-line"></i>
                                     </button>
@@ -286,7 +292,42 @@
 
     <script>
         const quill = new Quill('.quill-editor-default', {
-            theme: 'snow'
+            theme: 'snow',
+            modules: {
+                toolbar: {
+                    container: [
+                        ['bold', 'italic', 'underline', 'strike', 'link'],
+                        [{
+                            'list': 'ordered'
+                        }, {
+                            'list': 'bullet'
+                        }],
+                        [{
+                            'indent': '-1'
+                        }, {
+                            'indent': '+1'
+                        }],
+                        [{
+                            'direction': 'rtl'
+                        }],
+                        [{
+                            'size': ['small', false, 'large', 'huge']
+                        }],
+                        [{
+                            'header': [1, 2, 3, 4, 5, 6, false]
+                        }],
+                        [{
+                            'color': []
+                        }, {
+                            'background': []
+                        }],
+                        [{
+                            'align': []
+                        }],
+                        ['clean']
+                    ],
+                },
+            },
         });
 
         quill.enable(false);
