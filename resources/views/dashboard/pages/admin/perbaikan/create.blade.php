@@ -25,7 +25,7 @@
                             <input type="hidden" value="{{ request('idKendaraan') }}" name="idKendaraan">
                             <input type="hidden" value="Baru" name="status">
                             <div class="col-md-12">
-                                <label for="inputNama" class="form-label">Nama</label>
+                                <label for="inputNama" class="form-label">Nama Perbaikan</label>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                     name="nama" id="inputNama" value="{{ old('nama') }}">
                                 @error('nama')

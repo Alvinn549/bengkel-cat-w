@@ -105,6 +105,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-xxl-12 col-md-12">
+                    <div class="card info-card ">
+                        <div class="card-body">
+                            <h5 class="card-title">Perbaikan Selesai</h5>
+                            <div class="d-flex align-items-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                    <i class="bx bx-badge-check"></i>
+                                </div>
+                                <div class="ps-3">
+                                    <h6>{{ $perbaikanSelesaiCount ?? 0 }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             {{-- <hr>
             <div class="row mt-3">
