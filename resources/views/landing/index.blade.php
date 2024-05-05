@@ -118,7 +118,7 @@
                                 <h4>Telepon:</h4>
                                 <p>{{ $settings->telepon }}</p>
                             </div>
-                            <div style="overflow: hidden">
+                            <div style="overflow: hidden" class="rounded">
                                 {!! $settings->map_google !!}
                             </div>
                         </div>
