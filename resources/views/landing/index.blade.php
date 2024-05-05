@@ -60,7 +60,7 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    <div class="col-lg-8">
+                    <div class="col-lg-8" style="text-align: justify">
                         {!! $settings->deskripsi !!}
                     </div>
                 </div>
@@ -69,7 +69,8 @@
                     <div class="col-lg-4 col-md-6 icon-box">
                         <div class="icon"><i class="bi bi-briefcase"></i></div>
                         <h4 class="title"><a href="#">Jam Operasional</a></h4>
-                        <h5>{{ $settings->jam_operasional }}</h5>
+                        <h5 class="badge text-white rounded bg-info" style="font-size: 20px">
+                            {{ $settings->jam_operasional }}</h5>
                     </div>
                 </div>
             </div>
