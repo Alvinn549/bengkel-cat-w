@@ -115,7 +115,7 @@ class DashboardPekerjaController extends Controller
                 'perbaikan_id' => 'required|exists:perbaikans,id',
                 'pekerja_id' => 'required|exists:pekerjas,id',
                 'keterangan' => 'required|string',
-                'foto' => 'nullable|image|mimes:jpg,png|max:2048',
+                'foto' => 'nullable|image|mimes:jpg,png|max:5048',
                 'is_selesai' => 'nullable',
             ]);
 

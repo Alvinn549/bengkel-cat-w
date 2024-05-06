@@ -547,10 +547,10 @@
                 }
 
                 // Check file size
-                const maxSize{{ $progres->id }} = 3 * 1024 * 1024;
+                const maxSize{{ $progres->id }} = 5 * 1024 * 1024;
                 if (fileSize{{ $progres->id }} > maxSize{{ $progres->id }}) {
                     document.getElementById('fotoHelp{{ $progres->id }}').textContent =
-                        'Ukuran file tidak boleh melebihi 3MB.';
+                        'Ukuran file tidak boleh melebihi 5MB.';
                     fileInput{{ $progres->id }}.value = '';
                     return;
                 }
