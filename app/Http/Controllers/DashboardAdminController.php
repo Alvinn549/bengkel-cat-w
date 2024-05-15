@@ -141,7 +141,11 @@ class DashboardAdminController extends Controller
 
         $fullName = explode(' ', $pelanggan->nama);
         $firstName = $fullName[0];
-        $lastName = isset($fullName[1]) ? $fullName[1] : null;
+        $lastName = null;
+
+        if (count($fullName) > 1) {
+            $lastName = end($fullName);
+        }
 
         Transaksi::updateOrCreate(
             ['order_id' => 'tr-' . $perbaikan->kode_unik],
@@ -149,15 +153,15 @@ class DashboardAdminController extends Controller
                 'perbaikan_id' => $perbaikan->id,
                 'pelanggan_id' => $pelanggan->id,
                 'gross_amount' => $biaya,
-                'transaction_status' => 'Menunggu Konfirmasi Pelanggan',
                 'first_name' => $firstName,
                 'last_name' => $lastName,
                 'email' => $pelanggan->user->email,
                 'phone' => $pelanggan->no_telp,
+                'address' => $pelanggan->alamat,
             ]
         );
 
-        Alert::success('Perbaikan Selesai', 'Perbaikan telah selesai dan transaksi telah dibuat');
+        Alert::success('Perbaikan Selesai', 'Perbaikan telah di rubah statusnya dan transaksi telah dibuat');
 
         return redirect()->route('dashboard.admin.list-perbaikan-selesai-di-proses');
     }

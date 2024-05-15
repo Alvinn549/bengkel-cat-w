@@ -15,24 +15,24 @@ class PelangganSeeder extends Seeder
      */
     public function run()
     {
-        // $pelanggan = User::create([
-        //     'role' => 'pelanggan',
-        //     'device_id' => null,
-        //     'email' => 'pelanggan@gmail.com',
-        //     'password' => bcrypt('password'),
-        //     'email_verified_at' => now(),
-        //     'created_at' => now()
-        // ]);
+        $pelanggan = User::create([
+            'role' => 'pelanggan',
+            'device_id' => null,
+            'email' => 'alvinn549@gmail.com',
+            'password' => bcrypt('password'),
+            'email_verified_at' => now(),
+            'created_at' => now()
+        ]);
 
-        // Pelanggan::create([
-        //     'user_id' => $pelanggan->id,
-        //     'nama' => 'Pelanggan',
-        //     'no_telp' => '08123456789',
-        //     'alamat' => 'Pacitan, Jatim',
-        //     'jenis_k' => 'L',
-        //     'foto' => null,
-        //     'created_at' => now()
-        // ]);
+        Pelanggan::create([
+            'user_id' => $pelanggan->id,
+            'nama' => 'Pelanggan',
+            'no_telp' => '08123456789',
+            'alamat' => 'Pacitan, Jatim',
+            'jenis_k' => 'L',
+            'foto' => null,
+            'created_at' => now()
+        ]);
 
         // User::factory(10)->create([
         //     'role' => 'pelanggan',

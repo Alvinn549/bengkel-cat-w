@@ -1,6 +1,8 @@
 @extends('dashboard.layouts.main')
 
 @section('css')
+    <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
+        data-client-key="{{ $clienKey }}"></script>
 @endsection
 @section('content')
     <div class="pagetitle">
@@ -66,6 +68,10 @@
                                             </tr>
                                             <tr>
                                                 <th>Payment Method</th>
+                                                <td>: {{ $transaksi->chosen_payment ?? '-' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>By</th>
                                                 <td>: {{ $transaksi->payment_type ?? '-' }}</td>
                                             </tr>
                                         </table>
@@ -145,38 +151,63 @@
                                 </div>
                             </div>
                             <hr>
-                            @if ($transaksi->transaction_status == 'Menunggu Konfirmasi Pelanggan')
+                            @if ($transaksi->chosen_payment == null)
+                                {{-- Belum Memilih chosen_payment --}}
                                 <div class="d-print-none">
                                     <div class="float-end">
-                                        <form id="myForm"
-                                            action="{{ route('dashboard.pelanggan.proses-my-transaksi') }}" method="POST">
-                                            @csrf
+                                        <form id="formChosePayment" method="POST">
                                             <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
                                             <input type="hidden" name="pelanggan_id"
                                                 value="{{ $transaksi->pelanggan->id }}">
-                                            <select class="form-select @error('payment_type') is-invalid @enderror"
-                                                name="payment_type" style="width: 100%">
+
+                                            <select class="form-select" name="chosen_payment" id="chosen_payment"
+                                                style="width: 100%">
                                                 <option value="">Pilih Metode Pembayaran</option>
                                                 <option value="cash">Cash</option>
                                                 <option value="virtual">Virtual</option>
                                             </select>
-                                            @error('payment_type')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-                                            <button type="button" class="btn btn-primary w-100 mt-3"
-                                                onclick="confirmSubmit()">
+
+                                            <button type="button" id="submitBtnFormChosePayment"
+                                                class="btn btn-primary w-100 mt-3">
                                                 <i class="bi bi-credit-card me-2"></i>Pilih
                                             </button>
                                         </form>
                                     </div>
                                 </div>
-                            @elseif ($transaksi->transaction_status == 'Menunggu Konfirmasi Admin')
+                            @elseif ($transaksi->chosen_payment == 'cash')
                                 <div class="d-print-none">
                                     <div class="float-end">
                                         <span class="badge bg-warning" style="font-size: 16px">Menunggu Konfirmasi
                                             Admin</span>
+                                    </div>
+                                </div>
+                            @elseif ($transaksi->chosen_payment == 'virtual')
+                                <div class="d-print-none">
+                                    <div class="float-end">
+                                        <form id="formTransaksiPayment" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
+                                            <input type="hidden" name="snap_token" value="{{ $transaksi->snap_token }}">
+
+                                            <button type="button" id="submitFormTransaksiPayment"
+                                                class="btn btn-success w-100 mt-3">
+                                                <i class="bi bi-credit-card me-2"></i>Bayar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @endif
+                            {{--  --}}
+                            @if ($transaksi->transaction_status == 'Menunggu Konfirmasi Pelanggan')
+                                {{-- Belum Memilih Payment Type --}}
+                            @elseif ($transaksi->transaction_status == 'Menunggu Pembayaran')
+                                {{-- Sudah Memilih Virtual Tetapi Belum Bayar --}}
+                            @elseif ($transaksi->transaction_status == 'Menunggu Konfirmasi Admin')
+
+                            @elseif ($transaksi->transaction_status == 'Selesai')
+                                <div class="d-print-none">
+                                    <div class="float-end">
+                                        <span class="badge bg-success" style="font-size: 16px">Selesai</span>
                                     </div>
                                 </div>
                             @endif
@@ -189,22 +220,112 @@
 @endsection
 
 @section('js')
-    <script>
-        function confirmSubmit() {
-            Swal.fire({
-                title: 'Konfirmasi',
-                text: "Apakah Anda yakin ingin memilih metode pembayaran ini ?",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, Lanjutkan',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('myForm').submit();
-                }
+    @if ($transaksi->chosen_payment == null)
+        <script>
+            document.getElementById('submitBtnFormChosePayment').addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Konfirmasi',
+                    text: "Apakah Anda yakin ingin memilih metode pembayaran ini?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Lanjutkan',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        var paymentType = document.getElementById('chosen_payment').value;
+                        if (paymentType === 'cash') {
+                            var formData = new FormData(document.getElementById('formChosePayment'));
+
+                            $.ajax({
+                                url: '{{ route('dashboard.pelanggan.proses-my-transaksi-cash') }}',
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+
+                                success: function(data) {
+                                    if (data.status === 'success') {
+                                        Swal.fire({
+                                            title: 'Success',
+                                            text: data.message,
+                                            icon: 'success',
+                                            allowOutsideClick: false,
+                                            showCancelButton: false,
+                                            confirmButtonColor: '#3085d6',
+                                            confirmButtonText: 'Ok',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location.reload();
+                                            }
+                                        });
+                                    }
+                                },
+                                error: function(xhr) {
+                                    var errorMessage = 'Something went wrong';
+                                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                                        errorMessage = xhr.responseJSON.message;
+                                    }
+                                    Swal.fire('Error', errorMessage, 'error');
+                                }
+                            });
+                        } else if (paymentType === 'virtual') {
+                            var formData = new FormData(document.getElementById('formChosePayment'));
+
+                            $.ajax({
+                                url: '{{ route('dashboard.pelanggan.proses-my-transaksi-virtual') }}',
+                                method: 'POST',
+                                headers: {
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                data: formData,
+                                processData: false,
+                                contentType: false,
+                                success: function(data) {
+                                    if (data.status === 'success') {
+                                        Swal.fire({
+                                            title: 'Success',
+                                            text: data.message,
+                                            icon: 'success',
+                                            allowOutsideClick: false,
+                                            showCancelButton: false,
+                                            confirmButtonColor: '#3085d6',
+                                            confirmButtonText: 'Ok',
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.location.reload();
+                                            }
+                                        });
+                                    } else if (data.status === 'error') {
+                                        Swal.fire('Error', data.message, 'error');
+                                    }
+                                },
+                                error: function(xhr) {
+                                    var errorMessage = 'Something went wrong';
+                                    if (xhr.responseJSON && xhr.responseJSON.message) {
+                                        errorMessage = xhr.responseJSON.message;
+                                    }
+                                    Swal.fire('Error', errorMessage, 'error');
+                                }
+                            });
+                        } else {
+                            Swal.fire('Error', 'Pilih metode pembayaran terlebih dahulu', 'error');
+                        }
+                    }
+                });
             });
-        }
-    </script>
+        </script>
+    @else
+        <script>
+            document.getElementById('submitFormTransaksiPayment').addEventListener('click', function() {
+                var snapToken = document.querySelector('input[name="snap_token"]').value;
+                console.log(snapToken);
+                snap.pay(snapToken);
+            });
+        </script>
+    @endif
 @endsection

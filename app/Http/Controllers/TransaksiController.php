@@ -5,11 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Transaksi;
 use App\Http\Requests\StoreTransaksiRequest;
 use App\Http\Requests\UpdateTransaksiRequest;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
+use Midtrans\Config;
+use Midtrans\Snap;
+use Midtrans\Notification;
 
 class TransaksiController extends Controller
 {
+    public function __construct()
+    {
+        Config::$serverKey = config('services.midtrans.serverKey');
+        Config::$isProduction = config('services.midtrans.isProduction');
+        Config::$isSanitized = config('services.midtrans.isSanitized');
+        Config::$is3ds = config('services.midtrans.is3ds');
+    }
+
     public function index()
     {
         return view('dashboard.pages.admin.transaksi.index');
@@ -67,5 +79,153 @@ class TransaksiController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    public function forCashMethod(Request $request)
+    {
+        $request->validate([
+            'chosen_payment' => 'required',
+        ], [
+            'chosen_payment.required' => 'Pilih metode pembayaran',
+        ]);
+
+        $transaksi = Transaksi::find($request->transaksi_id);
+
+        if (!$transaksi) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Transaksi tidak ditemukan'
+                ],
+                404
+            );
+        }
+
+        // $transaksi->update([
+        //     'chosen_payment' => $request->chosen_payment,
+        //     'payment_type' => $request->chosen_payment,
+        //     'transaction_status' => 'Menunggu Konfirmasi Admin',
+        // ]);
+
+        return response()->json(
+            [
+                'status' => 'success',
+                'message' => 'Transaksi berhasil diproses, silahkan tunggu konfirmasi admin',
+            ],
+            200
+        );
+    }
+
+    public function forVirtualMethod(Request $request)
+    {
+        $request->validate([
+            'chosen_payment' => 'required',
+        ], [
+            'chosen_payment.required' => 'Pilih metode pembayaran',
+        ]);
+
+        $transaksi = Transaksi::find($request->transaksi_id);
+
+        if (!$transaksi) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => 'Transaksi tidak ditemukan'
+                ],
+                404
+            );
+        }
+
+        $payload = [
+            'transaction_details' => [
+                'order_id'      => $transaksi->order_id,
+                'gross_amount'  => $transaksi->gross_amount,
+            ],
+            'customer_details' => [
+                'first_name'    => $transaksi->first_name,
+                'last_name'     => $transaksi->last_name,
+                'email'         => $transaksi->email,
+                'phone'         => $transaksi->phone,
+                'address'       => $transaksi->address,
+            ],
+            'item_details' => [
+                [
+                    'id'       => $transaksi->perbaikan->id,
+                    'quantity' => 1,
+                    'price'    => $transaksi->perbaikan->biaya,
+                    'name'     => $transaksi->perbaikan->nama,
+                ]
+            ]
+        ];
+
+        try {
+            $snapToken = Snap::getSnapToken($payload);
+        } catch (\Exception $e) {
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage() . ' silahkan coba lagi nanti !'
+                ],
+                500
+            );
+        }
+
+        // dd($snapToken);
+        $transaksi->update([
+            'chosen_payment' => $request->chosen_payment,
+            'snap_token' => $snapToken,
+        ]);
+
+        return response()->json(
+            [
+                'status' => 'success',
+                'message' => 'Transaksi berhasil diproses, silahkan lanjutkan pembayaran',
+                'snap_token' => $snapToken
+            ],
+            200
+        );
+    }
+
+    public function snapFinish(Request $request)
+    {
+        $order_id = $request->get('order_id');
+        $status_code = $request->get('status_code');
+        $transaction_status = $request->get('transaction_status');
+
+        // dd($order_id, $status_code, $transaction_status);
+
+        $getTransaksi = Transaksi::where('order_id', $order_id)->first();
+
+        if ($transaction_status == 'pending') {
+            $getTransaksi->update([
+                'transaction_status' => $transaction_status,
+            ]);
+
+            Alert::info('Pembayaran', 'Silahkan selesaikan pembayaran anda !');
+
+            return redirect()->route('dashboard.pelanggan.my-transaksi-detail', $getTransaksi->id);
+        } elseif ($transaction_status == 'settlement') {
+            $getTransaksi->update([
+                'transaction_status' => $transaction_status,
+            ]);
+
+            $getPerbaikan = $getTransaksi->perbaikan;
+
+            $getPerbaikan->update([
+                'status' => 'Selesai',
+            ]);
+
+            Alert::success('Pembayaran', 'Pembayaran berhasil dan transaksi telah selesai !');
+
+            return redirect()->route('dashboard.pelanggan.index');
+        }
+    }
+
+    public function snapUnFinish(Request $request)
+    {
+    }
+
+    public function snapError(Request $request)
+    {
     }
 }

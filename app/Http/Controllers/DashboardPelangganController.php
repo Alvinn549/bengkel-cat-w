@@ -8,9 +8,21 @@ use App\Models\Perbaikan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
+use Midtrans\Config;
+use Midtrans\Snap;
+use Midtrans\Notification;
+
 
 class DashboardPelangganController extends Controller
 {
+    public function __construct()
+    {
+        Config::$serverKey = config('services.midtrans.serverKey');
+        Config::$isProduction = config('services.midtrans.isProduction');
+        Config::$isSanitized = config('services.midtrans.isSanitized');
+        Config::$is3ds = config('services.midtrans.is3ds');
+    }
+
     public function index()
     {
         $pelanggan = Pelanggan::with('kendaraans', 'transaksis')
@@ -67,34 +79,9 @@ class DashboardPelangganController extends Controller
     public function detailMyTransaksi(Transaksi $transaksi)
     {
         $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
+        $clienKey = config('services.midtrans.clientKey');
 
-        return view('dashboard.pages.pelanggan.my-transaksi.show', compact('transaksi'));
-    }
-
-    public function prosesMyTransaksi(Request $request)
-    {
-        $request->validate([
-            'payment_type' => 'required',
-        ], [
-            'payment_type.required' => 'Pilih metode pembayaran',
-        ]);
-
-        if ($request->payment_type == 'virtual') {
-            dd('virtual');
-        } elseif ($request->payment_type == 'cash') {
-            $transaksi = Transaksi::find($request->transaksi_id);
-
-            $transaksi->update([
-                'payment_type' => $request->payment_type,
-                'transaction_status' => 'Menunggu Konfirmasi Admin',
-            ]);
-
-            Alert::success('Success', 'Transaksi sedang diproses, menunggu konfirmasi dari admin');
-
-            return redirect()->route('dashboard.pelanggan.my-transaksi-detail', $request->transaksi_id);
-        } else {
-            abort(404);
-        }
+        return view('dashboard.pages.pelanggan.my-transaksi.show', compact('transaksi', 'clienKey'));
     }
 
     public function historyTransaksi($idPelanggan)

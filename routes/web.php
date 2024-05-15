@@ -30,6 +30,12 @@ Route::get('/', [LandingPageController::class, 'index'])->name('home');
 Route::get('/detail-perbaikan/{perbaikan}', [LandingPageController::class, 'detailPerbaikan'])->name('home.detail-perbaikan');
 Route::post('/send-contact-form', [LandingPageController::class, 'sendContactForm'])->name('send.contact.form');
 
+// Redirect Url For Snap Midtrans 
+Route::get('/snap/finish', [TransaksiController::class, 'snapFinish'])->name('snap.finish');
+Route::get('/snap/un-finish', [TransaksiController::class, 'snapUnFinish'])->name('snap.un-finish');
+Route::get('/snap/error', [TransaksiController::class, 'snapError'])->name('snap.error');
+// End Redirect Url For Snap Midtrans
+
 Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/do-login', [AuthController::class, 'doLogin'])->name('do-login');
@@ -62,7 +68,8 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/my-transaksi/{idPelanggan}', [DashboardPelangganController::class, 'myTransaksi'])->name('dashboard.pelanggan.my-transaksi');
             Route::get('/my-transaksi/detail/{transaksi}', [DashboardPelangganController::class, 'detailMyTransaksi'])->name('dashboard.pelanggan.my-transaksi-detail');
-            Route::post('/my-transaksi/proses', [DashboardPelangganController::class, 'prosesMyTransaksi'])->name('dashboard.pelanggan.proses-my-transaksi');
+            Route::post('/my-transaksi/proses/cash', [TransaksiController::class, 'forCashMethod'])->name('dashboard.pelanggan.proses-my-transaksi-cash');
+            Route::post('/my-transaksi/proses/virtual', [TransaksiController::class, 'forVirtualMethod'])->name('dashboard.pelanggan.proses-my-transaksi-virtual');
 
             Route::get('/history-transaksi/{idPelanggan}', [DashboardPelangganController::class, 'historyTransaksi'])->name('dashboard.pelanggan.history-transaksi');
             Route::get('/history-transaksi/detail/{transaksi}', [DashboardPelangganController::class, 'detailHistoryTransaksi'])->name('dashboard.pelanggan.history-transaksi-detail');

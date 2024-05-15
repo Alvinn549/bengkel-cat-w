@@ -12,6 +12,7 @@ class Transaksi extends Model
     protected $fillable = [
         'perbaikan_id',
         'pelanggan_id',
+        'chosen_payment',
         'order_id',
         'gross_amount',
         'payment_type',
@@ -20,7 +21,8 @@ class Transaksi extends Model
         'last_name',
         'email',
         'phone',
-        'midtrans_response',
+        'address',
+        'snap_token',
     ];
 
     public function perbaikan()
