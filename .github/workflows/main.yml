@@ -31,11 +31,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Execute remote SSH commands using password
-        uses: appleboy/ssh-action@v0.1.1
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.CLOUDPANEL_HOST }}
           username: ${{ secrets.CLOUDPANEL_USERNAME }}
           password: ${{ secrets.CLOUDPANEL_PASSWORD }}
+          port: ${{ secrets.CLOUDPANEL_PORT }}
           script: |
             cd htdocs/bengkel-cat-w.australiaeast.cloudapp.azure.com/
             git pull
