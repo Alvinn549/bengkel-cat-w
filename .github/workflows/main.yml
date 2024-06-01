@@ -1,11 +1,16 @@
-name: Update ECS ALIBABA
+name: Update ECS and CloudPanel
+
 on: [push]
+
 jobs:
-  build:
-    name: Build
+  update_alibaba:
+    name: Update Alibaba Cloud ECS
     runs-on: ubuntu-latest
     steps:
-      - name: executing remote ssh commands using ssh key
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Execute remote SSH commands using SSH key
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.HOST }}
@@ -14,6 +19,25 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd /var/www/bengkel-cat-w
+            git pull
+            php artisan migrate:fresh --seed --force
+            php artisan optimize
+
+  update_cloudpanel:
+    name: Update CloudPanel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Execute remote SSH commands using password
+        uses: appleboy/ssh-action@v0.1.1
+        with:
+          host: ${{ secrets.CLOUDPANEL_HOST }}
+          username: ${{ secrets.CLOUDPANEL_USERNAME }}
+          password: ${{ secrets.CLOUDPANEL_PASSWORD }}
+          script: |
+            cd htdocs/bengkel-cat-w.australiaeast.cloudapp.azure.com/
             git pull
             php artisan migrate:fresh --seed --force
             php artisan optimize
