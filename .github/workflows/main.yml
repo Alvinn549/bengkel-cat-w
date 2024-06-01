@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Execute remote SSH commands using password
-        uses: garygrossgarten/github-action-ssh@release
+        uses: appleboy/ssh-action@v0.1.8
         with:
           host: ${{ secrets.CLOUDPANEL_HOST }}
           username: ${{ secrets.CLOUDPANEL_USERNAME }}
