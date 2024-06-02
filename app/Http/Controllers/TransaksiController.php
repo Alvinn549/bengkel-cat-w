@@ -222,6 +222,7 @@ class TransaksiController extends Controller
 
             $getPerbaikan->update([
                 'status' => 'Selesai',
+                'tgl_selesai' => now(),
             ]);
 
             Alert::success('Pembayaran', 'Pembayaran berhasil dan transaksi telah selesai !');
@@ -301,6 +302,7 @@ class TransaksiController extends Controller
 
                 $getPerbaikan->update([
                     'status' => 'Selesai',
+                    'tgl_selesai' => now(),
                 ]);
 
                 Log::channel('midtrans')->info('Transaction settled', ['order_id' => $order_id, 'bank' => $bank]);
