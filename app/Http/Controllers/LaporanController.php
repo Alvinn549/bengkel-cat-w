@@ -44,44 +44,58 @@ class LaporanController extends Controller
         $startDate = null;
         $endDate = null;
 
-        if ($status != null && $durasi == null) {
-            $perbaikans = Perbaikan::where('status', $status)
-                ->latest()
-                ->get();
-        } elseif ($status != null && $durasi != null) {
+        if ($durasi != null) {
             $dates = explode(" to ", $durasi);
-
             $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
             $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
-
-            $perbaikans = Perbaikan::with('kendaraan')
-                ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
-                    return $query->whereBetween('created_at', [$startDate, $endDate]);
-                })
-                ->where('status', $status)
-                ->latest()
-                ->get();
-        } elseif ($status == null && $durasi != null) {
-            $dates = explode(" to ", $durasi);
-
-            $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
-            $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
-
-            $perbaikans = Perbaikan::with('kendaraan')
-                ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
-                    return $query->whereBetween('created_at', [$startDate, $endDate]);
-                })
-                ->latest()
-                ->get();
-        } else {
-            $perbaikans = Perbaikan::latest()->get();
         }
 
-        $rata_rata_durasi_selesai = null;
+        $perbaikans = Perbaikan::with('kendaraan')
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                return $query->whereBetween('created_at', [$startDate, $endDate]);
+            })
+            ->when($status != null, function ($query) use ($status) {
+                return $query->where('status', $status);
+            })
+            ->latest()
+            ->get();
 
         $totalPerbaikans = $perbaikans->count();
 
-        return view('dashboard.pages.admin.laporan.perbaikan.index', compact('perbaikans', 'totalPerbaikans', 'durasi', 'startDate', 'endDate'));
+        $average_done_in_days = null;
+
+        $totalDuration = $perbaikans->filter(function ($perbaikan) {
+            return $perbaikan->status == 'Selesai' && $perbaikan->tgl_selesai;
+        })->sum(function ($perbaikan) {
+            return Carbon::parse($perbaikan->created_at)->diffInDays(Carbon::parse($perbaikan->tgl_selesai));
+        });
+
+        $completedPerbaikans = $perbaikans->filter(function ($perbaikan) {
+            return $perbaikan->status == 'Selesai' && $perbaikan->tgl_selesai;
+        })->count();
+
+        if ($completedPerbaikans > 0) {
+            $average_done_in_days = $totalDuration / $completedPerbaikans;
+        }
+
+        $statuses = ['Baru', 'Antrian', 'Dalam Proses', 'Proses Selesai', 'Menunggu Bayar', 'Selesai'];
+        $statusCounts = [];
+
+        foreach ($statuses as $statusName) {
+            $statusCounts[$statusName] = Perbaikan::where('status', $statusName)
+                ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                    return $query->whereBetween('created_at', [$startDate, $endDate]);
+                })
+                ->count();
+        }
+
+        if ($status != null) {
+            $statusCounts = [
+                $status => $perbaikans->count()
+            ];
+        }
+
+        return view('dashboard.pages.admin.laporan.perbaikan.index', compact('perbaikans', 'totalPerbaikans', 'average_done_in_days', 'statusCounts'));
     }
 
     public function transaksi()

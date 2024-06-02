@@ -1,5 +1,13 @@
 @extends('dashboard.layouts.main')
 
+@section('css')
+    <style>
+        .stat_count {
+            overflow: auto;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="pagetitle">
         <h1>Laporan</h1>
@@ -60,7 +68,25 @@
                 </div>
             </div>
             <div class="col-lg-12">
-                <div class="row">
+                <div class="row justify-content-center">
+                    @if ($average_done_in_days != null)
+                        <div class="col-md-6">
+                            <div class="card info-card sales-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Rata-rata Durasi Selesai</h5>
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-clock"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>{{ $average_done_in_days }} Hari</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-md-6">
                         <div class="card info-card sales-card">
                             <div class="card-body">
@@ -76,18 +102,32 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-12">
                         <div class="card info-card sales-card">
-                            <div class="card-body">
-                                <h5 class="card-title">Rata-rata Durasi Selesai</h5>
-                                <div class="d-flex align-items-center">
-                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-tools"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        {{-- Average duration in days --}}
-                                        <h6>Average done duration in days</h6>
-                                    </div>
+                            <div class="card-body" style="height: 110px;">
+                                <div class="stat_count">
+                                    <table class="table mt-3 table-borderless text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>Baru</th>
+                                                <th>Antrian</th>
+                                                <th>Dalam Proses</th>
+                                                <th>Proses Selesai</th>
+                                                <th>Menunggu Bayar</th>
+                                                <th>Selesai</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ $statusCounts['Baru'] ?? 0 }}</td>
+                                                <td>{{ $statusCounts['Antrian'] ?? 0 }}</td>
+                                                <td>{{ $statusCounts['Dalam Proses'] ?? 0 }}</td>
+                                                <td>{{ $statusCounts['Proses Selesai'] ?? 0 }}</td>
+                                                <td>{{ $statusCounts['Menunggu Bayar'] ?? 0 }}</td>
+                                                <td>{{ $statusCounts['Selesai'] ?? 0 }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -95,10 +135,9 @@
                 </div>
             </div>
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card info-card sales-card">
                     <div class="card-body">
                         <h1 class="card-title">Data Perbaikan</h1>
-
                         <table id="datatable"
                             class="display table table-hover table-bordered dt-responsive table-responsive"
                             style="width:100%">
