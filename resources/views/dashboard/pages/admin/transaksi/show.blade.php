@@ -59,6 +59,14 @@
                                                 <th>Order Status</th>
                                                 <td>: {{ $transaksi->transaction_status ?? '-' }}</td>
                                             </tr>
+                                            <tr>
+                                                <th>Payment Method</th>
+                                                <td>: {{ $transaksi->chosen_payment ?? '' }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>By</th>
+                                                <td>: {{ $transaksi->pay_by ?? '' }}</td>
+                                            </tr>
                                         </table>
                                     </div>
                                 </div>
