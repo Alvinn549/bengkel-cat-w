@@ -307,6 +307,7 @@ class TransaksiController extends Controller
             } elseif ($transaction_status == 'pending' && $status_code == 201) {
                 $getTransaksi->update([
                     'transaction_status' => $transaction_status,
+                    'pay_by' => $bank,
                 ]);
 
                 Log::channel('midtrans')->info('Transaction pending', ['order_id' => $order_id]);
