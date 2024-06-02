@@ -35,6 +35,7 @@ jobs:
         with:
           host: ${{ secrets.CLOUDPANEL_HOST }}
           username: ${{ secrets.CLOUDPANEL_USERNAME }}
+          password: ${{ secrets.CLOUDPANEL_PASSWORD }}
           key: ${{ secrets.CLOUDPANEL_KEY }}
           port: ${{ secrets.CLOUDPANEL_PORT }}
           script: |
