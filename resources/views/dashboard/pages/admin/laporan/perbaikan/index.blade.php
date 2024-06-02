@@ -33,7 +33,9 @@
                                     <select class="form-select" name="status" id="status">
                                         <option value="">Pilih Status</option>
                                         @foreach ($status as $item)
-                                            <option value="{{ $item }}">{{ $item }}</option>
+                                            <option value="{{ $item }}"
+                                                {{ request('status') == $item ? 'selected' : '' }}>{{ $item }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -68,7 +70,7 @@
                                         <i class="bi bi-tools"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>000</h6>
+                                        <h6>{{ $totalPerbaikans }}</h6>
                                     </div>
                                 </div>
                             </div>
@@ -83,7 +85,8 @@
                                         <i class="bi bi-tools"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>000</h6>
+                                        {{-- Average duration in days --}}
+                                        <h6>Average done duration in days</h6>
                                     </div>
                                 </div>
                             </div>
@@ -104,13 +107,73 @@
                                     <th>#</th>
                                     <th>Kode Perbaikan</th>
                                     <th>Nama Perbaikan</th>
-                                    <th>Durasi</th>
-                                    <th>Selesai Pada</th>
+                                    <th>Es. Durasi</th>
                                     <th>Status</th>
+                                    <th>Selesai Pada</th>
+                                    <th>Terdaftar Sejak</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse ($perbaikans as $perbaikan)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $perbaikan->kode_unik }}</td>
+                                        <td>{{ $perbaikan->nama }}</td>
+                                        <td class="text-center">
+                                            @php
+                                                if ($perbaikan->durasi) {
+                                                    $durations = explode(' to ', $perbaikan->durasi);
+                                                    $startDate = \Carbon\Carbon::createFromFormat(
+                                                        'd-m-Y',
+                                                        $durations[0],
+                                                    );
+                                                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[1]);
 
+                                                    $days = $startDate->diffInDays($endDate);
+                                                }
+                                            @endphp
+                                            {{ $days }} Hari <br>
+                                            <small class="text-warning">{{ $perbaikan->durasi }}</small>
+                                        </td>
+                                        <td>
+                                            @php
+                                                $badge_bg = null;
+                                                $btn_color = null;
+
+                                                switch ($perbaikan->status) {
+                                                    case 'Selesai':
+                                                        $badge_bg = 'bg-success';
+                                                        $btn_color = 'success';
+                                                        break;
+                                                    case 'Baru':
+                                                        $badge_bg = 'bg-info';
+                                                        $btn_color = 'info';
+                                                        break;
+                                                    case 'Antrian':
+                                                        $badge_bg = 'bg-primary';
+                                                        $btn_color = 'primary';
+                                                        break;
+                                                    case 'Dalam Proses':
+                                                        $badge_bg = 'bg-secondary';
+                                                        $btn_color = 'secondary';
+                                                        break;
+                                                    case 'Menunggu Bayar':
+                                                        $badge_bg = 'bg-warning';
+                                                        $btn_color = 'warning';
+                                                        break;
+                                                    default:
+                                                        $badge_bg = 'bg-dark';
+                                                        $btn_color = 'dark';
+                                                        break;
+                                                }
+                                            @endphp
+                                            <span class="badge {{ $badge_bg }}">{{ $perbaikan->status ?? '-' }}</span>
+                                        </td>
+                                        <td>{{ $perbaikan->tgl_selesai }}</td>
+                                        <td>{{ $perbaikan->created_at }}</td>
+                                    </tr>
+                                @empty
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -137,7 +200,7 @@
 
         function resetForm() {
             document.getElementById("formFilter").reset();
-            document.getElementById("formFilter").submit();
+            window.location.href = "{{ route('laporan.perbaikan') }}";
         }
     </script>
 @endsection

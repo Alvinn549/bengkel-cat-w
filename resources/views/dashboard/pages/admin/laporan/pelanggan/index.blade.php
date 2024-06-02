@@ -106,9 +106,6 @@
                                         <td>{{ $pelanggan->created_at ?? '' }}</td>
                                     </tr>
                                 @empty
-                                    <tr>
-                                        <td colspan="8" class="text-center">Tidak ada data</td>
-                                    </tr>
                                 @endforelse
                             </tbody>
                         </table>
@@ -136,7 +133,7 @@
 
         function resetForm() {
             document.getElementById("formFilter").reset();
-            document.getElementById("formFilter").submit();
+            window.location.href = "{{ route('laporan.pelanggan') }}";
         }
     </script>
 @endsection

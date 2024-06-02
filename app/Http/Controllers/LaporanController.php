@@ -40,22 +40,44 @@ class LaporanController extends Controller
     public function perbaikan()
     {
         $durasi = request()->input('durasi');
+        $status = request()->input('status');
         $startDate = null;
         $endDate = null;
 
-        if ($durasi) {
+        if ($status != null && $durasi == null) {
+            $perbaikans = Perbaikan::where('status', $status)
+                ->latest()
+                ->get();
+        } elseif ($status != null && $durasi != null) {
             $dates = explode(" to ", $durasi);
 
             $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
             $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+
+            $perbaikans = Perbaikan::with('kendaraan')
+                ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                    return $query->whereBetween('created_at', [$startDate, $endDate]);
+                })
+                ->where('status', $status)
+                ->latest()
+                ->get();
+        } elseif ($status == null && $durasi != null) {
+            $dates = explode(" to ", $durasi);
+
+            $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+            $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+
+            $perbaikans = Perbaikan::with('kendaraan')
+                ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                    return $query->whereBetween('created_at', [$startDate, $endDate]);
+                })
+                ->latest()
+                ->get();
+        } else {
+            $perbaikans = Perbaikan::latest()->get();
         }
 
-        $perbaikans = Perbaikan::with('kendaraan')
-            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
-                return $query->whereBetween('created_at', [$startDate, $endDate]);
-            })
-            ->latest()
-            ->get();
+        $rata_rata_durasi_selesai = null;
 
         $totalPerbaikans = $perbaikans->count();
 
