@@ -6,6 +6,7 @@ use App\Models\Transaksi;
 use App\Http\Requests\StoreTransaksiRequest;
 use App\Http\Requests\UpdateTransaksiRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Midtrans\Config;
@@ -268,5 +269,65 @@ class TransaksiController extends Controller
                 return redirect()->route('dashboard.pelanggan.my-transaksi-detail', $getTransaksi->id);
             }
         }
+    }
+
+    public function midtransCallbackNotification(Request $request)
+    {
+        Log::channel('midtrans')->info('Midtrans Notification Received', $request->all());
+
+        $validated = $request->validate([
+            'order_id' => 'required|string',
+            'transaction_status' => 'required|string',
+            'status_code' => 'required|integer',
+            'va_numbers' => 'array',
+            'va_numbers.*.bank' => 'string|nullable',
+        ]);
+
+        $order_id = $validated['order_id'];
+        $transaction_status = $validated['transaction_status'];
+        $status_code = $validated['status_code'];
+        $bank = $validated['va_numbers'][0]['bank'] ?? null;
+
+        $getTransaksi = Transaksi::with('perbaikan')->where('order_id', $order_id)->first();
+
+        if ($getTransaksi) {
+            if ($transaction_status == 'settlement' && $status_code == 200) {
+                $getTransaksi->update([
+                    'transaction_status' => $transaction_status,
+                    'pay_by' => $bank,
+                ]);
+
+                $getPerbaikan = $getTransaksi->perbaikan;
+
+                $getPerbaikan->update([
+                    'status' => 'Selesai',
+                ]);
+
+                Log::channel('midtrans')->info('Transaction settled', ['order_id' => $order_id, 'bank' => $bank]);
+            } elseif ($transaction_status == 'pending' && $status_code == 201) {
+                $getTransaksi->update([
+                    'transaction_status' => $transaction_status,
+                ]);
+
+                Log::channel('midtrans')->info('Transaction pending', ['order_id' => $order_id]);
+            } elseif ($transaction_status == 'expire' && $status_code == 202) {
+                $getTransaksi->update([
+                    'transaction_status' => 'pending',
+                    'chosen_payment' => null,
+                    'pay_by' => null,
+                    'snap_token' => null,
+                ]);
+
+                Log::channel('midtrans')->info('Transaction expired', ['order_id' => $order_id]);
+            }
+        } else {
+            Log::channel('midtrans')->warning('Transaction not found for order_id: ' . $order_id);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'OK',
+            'transaksi' => $getTransaksi ?? null,
+        ], 200);
     }
 }
