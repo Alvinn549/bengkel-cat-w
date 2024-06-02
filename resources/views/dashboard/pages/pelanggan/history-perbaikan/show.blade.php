@@ -155,8 +155,8 @@
                                     <tr>
                                         <th nowrap>Metode Pembayaran</th>
                                         <td>
-                                            {{ $perbaikan->transaksi->payment_type ?? '-' }} <br>
-                                            @if ($perbaikan->transaksi->payment_type == null)
+                                            {{ $perbaikan->transaksi->pay_by ?? '-' }} <br>
+                                            @if ($perbaikan->transaksi->pay_by == null)
                                                 <small class="text-danger">*Pelanggan belum memilih metode pembayaran
                                                 </small>
                                             @endif

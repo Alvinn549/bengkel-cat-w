@@ -101,11 +101,11 @@ class TransaksiController extends Controller
             );
         }
 
-        // $transaksi->update([
-        //     'chosen_payment' => $request->chosen_payment,
-        //     'payment_type' => $request->chosen_payment,
-        //     'transaction_status' => 'Menunggu Konfirmasi Admin',
-        // ]);
+        $transaksi->update([
+            'chosen_payment' => $request->chosen_payment,
+            'pay_by' => $request->chosen_payment,
+            'transaction_status' => 'pending',
+        ]);
 
         return response()->json(
             [
@@ -135,6 +135,12 @@ class TransaksiController extends Controller
                 404
             );
         }
+
+        $transaksi->update([
+            'chosen_payment' => $request->chosen_payment,
+            'pay_by' => $request->chosen_payment,
+            'transaction_status' => 'pending',
+        ]);
 
         $payload = [
             'transaction_details' => [
@@ -188,6 +194,8 @@ class TransaksiController extends Controller
 
     public function snapFinish(Request $request)
     {
+        // dd($request->all());
+
         $order_id = $request->get('order_id');
         $status_code = $request->get('status_code');
         $transaction_status = $request->get('transaction_status');
@@ -204,7 +212,7 @@ class TransaksiController extends Controller
             Alert::info('Pembayaran', 'Silahkan selesaikan pembayaran anda !');
 
             return redirect()->route('dashboard.pelanggan.my-transaksi-detail', $getTransaksi->id);
-        } elseif ($transaction_status == 'settlement') {
+        } elseif ($transaction_status == 'settlement' && $status_code == 200) {
             $getTransaksi->update([
                 'transaction_status' => $transaction_status,
             ]);
@@ -223,9 +231,42 @@ class TransaksiController extends Controller
 
     public function snapUnFinish(Request $request)
     {
+        dd($request->all());
     }
 
     public function snapError(Request $request)
     {
+        // dd($request->all());
+        $order_id = $request->get('order_id');
+        $status_code = $request->get('status_code');
+        $transaction_status = $request->get('transaction_status');
+
+        // dd($order_id, $status_code, $transaction_status);
+
+        $getTransaksi = Transaksi::where('order_id', $order_id)->first();
+
+        if ($getTransaksi) {
+            if ($transaction_status == 'expire' && $status_code == 407) {
+                $getTransaksi->update([
+                    'chosen_payment' => null,
+                    'pay_by' => null,
+                    'snap_token' => null,
+                ]);
+
+                Alert::info('Pembayaran', 'Transaksi anda telah expired, silahkan bayar kembali !');
+
+                return redirect()->route('dashboard.pelanggan.my-transaksi-detail', $getTransaksi->id);
+            } else {
+                $getTransaksi->update([
+                    'chosen_payment' => null,
+                    'pay_by' => null,
+                    'snap_token' => null,
+                ]);
+
+                Alert::info('Pembayaran', 'Transaksi anda telah gagal, silahkan bayar kembali !');
+
+                return redirect()->route('dashboard.pelanggan.my-transaksi-detail', $getTransaksi->id);
+            }
+        }
     }
 }

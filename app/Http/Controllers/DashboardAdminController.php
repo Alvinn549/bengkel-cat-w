@@ -158,6 +158,7 @@ class DashboardAdminController extends Controller
                 'email' => $pelanggan->user->email,
                 'phone' => $pelanggan->no_telp,
                 'address' => $pelanggan->alamat,
+                'transaction_status' => 'pending',
             ]
         );
 
@@ -186,7 +187,7 @@ class DashboardAdminController extends Controller
         $transaksi = Transaksi::find($request->transaksi_id);
 
         $transaksi->update([
-            'transaction_status' => 'Selesai',
+            'transaction_status' => 'settlement',
         ]);
 
         $perbaikan = Perbaikan::find($transaksi->perbaikan_id);

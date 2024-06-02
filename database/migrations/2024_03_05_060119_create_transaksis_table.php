@@ -26,7 +26,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
-            $table->string('payment_type')->nullable();
+            $table->string('pay_by')->nullable();
             $table->string('snap_token')->nullable();
             $table->timestamps();
         });

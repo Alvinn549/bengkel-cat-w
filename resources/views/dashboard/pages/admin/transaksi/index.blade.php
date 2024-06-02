@@ -80,7 +80,16 @@
                     },
                     {
                         data: 'transaction_status',
-                        name: 'transaction_status'
+                        name: 'transaction_status',
+                        render: function(data, type, row) {
+                            if (data === 'pending') {
+                                return '<span class="badge bg-warning">' + data + '</span>';
+                            } else if (data === 'settlement') {
+                                return '<span class="badge bg-success">' + data + '</span>';
+                            } else {
+                                return data;
+                            }
+                        }
                     },
                     {
                         data: 'aksi',
@@ -91,54 +100,5 @@
                 ],
             });
         });
-
-        function deleteData(id) {
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Data yang dihapus tidak dapat dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    var url = '{{ route('transaksi.destroy', ':id') }}';
-                    url = url.replace(':id', id);
-
-                    $.ajax({
-                        url: url,
-                        type: 'POST',
-                        data: {
-                            '_token': '{{ csrf_token() }}',
-                            '_method': 'DELETE'
-                        },
-                        success: function(response) {
-                            $('#datatable').DataTable().ajax.reload();
-                            Swal.fire(
-                                'Deleted!',
-                                'Data telah dihapus.',
-                                'success'
-                            );
-                        },
-                        error: function(xhr, status, error) {
-                            var errorMessage = '';
-                            if (xhr.responseText) {
-                                var errorResponse = JSON.parse(xhr.responseText);
-                                if (errorResponse.message) {
-                                    errorMessage = errorResponse.message;
-                                }
-                            }
-                            Swal.fire(
-                                'Error!',
-                                errorMessage,
-                                'error'
-                            );
-                        }
-                    });
-                }
-            });
-        }
     </script>
 @endsection

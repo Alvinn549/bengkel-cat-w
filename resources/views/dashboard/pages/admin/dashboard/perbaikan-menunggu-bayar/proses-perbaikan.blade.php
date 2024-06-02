@@ -110,7 +110,7 @@
                                     </tr>
                                     <tr>
                                         <th>Biaya</th>
-                                        <td>Rp. {{ number_format($perbaikan->biaya, 2) ?? '-' }}</td>
+                                        <td>Rp. {{ number_format($perbaikan->biaya, 2) ?? '' }}</td>
                                     </tr>
                                     <tr>
                                         @php
@@ -125,19 +125,19 @@
                                         <th>Durasi</th>
                                         <td>
                                             @if ($perbaikan->durasi)
-                                                {{ $days ?? '-' }} Hari <br> {{ $perbaikan->durasi ?? '-' }}
+                                                {{ $days ?? '' }} Hari <br> {{ $perbaikan->durasi ?? '' }}
                                             @else
-                                                {{ $perbaikan->durasi ?? '-' }}
+                                                {{ $perbaikan->durasi ?? '' }}
                                             @endif
                                         </td>
                                     </tr>
                                     <tr>
                                         <th>Masuk</th>
-                                        <td>{{ $perbaikan->created_at ?? '-' }}</td>
+                                        <td>{{ $perbaikan->created_at ?? '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Selesai</th>
-                                        <td>{{ $perbaikan->tgl_selesai ?? '-' }}</td>
+                                        <td>{{ $perbaikan->tgl_selesai ?? '' }}</td>
                                     </tr>
                                     <tr>
                                         @php
@@ -173,7 +173,7 @@
                                         @endphp
                                         <th>Status</th>
                                         <td><span class="badge {{ $badge_bg }}"
-                                                style="font-size: 1rem;">{{ $perbaikan->status ?? '-' }}</span>
+                                                style="font-size: 1rem;">{{ $perbaikan->status ?? '' }}</span>
                                         </td>
                                     </tr>
                                 </table>
@@ -191,13 +191,13 @@
                                 <table class="table table-borderless">
                                     <tr>
                                         <th>Order Id</th>
-                                        <td>{{ $perbaikan->transaksi->order_id ?? '-' }}</td>
+                                        <td>{{ $perbaikan->transaksi->order_id ?? '' }}</td>
                                     </tr>
                                     <tr>
                                         <th nowrap>Metode Pembayaran</th>
                                         <td>
-                                            {{ $perbaikan->transaksi->payment_type ?? '-' }} <br>
-                                            @if ($perbaikan->transaksi->payment_type == null)
+                                            {{ $perbaikan->transaksi->chosen_payment ?? '' }} <br>
+                                            @if ($perbaikan->transaksi->chosen_payment == null)
                                                 <small class="text-danger">*Pelanggan belum memilih metode pembayaran
                                                 </small>
                                             @endif
@@ -205,16 +205,22 @@
                                     </tr>
                                     <tr>
                                         <th>Total</th>
-                                        <td>Rp. {{ number_format($perbaikan->transaksi->gross_amount, 2) ?? '-' }}</td>
+                                        <td>Rp. {{ number_format($perbaikan->transaksi->gross_amount) ?? '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Status Transaksi</th>
-                                        <td>{{ $perbaikan->transaksi->transaction_status ?? '-' }}</td>
+                                        <td>
+                                            {{ $perbaikan->transaksi->transaction_status ?? '' }}
+                                            @if ($perbaikan->transaksi->transaction_status == null)
+                                                <small class="text-danger">*Pelanggan belum memilih metode pembayaran
+                                                </small>
+                                            @endif
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
                         </div>
-                        @if ($perbaikan->transaksi->transaction_status == 'Menunggu Konfirmasi Admin')
+                        @if ($perbaikan->transaksi->chosen_payment == 'cash')
                             <form class="row g-3 justify-content-center"
                                 action="{{ route('dashboard.admin.konfirmasi-pembayaran-cash') }}" method="POST"
                                 id="form_konfirmasi_pembayaran" enctype="multipart/form-data">
@@ -254,19 +260,19 @@
                                 <table class="table table-borderless">
                                     <tr>
                                         <th>Nama Depan</th>
-                                        <td>{{ $perbaikan->transaksi->first_name ?? '-' }}</td>
+                                        <td>{{ $perbaikan->transaksi->first_name ?? '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Nama Belakang</th>
-                                        <td>{{ $perbaikan->transaksi->last_name ?? '-' }}</td>
+                                        <td>{{ $perbaikan->transaksi->last_name ?? '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Email</th>
-                                        <td>{{ $perbaikan->transaksi->email ?? '-' }}</td>
+                                        <td>{{ $perbaikan->transaksi->email ?? '' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Telepon</th>
-                                        <td>{{ $perbaikan->transaksi->phone ?? '-' }}</td>
+                                        <td>{{ $perbaikan->transaksi->phone ?? '' }}</td>
                                     </tr>
                                 </table>
                             </div>

@@ -15,7 +15,7 @@ class Transaksi extends Model
         'chosen_payment',
         'order_id',
         'gross_amount',
-        'payment_type',
+        'pay_by',
         'transaction_status',
         'first_name',
         'last_name',

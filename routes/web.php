@@ -34,9 +34,8 @@ Route::post('/send-contact-form', [LandingPageController::class, 'sendContactFor
 Route::get('/snap/finish', [TransaksiController::class, 'snapFinish'])->name('snap.finish');
 Route::get('/snap/un-finish', [TransaksiController::class, 'snapUnFinish'])->name('snap.un-finish');
 Route::get('/snap/error', [TransaksiController::class, 'snapError'])->name('snap.error');
-// End Redirect Url For Snap Midtrans
 
-Route::middleware(['guest'])->group(function () {
+Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/do-login', [AuthController::class, 'doLogin'])->name('do-login');
 

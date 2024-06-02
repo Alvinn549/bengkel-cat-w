@@ -71,7 +71,7 @@
                                             </tr>
                                             <tr>
                                                 <th>Payment Method</th>
-                                                <td>: {{ $transaksi->payment_type ?? '-' }}</td>
+                                                <td>: {{ $transaksi->pay_by ?? '-' }}</td>
                                             </tr>
                                         </table>
                                     </div>

@@ -64,15 +64,15 @@
                                             </tr>
                                             <tr>
                                                 <th>Order Status</th>
-                                                <td>: {{ $transaksi->transaction_status ?? '-' }}</td>
+                                                <td>: {{ $transaksi->transaction_status ?? '' }}</td>
                                             </tr>
                                             <tr>
                                                 <th>Payment Method</th>
-                                                <td>: {{ $transaksi->chosen_payment ?? '-' }}</td>
+                                                <td>: {{ $transaksi->chosen_payment ?? '' }}</td>
                                             </tr>
                                             <tr>
                                                 <th>By</th>
-                                                <td>: {{ $transaksi->payment_type ?? '-' }}</td>
+                                                <td>: {{ $transaksi->pay_by ?? '' }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -84,15 +84,15 @@
                                     <table class="table table-borderless" style="width: 100%">
                                         <tr>
                                             <th>Nama</th>
-                                            <td>: {{ $transaksi->pelanggan->nama ?? '-' }}</td>
+                                            <td>: {{ $transaksi->pelanggan->nama ?? '' }}</td>
                                         </tr>
                                         <tr>
                                             <th>No Telp</th>
-                                            <td>: {{ $transaksi->pelanggan->no_telp ?? '-' }}</td>
+                                            <td>: {{ $transaksi->pelanggan->no_telp ?? '' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Email</th>
-                                            <td>: {{ $transaksi->email ?? '-' }}</td>
+                                            <td>: {{ $transaksi->email ?? '' }}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -100,15 +100,15 @@
                                     <table class="table table-borderless" style="width: 100%">
                                         <tr>
                                             <th>No Plat</th>
-                                            <td>: {{ $transaksi->perbaikan->kendaraan->no_plat ?? '-' }}</td>
+                                            <td>: {{ $transaksi->perbaikan->kendaraan->no_plat ?? '' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Merek</th>
-                                            <td>: {{ $transaksi->perbaikan->kendaraan->merek->nama_merek ?? '-' }}</td>
+                                            <td>: {{ $transaksi->perbaikan->kendaraan->merek->nama_merek ?? '' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Tipe</th>
-                                            <td>: {{ $transaksi->perbaikan->kendaraan->tipe->nama_tipe ?? '-' }}</td>
+                                            <td>: {{ $transaksi->perbaikan->kendaraan->tipe->nama_tipe ?? '' }}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -116,17 +116,17 @@
                                     <table class="table table-borderless" style="width: 100%">
                                         <tr>
                                             <th>Nama Perbaikan</th>
-                                            <td>: {{ $transaksi->perbaikan->nama ?? '-' }}</td>
+                                            <td>: {{ $transaksi->perbaikan->nama ?? '' }}</td>
                                         </tr>
                                         <tr>
                                             <th>Selesai Pada</th>
                                             <td>:
-                                                {{ \Carbon\Carbon::parse($transaksi->perbaikan->tgl_selesai)->format('d-m-Y') ?? '-' }}
+                                                {{ \Carbon\Carbon::parse($transaksi->perbaikan->tgl_selesai)->format('d-m-Y') ?? '' }}
                                             </td>
                                         </tr>
                                         <tr>
                                             <th>Unit Cost</th>
-                                            <td>: Rp. {{ number_format($transaksi->gross_amount, 2) ?? '-' }}</td>
+                                            <td>: Rp. {{ number_format($transaksi->gross_amount, 2) ?? '' }}</td>
                                         </tr>
                                     </table>
                                 </div>
@@ -147,69 +147,64 @@
                                 </div>
                                 <div class="col-md-6" style="text-align: right">
                                     <h2>Total</h2>
-                                    <h4><strong>Rp. {{ number_format($transaksi->gross_amount, 2) ?? '-' }}</strong></h4>
+                                    <h4><strong>Rp. {{ number_format($transaksi->gross_amount, 2) ?? '' }}</strong></h4>
                                 </div>
                             </div>
                             <hr>
-                            @if ($transaksi->chosen_payment == null)
-                                {{-- Belum Memilih chosen_payment --}}
-                                <div class="d-print-none">
-                                    <div class="float-end">
-                                        <form id="formChosePayment" method="POST">
-                                            <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
-                                            <input type="hidden" name="pelanggan_id"
-                                                value="{{ $transaksi->pelanggan->id }}">
-
-                                            <select class="form-select" name="chosen_payment" id="chosen_payment"
-                                                style="width: 100%">
-                                                <option value="">Pilih Metode Pembayaran</option>
-                                                <option value="cash">Cash</option>
-                                                <option value="virtual">Virtual</option>
-                                            </select>
-
-                                            <button type="button" id="submitBtnFormChosePayment"
-                                                class="btn btn-primary w-100 mt-3">
-                                                <i class="bi bi-credit-card me-2"></i>Pilih
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            @elseif ($transaksi->chosen_payment == 'cash')
-                                <div class="d-print-none">
-                                    <div class="float-end">
-                                        <span class="badge bg-warning" style="font-size: 16px">Menunggu Konfirmasi
-                                            Admin</span>
-                                    </div>
-                                </div>
-                            @elseif ($transaksi->chosen_payment == 'virtual')
-                                <div class="d-print-none">
-                                    <div class="float-end">
-                                        <form id="formTransaksiPayment" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
-                                            <input type="hidden" name="snap_token" value="{{ $transaksi->snap_token }}">
-
-                                            <button type="button" id="submitFormTransaksiPayment"
-                                                class="btn btn-success w-100 mt-3">
-                                                <i class="bi bi-credit-card me-2"></i>Bayar
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            @endif
-                            {{--  --}}
-                            @if ($transaksi->transaction_status == 'Menunggu Konfirmasi Pelanggan')
-                                {{-- Belum Memilih Payment Type --}}
-                            @elseif ($transaksi->transaction_status == 'Menunggu Pembayaran')
-                                {{-- Sudah Memilih Virtual Tetapi Belum Bayar --}}
-                            @elseif ($transaksi->transaction_status == 'Menunggu Konfirmasi Admin')
-
-                            @elseif ($transaksi->transaction_status == 'Selesai')
+                            @if ($transaksi->transaction_status == 'settlement')
                                 <div class="d-print-none">
                                     <div class="float-end">
                                         <span class="badge bg-success" style="font-size: 16px">Selesai</span>
                                     </div>
                                 </div>
+                            @else
+                                @if ($transaksi->chosen_payment == null)
+                                    {{-- Belum Memilih chosen_payment --}}
+                                    <div class="d-print-none">
+                                        <div class="float-end">
+                                            <form id="formChosePayment" method="POST">
+                                                <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
+                                                <input type="hidden" name="pelanggan_id"
+                                                    value="{{ $transaksi->pelanggan->id }}">
+
+                                                <select class="form-select" name="chosen_payment" id="chosen_payment"
+                                                    style="width: 100%">
+                                                    <option value="">Pilih Metode Pembayaran</option>
+                                                    <option value="cash">Cash</option>
+                                                    <option value="virtual">Virtual</option>
+                                                </select>
+
+                                                <button type="button" id="submitBtnFormChosePayment"
+                                                    class="btn btn-primary w-100 mt-3">
+                                                    <i class="bi bi-credit-card me-2"></i>Pilih
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @elseif ($transaksi->chosen_payment == 'cash')
+                                    <div class="d-print-none">
+                                        <div class="float-end">
+                                            <span class="badge bg-warning" style="font-size: 16px">Menunggu Konfirmasi
+                                                Admin</span>
+                                        </div>
+                                    </div>
+                                @elseif ($transaksi->chosen_payment == 'virtual')
+                                    <div class="d-print-none">
+                                        <div class="float-end">
+                                            <form id="formTransaksiPayment" method="POST">
+                                                @csrf
+                                                <input type="hidden" name="transaksi_id" value="{{ $transaksi->id }}">
+                                                <input type="hidden" name="snap_token"
+                                                    value="{{ $transaksi->snap_token }}">
+
+                                                <button type="button" id="submitFormTransaksiPayment"
+                                                    class="btn btn-success w-100 mt-3">
+                                                    <i class="bi bi-credit-card me-2"></i>Bayar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endif
                             @endif
                         </div>
                     </div>
