@@ -2,32 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pelanggan;
+use App\Models\Perbaikan;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
     public function pelanggan()
     {
-        dd('Laporan Pelanggan');
-    }
+        $durasi = request()->input('durasi');
+        $startDate = null;
+        $endDate = null;
 
-    public function kendaraan()
-    {
-        dd('Laporan Kendaraan');
+        if ($durasi) {
+            $dates = explode(" to ", $durasi);
+
+            $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+            $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+        }
+
+        $pelanggans = Pelanggan::with('kendaraans', 'user')
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                return $query->whereBetween('created_at', [$startDate, $endDate]);
+            })
+            ->latest()
+            ->get();
+
+        $totalPelanggans = $pelanggans->count();
+        $totalKendaraans = $pelanggans->sum(function ($pelanggan) {
+            return $pelanggan->kendaraans->count();
+        });
+
+        return view('dashboard.pages.admin.laporan.pelanggan.index', compact('pelanggans', 'totalKendaraans', 'totalPelanggans', 'durasi', 'startDate', 'endDate'));
     }
 
     public function perbaikan()
     {
-        dd('Laporan Perbaikan');
+        $durasi = request()->input('durasi');
+        $startDate = null;
+        $endDate = null;
+
+        if ($durasi) {
+            $dates = explode(" to ", $durasi);
+
+            $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+            $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+        }
+
+        $perbaikans = Perbaikan::with('kendaraan')
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                return $query->whereBetween('created_at', [$startDate, $endDate]);
+            })
+            ->latest()
+            ->get();
+
+        $totalPerbaikans = $perbaikans->count();
+
+        return view('dashboard.pages.admin.laporan.perbaikan.index', compact('perbaikans', 'totalPerbaikans', 'durasi', 'startDate', 'endDate'));
     }
 
     public function transaksi()
     {
-        dd('Laporan Transaksi');
+        return view('dashboard.pages.admin.laporan.transaksi.index');
     }
 
     public function pekerja()
     {
-        dd('Laporan Pekerja');
+        return view('dashboard.pages.admin.laporan.pekerja.index');
     }
 }

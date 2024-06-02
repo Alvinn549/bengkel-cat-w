@@ -14,11 +14,9 @@
     <section class="section">
         <div class="row">
             <div class="col-lg-12">
-
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Data Transaksi</h5>
-
                         <table id="datatable"
                             class="display table table-hover table-bordered dt-responsive table-responsive nowrap"
                             style="width:100%">

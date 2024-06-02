@@ -141,7 +141,6 @@ Route::middleware('auth')->group(function () {
             Route::resource('settings', SettingsController::class);
 
             Route::get('/laporan/pelanggan', [LaporanController::class, 'pelanggan'])->name('laporan.pelanggan');
-            Route::get('/laporan/kendaraan', [LaporanController::class, 'kendaraan'])->name('laporan.kendaraan');
             Route::get('/laporan/perbaikan', [LaporanController::class, 'perbaikan'])->name('laporan.perbaikan');
             Route::get('/laporan/transaksi', [LaporanController::class, 'transaksi'])->name('laporan.transaksi');
             Route::get('/laporan/pekerja', [LaporanController::class, 'pekerja'])->name('laporan.pekerja');

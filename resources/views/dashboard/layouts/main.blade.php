@@ -60,7 +60,9 @@
     <!-- End Header -->
 
     <!-- ======= Sidebar ======= -->
-    @include('dashboard.layouts.components.sidebar')
+    @if (auth()->user()->role == 'admin')
+        @include('dashboard.layouts.components.sidebar')
+    @endif
     <!-- End Sidebar-->
 
     <!-- ======= Main ======= -->
