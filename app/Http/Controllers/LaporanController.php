@@ -100,6 +100,7 @@ class LaporanController extends Controller
 
     public function transaksi()
     {
+        // dd('init transaksi');
         return view('dashboard.pages.admin.laporan.transaksi.index');
     }
 

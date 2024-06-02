@@ -85,8 +85,8 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Nama</th>
-                                    <th>No Telp</th>
                                     <th>Alamat</th>
+                                    <th>No Telp</th>
                                     <th>Email</th>
                                     <th nowrap>J.k</th>
                                     <th>K. Dimiliki</th>
@@ -128,7 +128,12 @@
                 defaultDate: defaultDate,
             });
 
-            $('#datatable').DataTable();
+            $('#datatable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'colvis', 'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
         });
 
         function resetForm() {

@@ -144,6 +144,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Preview</th>
                                     <th>Kode Perbaikan</th>
                                     <th>Nama Perbaikan</th>
                                     <th>Es. Durasi</th>
@@ -156,6 +157,12 @@
                                 @forelse ($perbaikans as $perbaikan)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
+                                        <td class="text-center">
+                                            <img src="{{ asset('storage/' . $perbaikan->foto) }}" alt=""
+                                                class="img-fluid rounded"
+                                                style="max-width:100px; max-height:100px; cursor:pointer;"
+                                                onclick="openImage('{{ asset('storage/' . $perbaikan->foto) }}')">
+                                        </td>
                                         <td>{{ $perbaikan->kode_unik }}</td>
                                         <td>{{ $perbaikan->nama }}</td>
                                         <td class="text-center">
@@ -234,12 +241,26 @@
                 defaultDate: defaultDate,
             });
 
-            $('#datatable').DataTable();
+            $('#datatable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'colvis', 'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
         });
 
         function resetForm() {
             document.getElementById("formFilter").reset();
             window.location.href = "{{ route('laporan.perbaikan') }}";
+        }
+
+        function openImage(imageUrl) {
+            Swal.fire({
+                imageUrl: imageUrl,
+                imageWidth: 450,
+                imageAlt: 'Foto Progres',
+                showConfirmButton: false,
+            });
         }
     </script>
 @endsection
