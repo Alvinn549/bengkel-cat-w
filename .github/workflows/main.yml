@@ -24,17 +24,22 @@ jobs:
             php artisan optimize
 
   update_cloudpanel:
-    name: Update CloudPanel Server
+    name: Update CloudPanel
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Execute remote SSH commands using password
-        uses: garygrossgarten/github-action-ssh@release
+        uses: appleboy/ssh-action@master
         with:
-          command: ls -a
           host: ${{ secrets.CLOUDPANEL_HOST }}
           username: ${{ secrets.CLOUDPANEL_USERNAME }}
           password: ${{ secrets.CLOUDPANEL_PASSWORD }}
+          key: ${{ secrets.CLOUDPANEL_KEY }}
           port: ${{ secrets.CLOUDPANEL_PORT }}
+          script: |
+            cd htdocs/bengkel-cat-w.australiaeast.cloudapp.azure.com/
+            git pull
+            php artisan migrate:fresh --seed --force
+            php artisan optimize
