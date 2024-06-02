@@ -155,6 +155,45 @@
                             </thead>
                             <tbody>
                                 @forelse ($perbaikans as $perbaikan)
+                                    @php
+                                        $badge_bg = null;
+                                        $btn_color = null;
+
+                                        switch ($perbaikan->status) {
+                                            case 'Selesai':
+                                                $badge_bg = 'bg-success';
+                                                $btn_color = 'success';
+                                                break;
+                                            case 'Baru':
+                                                $badge_bg = 'bg-info';
+                                                $btn_color = 'info';
+                                                break;
+                                            case 'Antrian':
+                                                $badge_bg = 'bg-primary';
+                                                $btn_color = 'primary';
+                                                break;
+                                            case 'Dalam Proses':
+                                                $badge_bg = 'bg-secondary';
+                                                $btn_color = 'secondary';
+                                                break;
+                                            case 'Menunggu Bayar':
+                                                $badge_bg = 'bg-warning';
+                                                $btn_color = 'warning';
+                                                break;
+                                            default:
+                                                $badge_bg = 'bg-dark';
+                                                $btn_color = 'dark';
+                                                break;
+                                        }
+
+                                        if ($perbaikan->durasi) {
+                                            $durations = explode(' to ', $perbaikan->durasi);
+                                            $startDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[0]);
+                                            $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[1]);
+
+                                            $days = $startDate->diffInDays($endDate);
+                                        }
+                                    @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td class="text-center">
@@ -166,53 +205,11 @@
                                         <td>{{ $perbaikan->kode_unik }}</td>
                                         <td>{{ $perbaikan->nama }}</td>
                                         <td class="text-center">
-                                            @php
-                                                if ($perbaikan->durasi) {
-                                                    $durations = explode(' to ', $perbaikan->durasi);
-                                                    $startDate = \Carbon\Carbon::createFromFormat(
-                                                        'd-m-Y',
-                                                        $durations[0],
-                                                    );
-                                                    $endDate = \Carbon\Carbon::createFromFormat('d-m-Y', $durations[1]);
-
-                                                    $days = $startDate->diffInDays($endDate);
-                                                }
-                                            @endphp
                                             {{ $days }} Hari <br>
                                             <small class="text-warning">{{ $perbaikan->durasi }}</small>
                                         </td>
                                         <td>
-                                            @php
-                                                $badge_bg = null;
-                                                $btn_color = null;
 
-                                                switch ($perbaikan->status) {
-                                                    case 'Selesai':
-                                                        $badge_bg = 'bg-success';
-                                                        $btn_color = 'success';
-                                                        break;
-                                                    case 'Baru':
-                                                        $badge_bg = 'bg-info';
-                                                        $btn_color = 'info';
-                                                        break;
-                                                    case 'Antrian':
-                                                        $badge_bg = 'bg-primary';
-                                                        $btn_color = 'primary';
-                                                        break;
-                                                    case 'Dalam Proses':
-                                                        $badge_bg = 'bg-secondary';
-                                                        $btn_color = 'secondary';
-                                                        break;
-                                                    case 'Menunggu Bayar':
-                                                        $badge_bg = 'bg-warning';
-                                                        $btn_color = 'warning';
-                                                        break;
-                                                    default:
-                                                        $badge_bg = 'bg-dark';
-                                                        $btn_color = 'dark';
-                                                        break;
-                                                }
-                                            @endphp
                                             <span class="badge {{ $badge_bg }}">{{ $perbaikan->status ?? '-' }}</span>
                                         </td>
                                         <td>{{ $perbaikan->tgl_selesai }}</td>
@@ -243,8 +240,14 @@
 
             $('#datatable').DataTable({
                 dom: 'Bfrtip',
-                buttons: [
-                    'colvis', 'copy', 'csv', 'excel', 'pdf', 'print'
+                buttons: [{
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
+                    'copy', 'print', 'csv', 'excel', 'colvis'
                 ]
             });
         });
