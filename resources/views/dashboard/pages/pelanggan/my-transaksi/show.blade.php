@@ -2,7 +2,7 @@
 
 @section('css')
     <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js"
-        data-client-key="{{ $clienKey }}"></script>
+        data-client-key="{{ $midtransClientKey }}"></script>
 @endsection
 @section('content')
     <div class="pagetitle">

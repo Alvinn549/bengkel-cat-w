@@ -12,12 +12,16 @@ class AuthController extends Controller
 {
     public function login()
     {
-        return view('auths.login');
+        $pageTitle = 'Login';
+
+        return view('auths.login', compact('pageTitle'));
     }
 
     public function register()
     {
-        return view('auths.register');
+        $pageTitle = 'Register';
+
+        return view('auths.register', compact('pageTitle'));
     }
 
     public function doRegister(Request $request)
@@ -46,7 +50,8 @@ class AuthController extends Controller
         Auth::attempt($credentials);
         $request->session()->regenerate();
 
-        return redirect()->route('verification.notice')->with('success', 'Registrasi Berhasil Silahkan Verifikasi Email Anda');
+        return redirect()->route('verification.notice')
+            ->with('success', 'Registrasi Berhasil Silahkan Verifikasi Email Anda');
     }
 
     public function doLogin(Request $request)

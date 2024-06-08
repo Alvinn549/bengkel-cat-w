@@ -18,13 +18,17 @@ class VerificationController extends Controller
     public function verify(EmailVerificationRequest $request)
     {
         $request->fulfill();
-        return redirect()->route('dashboard')->withSuccess('Your email has been verified.');
+
+        return redirect()->route('dashboard')
+            ->withSuccess('Your email has been verified.');
     }
 
     public function resend(Request $request)
     {
         $request->user()->sendEmailVerificationNotification();
-        return back()->withSuccess('A fresh verification link has been sent to your email address.');
+
+        return back()
+            ->withSuccess('A fresh verification link has been sent to your email address.');
     }
 
     public function changeEmail(Request $request)
@@ -36,7 +40,8 @@ class VerificationController extends Controller
         $user = User::find(auth()->user()->id);
 
         if (!$user) {
-            return redirect()->back()->with('error', 'Email sudah terdaftar');
+            return redirect()->back()
+                ->with('error', 'Email sudah terdaftar');
         }
 
         $user->update([
@@ -45,6 +50,7 @@ class VerificationController extends Controller
 
         event(new Registered($user));
 
-        return redirect()->route('verification.notice')->with('success', 'Email Berhasil diubah dan link verifikasi telah dikirim');
+        return redirect()->route('verification.notice')
+            ->with('success', 'Email Berhasil diubah dan link verifikasi telah dikirim');
     }
 }

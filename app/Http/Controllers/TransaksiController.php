@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Transaksi;
-use App\Http\Requests\StoreTransaksiRequest;
-use App\Http\Requests\UpdateTransaksiRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Midtrans\Config;
 use Midtrans\Snap;
-use Midtrans\Notification;
 
 class TransaksiController extends Controller
 {
@@ -25,7 +22,9 @@ class TransaksiController extends Controller
 
     public function index()
     {
-        return view('dashboard.pages.admin.transaksi.index');
+        $pageTitle = 'Transaksi';
+
+        return view('dashboard.pages.admin.transaksi.index', compact('pageTitle'));
     }
 
     public function dataTableTransaksi()
@@ -41,31 +40,15 @@ class TransaksiController extends Controller
             ->make(true);
     }
 
-    public function create()
-    {
-        //
-    }
-
-    public function store(StoreTransaksiRequest $request)
-    {
-        //
-    }
-
     public function show(Transaksi $transaksi)
     {
+        $pageTitle = 'Detail Transaksi';
         $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
 
-        return view('dashboard.pages.admin.transaksi.show', compact('transaksi'));
-    }
-
-    public function edit(Transaksi $transaksi)
-    {
-        //
-    }
-
-    public function update(UpdateTransaksiRequest $request, Transaksi $transaksi)
-    {
-        //
+        return view('dashboard.pages.admin.transaksi.show', compact(
+            'pageTitle',
+            'transaksi'
+        ));
     }
 
     public function destroy(Transaksi $transaksi)
@@ -93,13 +76,10 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::find($request->transaksi_id);
 
         if (!$transaksi) {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'message' => 'Transaksi tidak ditemukan'
-                ],
-                404
-            );
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Transaksi tidak ditemukan'
+            ], 404);
         }
 
         $transaksi->update([
@@ -108,13 +88,10 @@ class TransaksiController extends Controller
             'transaction_status' => 'pending',
         ]);
 
-        return response()->json(
-            [
-                'status' => 'success',
-                'message' => 'Transaksi berhasil diproses, silahkan tunggu konfirmasi admin',
-            ],
-            200
-        );
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Transaksi berhasil diproses, silahkan tunggu konfirmasi admin',
+        ], 200);
     }
 
     public function forVirtualMethod(Request $request)
@@ -128,13 +105,10 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::find($request->transaksi_id);
 
         if (!$transaksi) {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'message' => 'Transaksi tidak ditemukan'
-                ],
-                404
-            );
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Transaksi tidak ditemukan'
+            ], 404);
         }
 
         $transaksi->update([
@@ -168,13 +142,10 @@ class TransaksiController extends Controller
         try {
             $snapToken = Snap::getSnapToken($payload);
         } catch (\Exception $e) {
-            return response()->json(
-                [
-                    'status' => 'error',
-                    'message' => $e->getMessage() . ' silahkan coba lagi nanti !'
-                ],
-                500
-            );
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage() . ' silahkan coba lagi nanti !'
+            ], 500);
         }
 
         // dd($snapToken);
@@ -183,14 +154,11 @@ class TransaksiController extends Controller
             'snap_token' => $snapToken,
         ]);
 
-        return response()->json(
-            [
-                'status' => 'success',
-                'message' => 'Transaksi berhasil diproses, silahkan lanjutkan pembayaran',
-                'snap_token' => $snapToken
-            ],
-            200
-        );
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Transaksi berhasil diproses, silahkan lanjutkan pembayaran',
+            'snap_token' => $snapToken
+        ], 200);
     }
 
     public function snapFinish(Request $request)

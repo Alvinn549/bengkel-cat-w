@@ -22,7 +22,7 @@
                         <form class="row g-3" action="{{ route('perbaikan.store') }}" method="POST" id="form"
                             enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" value="{{ request('idKendaraan') }}" name="idKendaraan">
+                            <input type="hidden" value="{{ $kendaraan->id }}" name="idKendaraan">
                             <input type="hidden" value="Baru" name="status">
                             <div class="col-md-12">
                                 <label for="inputNama" class="form-label">Nama Perbaikan</label>

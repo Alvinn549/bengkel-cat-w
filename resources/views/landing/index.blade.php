@@ -168,6 +168,9 @@
                     allowEscapeKey: false,
                     allowEnterKey: false,
                     showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
                 });
 
                 $.ajax({

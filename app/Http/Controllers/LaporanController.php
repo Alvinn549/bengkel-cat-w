@@ -11,6 +11,8 @@ class LaporanController extends Controller
 {
     public function pelanggan()
     {
+        $pageTitle = 'Laporan Pelanggan';
+
         $durasi = request()->get('durasi');
 
         [$startDate, $endDate] = $this->parseDateRange($durasi);
@@ -27,11 +29,13 @@ class LaporanController extends Controller
             return $pelanggan->kendaraans->count();
         });
 
-        return view('dashboard.pages.admin.laporan.pelanggan.index', compact('pelanggans', 'totalKendaraans', 'totalPelanggans', 'durasi', 'startDate', 'endDate'));
+        return view('dashboard.pages.admin.laporan.pelanggan.index', compact('pageTitle', 'pelanggans', 'totalKendaraans', 'totalPelanggans', 'durasi', 'startDate', 'endDate'));
     }
 
     public function perbaikan()
     {
+        $pageTitle = 'Laporan Perbaikan Kendaraan';
+
         $durasi = request()->get('durasi');
         $status = request()->get('status');
 
@@ -82,11 +86,13 @@ class LaporanController extends Controller
             ];
         }
 
-        return view('dashboard.pages.admin.laporan.perbaikan.index', compact('perbaikans', 'totalPerbaikans', 'average_done_in_days', 'statusCounts'));
+        return view('dashboard.pages.admin.laporan.perbaikan.index', compact('pageTitle', 'perbaikans', 'totalPerbaikans', 'average_done_in_days', 'statusCounts'));
     }
 
     public function transaksi()
     {
+        $pageTitle = 'Laporan Transaksi';
+
         $durasi = request()->get('durasi');
         $status = request()->get('status');
         $pelanggan = request()->get('pelanggan');
@@ -118,7 +124,7 @@ class LaporanController extends Controller
 
         // dd($totalTransaksiSelesai);
 
-        return view('dashboard.pages.admin.laporan.transaksi.index', compact('transaksis', 'totalIncome', 'potentialIncome', 'pelanggans'));
+        return view('dashboard.pages.admin.laporan.transaksi.index', compact('pageTitle', 'transaksis', 'totalIncome', 'potentialIncome', 'pelanggans'));
     }
 
     private function parseDateRange($durasi)

@@ -14,7 +14,9 @@ class PelangganController extends Controller
 
     public function index()
     {
-        return view('dashboard.pages.admin.pelanggan.index');
+        $pageTittle = 'Pelanggan';
+
+        return view('dashboard.pages.admin.pelanggan.index', compact('pageTittle'));
     }
 
     public function dataTablePelanggan()
@@ -32,7 +34,9 @@ class PelangganController extends Controller
 
     public function create()
     {
-        return view('dashboard.pages.admin.pelanggan.create');
+        $pageTittle = 'Tambah Pelanggan';
+
+        return view('dashboard.pages.admin.pelanggan.create', compact('pageTittle'));
     }
 
     public function store(Request $request)
@@ -95,14 +99,14 @@ class PelangganController extends Controller
         return redirect()->route('pelanggan.index');
     }
 
-    public function show(Pelanggan $pelanggan)
-    {
-        //
-    }
-
     public function edit(Pelanggan $pelanggan)
     {
-        return view('dashboard.pages.admin.pelanggan.edit', compact('pelanggan'));
+        $pageTittle = 'Edit Pelanggan';
+
+        return view('dashboard.pages.admin.pelanggan.edit', compact(
+            'pageTittle',
+            'pelanggan'
+        ));
     }
 
     public function update(Request $request, Pelanggan $pelanggan)

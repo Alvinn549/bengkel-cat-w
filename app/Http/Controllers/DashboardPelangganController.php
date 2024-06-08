@@ -6,12 +6,7 @@ use App\Models\Kendaraan;
 use App\Models\Pelanggan;
 use App\Models\Perbaikan;
 use App\Models\Transaksi;
-use Illuminate\Http\Request;
-use RealRashid\SweetAlert\Facades\Alert;
 use Midtrans\Config;
-use Midtrans\Snap;
-use Midtrans\Notification;
-
 
 class DashboardPelangganController extends Controller
 {
@@ -25,6 +20,8 @@ class DashboardPelangganController extends Controller
 
     public function index()
     {
+        $pageTitle = 'Dashboard Pelanggan';
+
         $pelanggan = Pelanggan::with('kendaraans', 'transaksis')
             ->where('id', auth()->user()->pelanggan->id)
             ->first();
@@ -41,6 +38,7 @@ class DashboardPelangganController extends Controller
         $transaksiDoneCount = $transaksis->where('transaction_status', 'Selesai')->count();
 
         return view('dashboard.pages.pelanggan.index', compact(
+            'pageTitle',
             'kendaraanCount',
             'perbaikanInProgressCount',
             'perbaikanDoneCount',
@@ -51,58 +49,91 @@ class DashboardPelangganController extends Controller
 
     public function myKendaraan($idPelanggan)
     {
+        $pageTitle = 'Kendaraan Saya';
+
         $kendaraans = Kendaraan::where('pelanggan_id', $idPelanggan)->get();
 
-        return view('dashboard.pages.pelanggan.my-kendaraan.index', compact('kendaraans'));
+        return view('dashboard.pages.pelanggan.my-kendaraan.index', compact(
+            'pageTitle',
+            'kendaraans'
+        ));
     }
 
     public function detailMyKendaraan(Kendaraan $kendaraan)
     {
+        $pageTitle = 'Detail Kendaraan';
+
         $kendaraan->load('pelanggan');
         $kendaraan->load('perbaikans');
         $kendaraan->load('tipe');
         $kendaraan->load('merek');
 
-        return view('dashboard.pages.pelanggan.my-kendaraan.show', compact('kendaraan'));
+        return view('dashboard.pages.pelanggan.my-kendaraan.show', compact(
+            'pageTitle',
+            'kendaraan'
+        ));
     }
 
     public function myTransaksi($idPelanggan)
     {
+        $pageTitle = 'Transaksi Saya';
+
         $transaksis = Transaksi::where('pelanggan_id', $idPelanggan)
             ->where('transaction_status', '!=', 'Selesai')
             ->latest()
             ->get();
 
-        return view('dashboard.pages.pelanggan.my-transaksi.index', compact('transaksis'));
+        return view('dashboard.pages.pelanggan.my-transaksi.index', compact(
+            'pageTitle',
+            'transaksis'
+        ));
     }
 
     public function detailMyTransaksi(Transaksi $transaksi)
     {
-        $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
-        $clienKey = config('services.midtrans.clientKey');
+        $pageTitle = 'Detail Transaksi';
 
-        return view('dashboard.pages.pelanggan.my-transaksi.show', compact('transaksi', 'clienKey'));
+        $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
+        $midtransClientKey = config('services.midtrans.clientKey');
+
+        return view('dashboard.pages.pelanggan.my-transaksi.show', compact(
+            'pageTitle',
+            'transaksi',
+            'midtransClientKey'
+        ));
     }
 
     public function historyTransaksi($idPelanggan)
     {
+        $pageTitle = 'History Transaksi';
+
         $transaksis = Transaksi::where('pelanggan_id', $idPelanggan)
             ->where('transaction_status', 'Selesai')
             ->latest()
             ->get();
 
-        return view('dashboard.pages.pelanggan.history-transaksi.index', compact('transaksis'));
+        return view('dashboard.pages.pelanggan.history-transaksi.index', compact(
+            'pageTitle',
+            'transaksis'
+        ));
     }
 
     public function detailHistoryTransaksi(Transaksi $transaksi)
     {
+        $pageTitle = 'Detail History Transaksi';
+
         $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
 
-        return view('dashboard.pages.pelanggan.history-transaksi.show', compact('transaksi'));
+        return view('dashboard.pages.pelanggan.history-transaksi.show', compact(
+            'pageTitle',
+            'transaksi'
+        ));
     }
 
     public function currentPerbaikan($idPelanggan)
     {
+        $pageTitle = 'Perbaikan Saat Ini';
+
         $kendaraans = Kendaraan::where('pelanggan_id', $idPelanggan)->get();
         $kendaraanIds = $kendaraans->pluck('id');
 
@@ -113,18 +144,29 @@ class DashboardPelangganController extends Controller
             ->get();
         // dd($perbaikans);
 
-        return view('dashboard.pages.pelanggan.current-perbaikan.index', compact('kendaraans', 'perbaikans'));
+        return view('dashboard.pages.pelanggan.current-perbaikan.index', compact(
+            'pageTitle',
+            'kendaraans',
+            'perbaikans'
+        ));
     }
 
     public function detailCurrentPerbaikan(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Detail Perbaikan';
+
         $perbaikan->load('kendaraan');
         $perbaikan->load('progres');
-        return view('dashboard.pages.pelanggan.current-perbaikan.show', compact('perbaikan'));
+        return view('dashboard.pages.pelanggan.current-perbaikan.show', compact(
+            'pageTitle',
+            'perbaikan'
+        ));
     }
 
     public function historyPerbaikan($idPelanggan)
     {
+        $pageTitle = 'History Perbaikan';
+
         $kendaraans = Kendaraan::where('pelanggan_id', $idPelanggan)->get();
         $kendaraanIds = $kendaraans->pluck('id');
 
@@ -133,20 +175,34 @@ class DashboardPelangganController extends Controller
             ->get();
         // dd($perbaikans);
 
-        return view('dashboard.pages.pelanggan.history-perbaikan.index', compact('kendaraans', 'perbaikans'));
+        return view('dashboard.pages.pelanggan.history-perbaikan.index', compact(
+            'pageTitle',
+            'kendaraans',
+            'perbaikans'
+        ));
     }
 
     public function detailHistoryPerbaikan(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Detail History Perbaikan';
+
         $perbaikan->load('kendaraan');
         $perbaikan->load('progres');
-        return view('dashboard.pages.pelanggan.history-perbaikan.show', compact('perbaikan'));
+        return view('dashboard.pages.pelanggan.history-perbaikan.show', compact(
+            'pageTitle',
+            'perbaikan'
+        ));
     }
 
     public function detailHistoryPerbaikanTransaksi(Transaksi $transaksi)
     {
+        $pageTitle = 'Detail History Perbaikan Transaksi';
+
         $transaksi->load('pelanggan', 'perbaikan', 'perbaikan.kendaraan');
 
-        return view('dashboard.pages.pelanggan.history-perbaikan.detail-transaksi', compact('transaksi'));
+        return view('dashboard.pages.pelanggan.history-perbaikan.detail-transaksi', compact(
+            'pageTitle',
+            'transaksi'
+        ));
     }
 }

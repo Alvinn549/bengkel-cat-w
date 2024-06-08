@@ -13,21 +13,34 @@ class LandingPageController extends Controller
 {
     public function index(Request $request)
     {
+
         $settings = Settings::first();
         $galleries = Gallery::all();
         $perbaikan = null;
+
+        $pageTitle = $settings->master_nama;
 
         if ($request->has('kode_unik') && $request->get('kode_unik') != '') {
             $kode_unik = $request->get('kode_unik');
             $perbaikan = Perbaikan::where('kode_unik', 'like', '%' . $kode_unik . '%')->first();
         }
 
-        return view('landing.index', compact('settings', 'galleries', 'perbaikan'));
+        return view('landing.index', compact(
+            'pageTitle',
+            'settings',
+            'galleries',
+            'perbaikan'
+        ));
     }
 
     public function detailPerbaikan(Perbaikan $perbaikan)
     {
-        return view('landing.detail-perbaikan', compact('perbaikan'));
+        $pageTitle = 'Detail Perbaikan';
+
+        return view('landing.detail-perbaikan', compact(
+            'pageTitle',
+            'perbaikan'
+        ));
     }
 
     public function sendContactForm(Request $request)

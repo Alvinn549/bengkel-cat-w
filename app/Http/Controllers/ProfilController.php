@@ -15,12 +15,14 @@ class ProfilController extends Controller
 {
     public function index()
     {
+        $pageTitle = 'Profil';
+
         if (auth()->user()->role == 'admin') {
-            return view('dashboard.pages.admin.profil.index');
+            return view('dashboard.pages.admin.profil.index', compact('pageTitle'));
         } elseif (auth()->user()->role == 'pekerja') {
-            return view('dashboard.pages.pekerja.profil.index');
+            return view('dashboard.pages.pekerja.profil.index', compact('pageTitle'));
         } elseif (auth()->user()->role == 'pelanggan') {
-            return view('dashboard.pages.pelanggan.profil.index');
+            return view('dashboard.pages.pelanggan.profil.index', compact('pageTitle'));
         }
     }
     public function changeEmail(Request $request)
@@ -46,205 +48,114 @@ class ProfilController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
         $user = User::find($id);
 
         if (!$user) {
             return redirect()->back()->with('error', 'User tidak ditemukan');
         }
 
+        $validatedData = $this->validateRequest($request, $user->id);
+
+        $this->updateUser($user, $validatedData);
+
         if ($user->role == 'admin') {
             $admin = Admin::where('user_id', $user->id)->first();
-
-            $validate = $request->validate(
-                [
-                    'nama' => ['required', 'string', 'max:100'],
-                    'email' => ['required', 'string', 'email', 'unique:users,email,' . $admin->user->id],
-                    'password' => ['nullable', 'string', 'min:8'],
-                    'no_telp' => ['required', 'digits_between:11,16'],
-                    'jenis_k' => ['required', 'string', 'in:L,P'],
-                    'alamat' => ['required', 'string'],
-                    'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
-                ],
-                [
-                    'nama.required' => 'Nama tidak boleh kosong',
-                    'nama.max' => 'Nama terlalu panjang',
-                    'email.unique' => 'Email sudah terdaftar',
-                    'email.required' => 'Email tidak boleh kosong',
-                    'email.email' => 'Email tidak valid',
-                    'password.required' => 'Password tidak boleh kosong',
-                    'password.min' => 'Password terlalu pendek',
-                    'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
-                    'no_telp.digits_between' => 'Nomor Telepon tidak valid',
-                    'jenis_k.required' => 'Jenis Kelamin tidak boleh kosong',
-                    'jenis_k.in' => 'Jenis Kelamin tidak valid',
-                    'alamat.required' => 'Alamat tidak boleh kosong',
-                    'foto.max' => 'Ukuran gambar terlalu besar',
-                    'foto.mimes' => 'Format gambar tidak valid',
-                ]
-            );
-
-            $admin->user->update([
-                'email' => $validate['email'],
-            ]);
-
-            if ($request->filled('password')) {
-                $admin->user->update([
-                    'password' => bcrypt($validate['password']),
-                ]);
-            }
-
             $admin->update([
-                'nama' => $validate['nama'],
-                'no_telp' => $validate['no_telp'],
-                'jenis_k' => $validate['jenis_k'],
-                'alamat' => $validate['alamat'],
+                'nama' => $validatedData['nama'],
+                'no_telp' => $validatedData['no_telp'],
+                'jenis_k' => $validatedData['jenis_k'],
+                'alamat' => $validatedData['alamat'],
             ]);
 
-            if ($request->hasFile('foto')) {
-                if ($admin->foto) {
-                    // Delete old photo
-                    Storage::delete($admin->foto);
-                }
-
-                // Store new photo
-                $fotoPath = $request->file('foto')->store('foto');
-                $admin->update(['foto' => $fotoPath]);
-            }
-
+            $this->updatePhoto($admin, $request);
             Alert::toast('<p style="color: white; margin-top: 10px;">' . $admin->nama . ' berhasil diubah!</p>', 'success')
                 ->toHtml()
                 ->background('#333A73');
-
-            return redirect()->route('profil.index');
         } elseif ($user->role == 'pekerja') {
             $pekerja = Pekerja::where('user_id', $user->id)->first();
-
-            $validate = $request->validate(
-                [
-                    'nama' => ['required', 'string', 'max:100'],
-                    'email' => ['required', 'string', 'email', 'unique:users,email,' . $pekerja->user->id],
-                    'password' => ['nullable', 'string', 'min:8'],
-                    'no_telp' => ['required', 'digits_between:11,16'],
-                    'jenis_k' => ['required', 'string', 'in:L,P'],
-                    'alamat' => ['required', 'string'],
-                    'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
-                ],
-                [
-                    'nama.required' => 'Nama tidak boleh kosong',
-                    'nama.max' => 'Nama terlalu panjang',
-                    'email.unique' => 'Email sudah terdaftar',
-                    'email.required' => 'Email tidak boleh kosong',
-                    'email.email' => 'Email tidak valid',
-                    'password.required' => 'Password tidak boleh kosong',
-                    'password.min' => 'Password terlalu pendek',
-                    'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
-                    'no_telp.digits_between' => 'Nomor Telepon tidak valid',
-                    'jenis_k.required' => 'Jenis Kelamin tidak boleh kosong',
-                    'jenis_k.in' => 'Jenis Kelamin tidak valid',
-                    'alamat.required' => 'Alamat tidak boleh kosong',
-                    'foto.max' => 'Ukuran gambar terlalu besar',
-                    'foto.mimes' => 'Format gambar tidak valid',
-                ]
-            );
-
-            $pekerja->user->update([
-                'email' => $validate['email'],
-            ]);
-
-            if ($request->filled('password')) {
-                $pekerja->user->update([
-                    'password' => bcrypt($validate['password']),
-                ]);
-            }
-
             $pekerja->update([
-                'nama' => $validate['nama'],
-                'no_telp' => $validate['no_telp'],
-                'jenis_k' => $validate['jenis_k'],
-                'alamat' => $validate['alamat'],
+                'nama' => $validatedData['nama'],
+                'no_telp' => $validatedData['no_telp'],
+                'jenis_k' => $validatedData['jenis_k'],
+                'alamat' => $validatedData['alamat'],
             ]);
 
-            if ($request->hasFile('foto')) {
-                if ($pekerja->foto) {
-                    // Delete old photo
-                    Storage::delete($pekerja->foto);
-                }
-
-                // Store new photo
-                $fotoPath = $request->file('foto')->store('foto');
-                $pekerja->update(['foto' => $fotoPath]);
-            }
-
+            $this->updatePhoto($pekerja, $request);
             Alert::toast('<p style="color: white; margin-top: 10px;">' . $pekerja->nama . ' berhasil diubah!</p>', 'success')
                 ->toHtml()
                 ->background('#333A73');
-
-            return redirect()->route('profil.index');
         } elseif ($user->role == 'pelanggan') {
             $pelanggan = Pelanggan::where('user_id', $user->id)->first();
-
-            $validate = $request->validate(
-                [
-                    'nama' => ['required', 'string', 'max:100'],
-                    'email' => ['required', 'string', 'email', 'unique:users,email,' . $pelanggan->user->id],
-                    'password' => ['nullable', 'string', 'min:8'],
-                    'no_telp' => ['required', 'digits_between:11,16'],
-                    'jenis_k' => ['required', 'string', 'in:L,P'],
-                    'alamat' => ['required', 'string'],
-                    'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
-                ],
-                [
-                    'nama.required' => 'Nama tidak boleh kosong',
-                    'nama.max' => 'Nama terlalu panjang',
-                    'email.unique' => 'Email sudah terdaftar',
-                    'email.required' => 'Email tidak boleh kosong',
-                    'email.email' => 'Email tidak valid',
-                    'password.required' => 'Password tidak boleh kosong',
-                    'password.min' => 'Password terlalu pendek',
-                    'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
-                    'no_telp.digits_between' => 'Nomor Telepon tidak valid',
-                    'jenis_k.required' => 'Jenis Kelamin tidak boleh kosong',
-                    'jenis_k.in' => 'Jenis Kelamin tidak valid',
-                    'alamat.required' => 'Alamat tidak boleh kosong',
-                    'foto.max' => 'Ukuran gambar terlalu besar',
-                    'foto.mimes' => 'Format gambar tidak valid',
-                ]
-            );
-
-            $pelanggan->user->update([
-                'email' => $validate['email'],
-            ]);
-
-            if ($request->filled('password')) {
-                $pelanggan->user->update([
-                    'password' => bcrypt($validate['password']),
-                ]);
-            }
-
             $pelanggan->update([
-                'nama' => $validate['nama'],
-                'no_telp' => $validate['no_telp'],
-                'jenis_k' => $validate['jenis_k'],
-                'alamat' => $validate['alamat'],
+                'nama' => $validatedData['nama'],
+                'no_telp' => $validatedData['no_telp'],
+                'jenis_k' => $validatedData['jenis_k'],
+                'alamat' => $validatedData['alamat'],
             ]);
 
-            if ($request->hasFile('foto')) {
-                if ($pelanggan->foto) {
-                    // Delete old photo
-                    Storage::delete($pelanggan->foto);
-                }
-
-                // Store new photo
-                $fotoPath = $request->file('foto')->store('foto');
-                $pelanggan->update(['foto' => $fotoPath]);
-            }
-
+            $this->updatePhoto($pelanggan, $request);
             Alert::toast('<p style="color: white; margin-top: 10px;">Profil berhasil diubah!</p>', 'success')
                 ->toHtml()
                 ->background('#333A73');
+        }
 
-            return redirect()->route('profil.index');
+        return redirect()->route('profil.index');
+    }
+
+    private function updateUser($user, $validatedData)
+    {
+        $user->update([
+            'email' => $validatedData['email'],
+        ]);
+
+        if (array_key_exists('password', $validatedData) && $validatedData['password']) {
+            $user->update([
+                'password' => bcrypt($validatedData['password']),
+            ]);
+        }
+    }
+
+    private function validateRequest($request, $userId)
+    {
+        return $request->validate(
+            [
+                'nama' => ['required', 'string', 'max:100'],
+                'email' => ['required', 'string', 'email', 'unique:users,email,' . $userId],
+                'password' => ['nullable', 'string', 'min:8'],
+                'no_telp' => ['required', 'digits_between:11,16'],
+                'jenis_k' => ['required', 'string', 'in:L,P'],
+                'alamat' => ['required', 'string'],
+                'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
+            ],
+            [
+                'nama.required' => 'Nama tidak boleh kosong',
+                'nama.max' => 'Nama terlalu panjang',
+                'email.unique' => 'Email sudah terdaftar',
+                'email.required' => 'Email tidak boleh kosong',
+                'email.email' => 'Email tidak valid',
+                'password.min' => 'Password terlalu pendek',
+                'no_telp.required' => 'Nomor Telepon tidak boleh kosong',
+                'no_telp.digits_between' => 'Nomor Telepon tidak valid',
+                'jenis_k.required' => 'Jenis Kelamin tidak boleh kosong',
+                'jenis_k.in' => 'Jenis Kelamin tidak valid',
+                'alamat.required' => 'Alamat tidak boleh kosong',
+                'foto.max' => 'Ukuran gambar terlalu besar',
+                'foto.mimes' => 'Format gambar tidak valid',
+            ]
+        );
+    }
+
+    private function updatePhoto($entity, $request)
+    {
+        if ($request->hasFile('foto')) {
+            if ($entity->foto) {
+                // Delete old photo
+                Storage::delete($entity->foto);
+            }
+
+            // Store new photo
+            $fotoPath = $request->file('foto')->store('foto');
+            $entity->update(['foto' => $fotoPath]);
         }
     }
 }

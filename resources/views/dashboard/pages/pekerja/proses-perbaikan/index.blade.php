@@ -454,8 +454,13 @@
             function showLoadingModal() {
                 Swal.fire({
                     title: 'Loading',
-                    html: 'Please wait...',
-                    allowOutsideClick: false
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
                 });
             }
 

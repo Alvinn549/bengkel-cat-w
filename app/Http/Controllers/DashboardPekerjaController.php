@@ -13,12 +13,14 @@ class DashboardPekerjaController extends Controller
 
     public function index()
     {
+        $pageTitle = 'Dashboard Pekerja';
+
         $countPerbaikansBaru = Perbaikan::where('status', 'Baru')->count();
         $countPerbaikansAntrian = Perbaikan::where('status', 'Antrian')->count();
         $countPerbaikansProses = Perbaikan::where('status', 'Dalam Proses')->count();
 
-
         return view('dashboard.pages.pekerja.index', compact(
+            'pageTitle',
             'countPerbaikansBaru',
             'countPerbaikansAntrian',
             'countPerbaikansProses'
@@ -27,11 +29,16 @@ class DashboardPekerjaController extends Controller
 
     public function listPerbaikanBaru()
     {
+        $pageTitle = 'Perbaikan Baru';
+
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Baru')
             ->get();
 
-        return view('dashboard.pages.pekerja.perbaikan-baru.index', compact('perbaikans'));
+        return view('dashboard.pages.pekerja.perbaikan-baru.index', compact(
+            'pageTitle',
+            'perbaikans'
+        ));
     }
 
     public function prosesPerbaikanBaru(Perbaikan $perbaikan)
@@ -50,16 +57,20 @@ class DashboardPekerjaController extends Controller
             ->background('#333A73');
 
         return redirect()->route('dashboard.pekerja.list-perbaikan-baru');
-        // return redirect()->route('dashboard.pekerja.list-perbaikan-antrian');
     }
 
     public function listPerbaikanAntrian()
     {
+        $pageTitle = 'Perbaikan Antrian';
+
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Antrian')
             ->get();
 
-        return view('dashboard.pages.pekerja.perbaikan-antrian.index', compact('perbaikans'));
+        return view('dashboard.pages.pekerja.perbaikan-antrian.index', compact(
+            'pageTitle',
+            'perbaikans'
+        ));
     }
 
     public function prosesPerbaikanAntrian(Perbaikan $perbaikan)
@@ -78,20 +89,26 @@ class DashboardPekerjaController extends Controller
             ->background('#333A73');
 
         return redirect()->route('dashboard.pekerja.list-perbaikan-antrian');
-        // return redirect()->route('dashboard.pekerja.list-perbaikan-dalam-proses');
     }
 
     public function listPerbaikanDalamProses()
     {
+        $pageTitle = 'Perbaikan Dalam Proses';
+
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Dalam proses')
             ->get();
 
-        return view('dashboard.pages.pekerja.perbaikan-dalam-proses.index', compact('perbaikans'));
+        return view('dashboard.pages.pekerja.perbaikan-dalam-proses.index', compact(
+            'pageTitle',
+            'perbaikans'
+        ));
     }
 
     public function prosesPerbaikanDalamProses(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Proses Perbaikan';
+
         $perbaikan->load('kendaraan');
         $perbaikan->load('kendaraan.pelanggan');
         $perbaikan->load('kendaraan.tipe');
@@ -104,7 +121,11 @@ class DashboardPekerjaController extends Controller
             'is_selesai' => $perbaikan->progres()->orderByDesc('id')->first()->is_selesai ?? null,
         ];
 
-        return view('dashboard.pages.pekerja.proses-perbaikan.index', compact('perbaikan', 'latest_progres'));
+        return view('dashboard.pages.pekerja.proses-perbaikan.index', compact(
+            'pageTitle',
+            'perbaikan',
+            'latest_progres'
+        ));
     }
 
     public function storeProgres(Request $request)
@@ -139,12 +160,10 @@ class DashboardPekerjaController extends Controller
                         'is_selesai' => true,
                     ]);
 
-                    return response()->json(
-                        [
-                            'status' => 'success-update-to-selesai',
-                            'message' => 'Progress inserted successfully and updated to selesai'
-                        ]
-                    );
+                    return response()->json([
+                        'status' => 'success-update-to-selesai',
+                        'message' => 'Progress inserted successfully and updated to selesai'
+                    ]);
                 }
             } else {
 
@@ -160,17 +179,21 @@ class DashboardPekerjaController extends Controller
                     'is_selesai' => false,
                 ]);
 
-                return response()->json(
-                    [
-                        'status' => 'success-insert-new-progress',
-                        'message' => 'Progress inserted successfully'
-                    ]
-                );
+                return response()->json([
+                    'status' => 'success-insert-new-progress',
+                    'message' => 'Progress inserted successfully'
+                ]);
             }
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json(['status' => 'error_validation', 'errors' => $e->errors()]);
+            return response()->json([
+                'status' => 'error_validation',
+                'errors' => $e->errors()
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['status' => 'error', 'message' => 'Failed to insert progress. ' . $e->getMessage()]);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to insert progress. ' . $e->getMessage()
+            ]);
         }
     }
 
@@ -212,6 +235,7 @@ class DashboardPekerjaController extends Controller
             $progres->update(['foto' => $fotoPath]);
         }
 
-        return redirect()->back()->with('success', 'Progress updated successfully');
+        return redirect()->back()
+            ->with('success', 'Progress updated successfully');
     }
 }

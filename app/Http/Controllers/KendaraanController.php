@@ -16,7 +16,9 @@ class KendaraanController extends Controller
 
     public function index()
     {
-        return view('dashboard.pages.admin.kendaraan.index');
+        $pageTitle = 'Kendaraan';
+
+        return view('dashboard.pages.admin.kendaraan.index', compact('pageTitle'));
     }
 
     public function dataTableKendaraan()
@@ -43,10 +45,18 @@ class KendaraanController extends Controller
 
     public function create()
     {
+        $pageTitle = 'Tambah Kendaraan';
+
         $pelanggans = Pelanggan::get(['id', 'nama']);
         $tipes = Tipe::get(['id', 'nama_tipe']);
         $mereks = Merek::get(['id', 'nama_merek']);
-        return view('dashboard.pages.admin.kendaraan.create', compact('pelanggans', 'tipes', 'mereks'));
+
+        return view('dashboard.pages.admin.kendaraan.create', compact(
+            'pageTitle',
+            'pelanggans',
+            'tipes',
+            'mereks'
+        ));
     }
 
     public function store(Request $request)
@@ -99,16 +109,23 @@ class KendaraanController extends Controller
 
     public function show(Kendaraan $kendaraan)
     {
+        $pageTitle = 'Detail Kendaraan';
+
         $kendaraan->load('pelanggan');
         $kendaraan->load('perbaikans');
         $kendaraan->load('tipe');
         $kendaraan->load('merek');
 
-        return view('dashboard.pages.admin.kendaraan.show', compact('kendaraan'));
+        return view('dashboard.pages.admin.kendaraan.show', compact(
+            'pageTitle',
+            'kendaraan'
+        ));
     }
 
     public function edit(Kendaraan $kendaraan)
     {
+        $pageTitle = 'Edit Kendaraan';
+
         $pelanggans = Pelanggan::get(['id', 'nama']);
         $tipes = Tipe::get(['id', 'nama_tipe']);
         $mereks = Merek::get(['id', 'nama_merek']);
@@ -117,7 +134,13 @@ class KendaraanController extends Controller
         $kendaraan->load('tipe');
         $kendaraan->load('merek');
 
-        return view('dashboard.pages.admin.kendaraan.edit', compact('kendaraan', 'pelanggans', 'tipes', 'mereks'));
+        return view('dashboard.pages.admin.kendaraan.edit', compact(
+            'pageTittle',
+            'kendaraan',
+            'pelanggans',
+            'tipes',
+            'mereks'
+        ));
     }
 
     public function update(Request $request, Kendaraan $kendaraan)

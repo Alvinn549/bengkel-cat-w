@@ -10,18 +10,18 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class SettingsController extends Controller
 {
-
     public function index()
     {
+        $pageTitle = 'Pengaturan';
+
         $settings = Settings::first();
         $galleries = Gallery::all();
 
-        return view('dashboard.pages.admin.settings.index', compact('settings', 'galleries'));
-    }
-
-    public function create()
-    {
-        //
+        return view('dashboard.pages.admin.settings.index', compact(
+            'pageTitle',
+            'settings',
+            'galleries'
+        ));
     }
 
     public function store(Request $request)
@@ -106,25 +106,5 @@ class SettingsController extends Controller
             ->background('#333A73');
 
         return redirect()->route('settings.index');
-    }
-
-    public function show(Settings $settings)
-    {
-        //
-    }
-
-    public function edit(Settings $settings)
-    {
-        //
-    }
-
-    public function update(Request $request, Settings $settings)
-    {
-        //
-    }
-
-    public function destroy(Settings $settings)
-    {
-        //
     }
 }

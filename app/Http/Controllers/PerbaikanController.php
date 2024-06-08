@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Kendaraan;
 use App\Models\Perbaikan;
-use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -12,23 +11,10 @@ use Illuminate\Support\Str;
 
 class PerbaikanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
+        $pageTitle = 'Tambah Perbaikan';
+
         $kendaraan = Kendaraan::find(request('idKendaraan'));
 
         if (!$kendaraan) {
@@ -36,19 +22,14 @@ class PerbaikanController extends Controller
             return redirect()->back();
         }
 
-        return view('dashboard.pages.admin.perbaikan.create');
+        return view('dashboard.pages.admin.perbaikan.create', compact('pageTitle', 'kendaraan'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorePerbaikanRequest  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         // dd($request->all());
         $kendaraan = Kendaraan::find($request->idKendaraan);
+
         if (!$kendaraan) {
             Alert::error('Error', 'Kendaraan tidak ditemukan');
             return redirect()->back();
@@ -94,38 +75,30 @@ class PerbaikanController extends Controller
         return redirect()->route('kendaraan.show', $request->idKendaraan);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Perbaikan  $perbaikan
-     * @return \Illuminate\Http\Response
-     */
     public function show(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Detail Perbaikan';
+
         $perbaikan->load('kendaraan');
         $perbaikan->load('progres');
-        return view('dashboard.pages.admin.perbaikan.show', compact('perbaikan'));
+
+        return view('dashboard.pages.admin.perbaikan.show', compact(
+            'pageTitle',
+            'perbaikan'
+        ));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Perbaikan  $perbaikan
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Edit Perbaikan';
         $perbaikan->load('kendaraan');
-        return view('dashboard.pages.admin.perbaikan.edit', compact('perbaikan'));
+
+        return view('dashboard.pages.admin.perbaikan.edit', compact(
+            'pageTitle',
+            'perbaikan'
+        ));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatePerbaikanRequest  $request
-     * @param  \App\Models\Perbaikan  $perbaikan
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Perbaikan $perbaikan)
     {
         $validate = $request->validate(
@@ -145,47 +118,10 @@ class PerbaikanController extends Controller
             ]
         );
 
-        $biaya  = null;
-        $tgl_selesai = null;
-
-        // if ($validate['status'] == 'Selesai') {
-        //     $request->validate([
-        //         'biaya' => ['required', 'string'],
-        //     ], [
-        //         'biaya.required' => 'Biaya tidak boleh kosong',
-        //     ]);
-
-        //     $biaya = (int) str_replace(',', '', $request->biaya);
-
-        //     $pelanggan = $perbaikan->kendaraan->pelanggan;
-
-        //     $fullName = explode(' ', $pelanggan->nama);
-        //     $firstName = $fullName[0];
-        //     $lastName = isset($fullName[1]) ? $fullName[1] : null;
-
-        //     Transaksi::updateOrCreate(
-        //         ['order_id' => 'tr-' . $perbaikan->kode_unik],
-        //         [
-        //             'perbaikan_id' => $perbaikan->id,
-        //             'pelanggan_id' => $pelanggan->id,
-        //             'gross_amount' => $biaya,
-        //             'transaction_status' => 'New',
-        //             'first_name' => $firstName,
-        //             'last_name' => $lastName,
-        //             'email' => $pelanggan->user->email,
-        //             'phone' => $pelanggan->no_telp,
-        //         ]
-        //     );
-
-        //     $tgl_selesai = now();
-        // }
-
         $perbaikan->update([
             'nama' => $validate['nama'],
             'keterangan' => $validate['keterangan'],
-            'biaya' => $biaya,
             'durasi' => $validate['durasi'],
-            'tgl_selesai' => $tgl_selesai,
         ]);
 
         if ($request->hasFile('foto')) {
@@ -207,12 +143,6 @@ class PerbaikanController extends Controller
         return redirect()->route('kendaraan.show', $perbaikan->kendaraan_id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Perbaikan  $perbaikan
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Perbaikan $perbaikan)
     {
         if ($perbaikan->foto) {

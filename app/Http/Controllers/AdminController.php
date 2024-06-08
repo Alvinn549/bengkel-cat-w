@@ -13,7 +13,9 @@ class AdminController extends Controller
 {
     public function index()
     {
-        return view('dashboard.pages.admin.admin.index');
+        $pageTitle = 'Master Admin';
+
+        return view('dashboard.pages.admin.admin.index', compact('pageTitle'));
     }
 
     public function dataTableAdmin()
@@ -31,7 +33,9 @@ class AdminController extends Controller
 
     public function create()
     {
-        return view('dashboard.pages.admin.admin.create');
+        $pageTitle = 'Tambah Admin';
+
+        return view('dashboard.pages.admin.admin.create', compact('pageTitle'));
     }
 
     public function store(Request $request)
@@ -94,14 +98,11 @@ class AdminController extends Controller
         return redirect()->route('admin.index');
     }
 
-    public function show(Admin $admin)
-    {
-        //
-    }
-
     public function edit(Admin $admin)
     {
-        return view('dashboard.pages.admin.admin.edit', compact('admin'));
+        $pageTitle = 'Edit Admin';
+
+        return view('dashboard.pages.admin.admin.edit', compact('admin', 'pageTitle'));
     }
 
     public function update(Request $request, Admin $admin)

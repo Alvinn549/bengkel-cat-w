@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kendaraan;
-use App\Models\Pelanggan;
 use App\Models\Perbaikan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
@@ -13,19 +11,16 @@ class DashboardAdminController extends Controller
 {
     public function index()
     {
+        $pageTitle = 'Dashboard Admin';
+
         $countPerbaikansBaru = Perbaikan::where('status', 'Baru')->count();
         $countPerbaikansAntrian = Perbaikan::where('status', 'Antrian')->count();
         $countPerbaikansProses = Perbaikan::where('status', 'Dalam Proses')->count();
         $countPerbaikansProsesSelesai = Perbaikan::where('status', 'Proses Selesai')->count();
         $countPerbaikansMenungguBayar = Perbaikan::where('status', 'Menunggu Bayar')->count();
 
-        $isExclamationMark = false;
-
-        if ($countPerbaikansProsesSelesai > 0 || $countPerbaikansMenungguBayar > 0) {
-            $isExclamationMark = true;
-        }
-
         return view('dashboard.pages.admin.index', compact(
+            'pageTitle',
             'countPerbaikansBaru',
             'countPerbaikansAntrian',
             'countPerbaikansProses',
@@ -36,78 +31,123 @@ class DashboardAdminController extends Controller
 
     public function listPerbaikanBaru()
     {
+        $pageTitle = 'Perbaikan Baru';
+
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Baru')
             ->get();
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-baru.index', compact('perbaikans'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-baru.index', compact(
+            'perbaikans',
+            'pageTitle'
+        ));
     }
 
     public function listPerbaikanAntrian()
     {
+        $pageTitle = 'Perbaikan Antrian';
+
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Antrian')
             ->get();
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-antrian.index', compact('perbaikans'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-antrian.index', compact(
+            'perbaikans',
+            'pageTitle'
+        ));
     }
 
     public function listPerbaikanDalamProses()
     {
+        $pageTitle = 'Perbaikan Dalam Proses';
+
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Dalam proses')
             ->get();
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-dalam-proses.index', compact('perbaikans'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-dalam-proses.index', compact(
+            'perbaikans',
+            'pageTitle'
+        ));
     }
 
     public function detailPerbaikanDalamProses(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Detail Perbaikan Dalam Proses';
+
         $perbaikan->load('kendaraan');
         $perbaikan->load('progres');
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-dalam-proses.show', compact('perbaikan'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-dalam-proses.show', compact(
+            'perbaikan',
+            'pageTitle'
+        ));
     }
 
     public function listPerbaikanSelesaiDiProses()
     {
+        $pageTitle = 'Perbaikan Selesai Di Proses';
+
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Proses Selesai')
             ->get();
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.index', compact('perbaikans'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.index', compact(
+            'perbaikans',
+            'pageTitle'
+        ));
     }
 
     public function detailPerbaikanSelesaiDiProses(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Detail Perbaikan Selesai Di Proses';
+
         $perbaikan->load('kendaraan');
         $perbaikan->load('progres');
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.show', compact('perbaikan'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.show', compact(
+            'perbaikan',
+            'pageTitle'
+        ));
     }
 
     public function listPerbaikanMenungguBayar()
     {
+        $pageTitle = 'Perbaikan Menunggu Bayar';
+
         $perbaikans = Perbaikan::with('kendaraan', 'transaksi')
             ->where('status', 'Menunggu Bayar')
             ->get();
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.index', compact('perbaikans'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.index', compact(
+            'perbaikans',
+            'pageTitle'
+        ));
     }
 
     public function detailPerbaikanMenungguBayar(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Detail Perbaikan Menunggu Bayar';
+
         $perbaikan->load('kendaraan');
         $perbaikan->load('progres');
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.show', compact('perbaikan'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.show', compact(
+            'perbaikan',
+            'pageTitle'
+        ));
     }
 
     public function prosesPerbaikanSelesaiDiProses(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Proses Perbaikan Selesai Di Proses';
+
         $perbaikan->load('kendaraan');
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.proses-perbaikan', compact('perbaikan'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.proses-perbaikan', compact(
+            'perbaikan',
+            'pageTitle'
+        ));
     }
 
     public function prosesPerbaikanSelesaiDiProsesPut(Request $request, Perbaikan $perbaikan)
@@ -160,10 +200,15 @@ class DashboardAdminController extends Controller
 
     public function prosesPerbaikanMenungguBayar(Perbaikan $perbaikan)
     {
+        $pageTitle = 'Proses Perbaikan Menunggu Bayar';
+
         $perbaikan->load('kendaraan');
         $perbaikan->load('transaksi');
 
-        return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.proses-perbaikan', compact('perbaikan'));
+        return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.proses-perbaikan', compact(
+            'perbaikan',
+            'pageTitle'
+        ));
     }
 
     public function konfirmasiPembayaranCash(Request $request)

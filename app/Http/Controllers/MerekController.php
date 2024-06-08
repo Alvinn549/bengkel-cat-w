@@ -11,13 +11,13 @@ class MerekController extends Controller
 
     public function index()
     {
-        $mereks = Merek::latest()->get();
-        return view('dashboard.pages.admin.merek.index', compact('mereks'));
-    }
+        $pageTitle = 'Merek';
 
-    public function create()
-    {
-        //
+        $mereks = Merek::latest()->get();
+        return view('dashboard.pages.admin.merek.index', compact(
+            'pageTitle',
+            'mereks'
+        ));
     }
 
     public function store(Request $request)
@@ -33,16 +33,6 @@ class MerekController extends Controller
             ->background('#333A73');
 
         return redirect()->route('merek.index');
-    }
-
-    public function show(Merek $merek)
-    {
-        //
-    }
-
-    public function edit(Merek $merek)
-    {
-        //
     }
 
     public function update(Request $request, Merek $merek)
