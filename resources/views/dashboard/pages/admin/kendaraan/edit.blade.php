@@ -137,9 +137,15 @@
 @section('js')
     <script>
         $(document).ready(function() {
-            $('.select2Pelanggan').select2();
-            $('.select2Merek').select2();
-            $('.select2Tipe').select2();
+            $('.select2Pelanggan').select2({
+                theme: 'bootstrap-5'
+            });
+            $('.select2Merek').select2({
+                theme: 'bootstrap-5'
+            });
+            $('.select2Tipe').select2({
+                theme: 'bootstrap-5'
+            });
         });
     </script>
 

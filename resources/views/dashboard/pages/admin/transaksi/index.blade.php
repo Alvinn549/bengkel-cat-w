@@ -28,6 +28,7 @@
                                     <th>Email</th>
                                     <th>No Telp</th>
                                     <th>Status</th>
+                                    <th>Tgl Transaksi</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -87,6 +88,13 @@
                             } else {
                                 return data;
                             }
+                        }
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
+                        render: function(data, type, row) {
+                            return moment(data).format('DD-MM-YY HH:mm:ss');
                         }
                     },
                     {

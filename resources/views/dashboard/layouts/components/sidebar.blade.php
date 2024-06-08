@@ -1,11 +1,23 @@
 <aside id="sidebar" class="sidebar">
     <ul class="sidebar-nav" id="sidebar-nav">
+        @php
+            $countPerbaikansProsesSelesai = App\Models\Perbaikan::where('status', 'Proses Selesai')->count();
+            $countPerbaikansMenungguBayar = App\Models\Perbaikan::where('status', 'Menunggu Bayar')->count();
 
+            $isExclamationMark = false;
+
+            if ($countPerbaikansProsesSelesai > 0 || $countPerbaikansMenungguBayar > 0) {
+                $isExclamationMark = true;
+            }
+        @endphp
         <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : 'collapsed' }}"
+            <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : 'collapsed' }} d-flex justify-content-between align-items-center"
                 href="{{ route('dashboard') }}">
-                <i class="bi bi-grid"></i>
-                <span>Dashboard</span>
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-grid"></i>
+                    <span>Dashboard</span>
+                </div>
+                <i class="bi bi-exclamation text-warning fs-3 {{ $isExclamationMark ? '' : 'd-none' }}"></i>
             </a>
         </li><!-- End Dashboard Nav -->
 

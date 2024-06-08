@@ -90,7 +90,7 @@
                                     <th>Email</th>
                                     <th nowrap>J.k</th>
                                     <th>K. Dimiliki</th>
-                                    <th>Sejak</th>
+                                    <th>Terdaftar Sejak</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -131,7 +131,14 @@
             $('#datatable').DataTable({
                 dom: 'Bfrtip',
                 buttons: [
-                    'colvis', 'copy', 'csv', 'excel', 'pdf', 'print'
+                    'colvis', 'copy', 'csv', 'excel', 'print',
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: ':visible'
+                        }
+                    },
                 ]
             });
         });

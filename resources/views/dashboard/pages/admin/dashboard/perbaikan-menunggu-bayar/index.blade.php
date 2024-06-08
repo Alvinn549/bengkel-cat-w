@@ -49,6 +49,7 @@
                                             <th>Kode Perbaikan</th>
                                             <th>Nama Perbaikan</th>
                                             <th>Tgl Masuk</th>
+                                            <th>Metode Bayar</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -60,6 +61,7 @@
                                                 <td>{{ $perbaikan->kode_unik }}</td>
                                                 <td>{{ $perbaikan->nama }}</td>
                                                 <td>{{ $perbaikan->created_at ?? '-' }}</td>
+                                                <td>{{ $perbaikan->transaksi->chosen_payment ?? '-' }}</td>
                                                 <td>
                                                     @php
                                                         $badge_bg = null;

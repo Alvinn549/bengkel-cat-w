@@ -21,6 +21,7 @@
 
     <section class="section dashboard">
         <div class="row">
+            <!-- Filter -->
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
@@ -39,7 +40,7 @@
                                         ];
                                     @endphp
                                     <select class="form-select" name="status" id="status">
-                                        <option value="">Pilih Status</option>
+                                        <option value="">All</option>
                                         @foreach ($status as $item)
                                             <option value="{{ $item }}"
                                                 {{ request('status') == $item ? 'selected' : '' }}>{{ $item }}
@@ -66,27 +67,25 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><!-- End Filter -->
+            <!-- Info -->
             <div class="col-lg-12">
                 <div class="row justify-content-center">
-                    @if ($average_done_in_days != null)
-                        <div class="col-md-6">
-                            <div class="card info-card sales-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Rata-rata Durasi Selesai</h5>
-                                    <div class="d-flex align-items-center">
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-clock"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>{{ $average_done_in_days }} Hari</h6>
-                                        </div>
+                    <div class="col-md-6">
+                        <div class="card info-card sales-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Rata-rata Durasi Selesai</h5>
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-clock"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>{{ $average_done_in_days }} Hari</h6>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    </div>
                     <div class="col-md-6">
                         <div class="card info-card sales-card">
                             <div class="card-body">
@@ -133,7 +132,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><!-- End Info -->
+            <!-- Data -->
             <div class="col-lg-12">
                 <div class="card info-card sales-card">
                     <div class="card-body">
@@ -144,13 +144,15 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Preview</th>
                                     <th>Kode Perbaikan</th>
-                                    <th>Nama Perbaikan</th>
+                                    <th>Nm Perbaikan</th>
+                                    <th>No Plat</th>
+                                    <th>Nm Pelanggan</th>
                                     <th>Es. Durasi</th>
                                     <th>Status</th>
-                                    <th>Selesai Pada</th>
-                                    <th>Terdaftar Sejak</th>
+                                    <th>Masuk</th>
+                                    <th>Selesai</th>
+                                    <th>Kode Transaksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -196,24 +198,20 @@
                                     @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td class="text-center">
-                                            <img src="{{ asset('storage/' . $perbaikan->foto) }}" alt=""
-                                                class="img-fluid rounded"
-                                                style="max-width:100px; max-height:100px; cursor:pointer;"
-                                                onclick="openImage('{{ asset('storage/' . $perbaikan->foto) }}')">
-                                        </td>
                                         <td>{{ $perbaikan->kode_unik }}</td>
                                         <td>{{ $perbaikan->nama }}</td>
+                                        <td>{{ $perbaikan->kendaraan->no_plat ?? '-' }}</td>
+                                        <td>{{ $perbaikan->kendaraan->pelanggan->nama ?? '-' }}</td>
                                         <td class="text-center">
                                             {{ $days }} Hari <br>
-                                            <small class="text-warning">{{ $perbaikan->durasi }}</small>
+                                            <small class="text-warning">{{ $perbaikan->durasi ?? '-' }}</small>
                                         </td>
                                         <td>
-
                                             <span class="badge {{ $badge_bg }}">{{ $perbaikan->status ?? '-' }}</span>
                                         </td>
-                                        <td>{{ $perbaikan->tgl_selesai }}</td>
                                         <td>{{ $perbaikan->created_at }}</td>
+                                        <td>{{ $perbaikan->tgl_selesai ?? '-' }}</td>
+                                        <td>{{ $perbaikan->transaksi->order_id ?? '-' }}</td>
                                     </tr>
                                 @empty
                                 @endforelse
@@ -221,7 +219,7 @@
                         </table>
                     </div>
                 </div>
-            </div>
+            </div><!-- End Data -->
         </div>
     </section>
 @endsection
@@ -240,14 +238,15 @@
 
             $('#datatable').DataTable({
                 dom: 'Bfrtip',
-                buttons: [{
+                buttons: [
+                    'colvis', 'copy', 'csv', 'excel', 'print',
+                    {
                         extend: 'pdfHtml5',
                         orientation: 'landscape',
                         exportOptions: {
                             columns: ':visible'
                         }
                     },
-                    'copy', 'print', 'csv', 'excel', 'colvis'
                 ]
             });
         });

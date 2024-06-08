@@ -4,23 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Pelanggan;
 use App\Models\Perbaikan;
+use App\Models\Transaksi;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
 
 class LaporanController extends Controller
 {
     public function pelanggan()
     {
-        $durasi = request()->input('durasi');
-        $startDate = null;
-        $endDate = null;
+        $durasi = request()->get('durasi');
 
-        if ($durasi) {
-            $dates = explode(" to ", $durasi);
-
-            $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
-            $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
-        }
+        [$startDate, $endDate] = $this->parseDateRange($durasi);
 
         $pelanggans = Pelanggan::with('kendaraans', 'user')
             ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
@@ -39,18 +32,12 @@ class LaporanController extends Controller
 
     public function perbaikan()
     {
-        $durasi = request()->input('durasi');
-        $status = request()->input('status');
-        $startDate = null;
-        $endDate = null;
+        $durasi = request()->get('durasi');
+        $status = request()->get('status');
 
-        if ($durasi != null) {
-            $dates = explode(" to ", $durasi);
-            $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
-            $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
-        }
+        [$startDate, $endDate] = $this->parseDateRange($durasi);
 
-        $perbaikans = Perbaikan::with('kendaraan')
+        $perbaikans = Perbaikan::with('kendaraan', 'transaksi', 'kendaraan.pelanggan')
             ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
                 return $query->whereBetween('created_at', [$startDate, $endDate]);
             })
@@ -100,12 +87,58 @@ class LaporanController extends Controller
 
     public function transaksi()
     {
-        // dd('init transaksi');
-        return view('dashboard.pages.admin.laporan.transaksi.index');
+        $durasi = request()->get('durasi');
+        $status = request()->get('status');
+        $pelanggan = request()->get('pelanggan');
+
+        [$startDate, $endDate] = $this->parseDateRange($durasi);
+
+        $transaksis = Transaksi::with('perbaikan', 'perbaikan.kendaraan', 'perbaikan.kendaraan.pelanggan')
+            ->when($durasi, function ($query) use ($startDate, $endDate) {
+                return $query->whereBetween('created_at', [$startDate, $endDate]);
+            })
+            ->when($status, function ($query) use ($status) {
+                return $query->where('transaction_status', $status);
+            })
+            ->when($pelanggan, function ($query) use ($pelanggan) {
+                return $query->where('pelanggan_id', $pelanggan);
+            })
+            ->latest()
+            ->get();
+
+        $totalIncome = $transaksis->filter(function ($transaksi) {
+            return $transaksi->transaction_status == 'settlement';
+        })->sum('gross_amount');
+
+        $potentialIncome = $transaksis->filter(function ($transaksi) {
+            return $transaksi->transaction_status != 'settlement';
+        })->sum('gross_amount');
+
+        $pelanggans = Pelanggan::with('kendaraans', 'user')->get();
+
+        // dd($totalTransaksiSelesai);
+
+        return view('dashboard.pages.admin.laporan.transaksi.index', compact('transaksis', 'totalIncome', 'potentialIncome', 'pelanggans'));
     }
 
-    public function pekerja()
+    private function parseDateRange($durasi)
     {
-        return view('dashboard.pages.admin.laporan.pekerja.index');
+        $startDate = null;
+        $endDate = null;
+
+        if ($durasi) {
+            $dates = explode(" to ", $durasi);
+
+            if (count($dates) == 1) {
+                $dates[1] = $dates[0];
+            }
+
+            if (isset($dates[0]) && isset($dates[1])) {
+                $startDate = Carbon::createFromFormat('d-m-Y', trim($dates[0]))->startOfDay();
+                $endDate = Carbon::createFromFormat('d-m-Y', trim($dates[1]))->endOfDay();
+            }
+        }
+
+        return [$startDate, $endDate];
     }
 }

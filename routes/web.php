@@ -143,7 +143,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/laporan/pelanggan', [LaporanController::class, 'pelanggan'])->name('laporan.pelanggan');
             Route::get('/laporan/perbaikan', [LaporanController::class, 'perbaikan'])->name('laporan.perbaikan');
             Route::get('/laporan/transaksi', [LaporanController::class, 'transaksi'])->name('laporan.transaksi');
-            Route::get('/laporan/pekerja', [LaporanController::class, 'pekerja'])->name('laporan.pekerja');
         });
     });
 });
