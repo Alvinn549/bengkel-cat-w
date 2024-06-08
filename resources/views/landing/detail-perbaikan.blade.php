@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <link href="{{ asset('assets/dashboard/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
+    <!-- Favicons -->
+    <link href="{{ asset('assets/letter-w.png') }}" rel="icon">
+    <link href="{{ asset('assets/letter-w.png') }}" rel="apple-touch-icon">
+
+    <link href="{{ asset('assets/dashboard/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"
+        type="text/css">
     <link href="{{ asset('assets/landing/css/detail-perbaikan.css') }}" rel="stylesheet">
 
     <title>Detail Perbaikan</title>
@@ -18,8 +23,7 @@
             <div class="col-lg-6 mb-3">
                 <div class="card shadow">
                     <div class="card-body">
-                        <h5 class="card-title">Detail Perbaikan</h5>
-                        <hr>
+                        <h5 class="card-title mb-3">Detail Perbaikan</h5>
                         <center>
                             @if ($perbaikan->foto)
                                 <img src="{{ asset('storage/' . $perbaikan->foto) }}" class="img-fluid rounded"
@@ -80,32 +84,25 @@
                             <tr>
                                 @php
                                     $badge_bg = null;
-                                    $btn_color = null;
 
                                     switch ($perbaikan->status) {
                                         case 'Selesai':
                                             $badge_bg = 'bg-success';
-                                            $btn_color = 'success';
                                             break;
                                         case 'Baru':
                                             $badge_bg = 'bg-info';
-                                            $btn_color = 'info';
                                             break;
                                         case 'Antrian':
                                             $badge_bg = 'bg-primary';
-                                            $btn_color = 'primary';
                                             break;
                                         case 'Dalam Proses':
                                             $badge_bg = 'bg-secondary';
-                                            $btn_color = 'secondary';
                                             break;
                                         case 'Menunggu Bayar':
                                             $badge_bg = 'bg-warning';
-                                            $btn_color = 'warning';
                                             break;
                                         default:
                                             $badge_bg = 'bg-dark';
-                                            $btn_color = 'dark';
                                             break;
                                     }
                                 @endphp
@@ -127,9 +124,7 @@
                                     stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
                             </symbol>
                         </svg>
-                        <h5 class="card-title">Progres Perbaikan</h5>
-                        <hr>
-
+                        <h5 class="card-title mb-3">Progres Perbaikan</h5>
                         @if ($perbaikan->progres->count() > 0)
                             <div id="timeline" class="timeline">
                                 <div class="btn-group">

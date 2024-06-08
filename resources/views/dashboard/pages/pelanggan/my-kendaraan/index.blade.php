@@ -23,12 +23,7 @@
                 <div class="col-md-4">
                     <div class="card" style=" height: 100%;">
                         <div class="card-body">
-                            <h5 class="card-title text-center">
-                                <span class="badge bg-secondary text-white rounded-pill"
-                                    style="font-size: 16px">{{ $kendaraan->no_plat }}</span>
-                            </h5>
-
-                            <div class="row g-3">
+                            <div class="row g-3 mt-2">
                                 <div class="col-md-12 d-flex justify-content-center" style="height: 200px;">
                                     @if ($kendaraan->foto)
                                         <img src="{{ asset('storage/' . $kendaraan->foto) }}" class="img-fluid rounded"
@@ -39,7 +34,7 @@
                                     @endif
                                 </div>
                                 <div class="col-md-12">
-                                    <table class="table table-borderless">
+                                    <table class="table ">
                                         <tr>
                                             <th nowrap>No Plat</th>
                                             <td>{{ $kendaraan->no_plat }}</td>

@@ -135,7 +135,7 @@ class KendaraanController extends Controller
         $kendaraan->load('merek');
 
         return view('dashboard.pages.admin.kendaraan.edit', compact(
-            'pageTittle',
+            'pageTitle',
             'kendaraan',
             'pelanggans',
             'tipes',

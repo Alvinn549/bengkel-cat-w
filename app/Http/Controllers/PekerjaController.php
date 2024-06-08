@@ -14,9 +14,9 @@ class PekerjaController extends Controller
 
     public function index()
     {
-        $pageTittle = 'Pekerja';
+        $pageTitle = 'Pekerja';
 
-        return view('dashboard.pages.admin.pekerja.index', compact('pageTittle'));
+        return view('dashboard.pages.admin.pekerja.index', compact('pageTitle'));
     }
 
     public function dataTablePekerja()
@@ -34,9 +34,9 @@ class PekerjaController extends Controller
 
     public function create()
     {
-        $pageTittle = 'Tambah Pekerja';
+        $pageTitle = 'Tambah Pekerja';
 
-        return view('dashboard.pages.admin.pekerja.create', compact('pageTittle'));
+        return view('dashboard.pages.admin.pekerja.create', compact('pageTitle'));
     }
 
     public function store(Request $request)
@@ -101,10 +101,10 @@ class PekerjaController extends Controller
 
     public function edit(Pekerja $pekerja)
     {
-        $pageTittle = 'Edit Pekerja';
+        $pageTitle = 'Edit Pekerja';
 
         return view('dashboard.pages.admin.pekerja.edit', compact(
-            'pageTittle',
+            'pageTitle',
             'pekerja'
         ));
     }
