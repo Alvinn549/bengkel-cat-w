@@ -2,7 +2,7 @@
 
     <div class="d-flex align-items-center justify-content-between">
         <a href="{{ route('home') }}" target="_blank" class="logo d-flex align-items-center">
-            <img src="{{ asset('assets/dashboard/img/logo.png') }}" class="me-3" alt="">
+            <img src="{{ asset('assets/letter-w.png') }}" class="me-3" alt="">
             @php
                 $profil_bengkel = \App\Models\Settings::first();
                 $master_nama = $profil_bengkel->master_nama ?? '';

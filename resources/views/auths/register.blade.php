@@ -10,8 +10,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/dashboard/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/dashboard/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/letter-w.png') }}" rel="icon">
+    <link href="{{ asset('assets/letter-w.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -32,32 +32,24 @@
 
     <main>
         <div class="container">
-
             <section
                 class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-                            @php
-                                $profil_bengkel = \App\Models\Settings::first();
-                            @endphp
                             <div class="d-flex text-center justify-content-center py-4">
                                 <a href="{{ route('home') }}" class="logo  align-items-center w-auto">
-                                    <img src="{{ asset('assets/dashboard/img/logo.png') }}" alt="">
-                                    <span class="d-none d-lg-block mt-3">{{ $profil_bengkel->master_nama ?? '' }}</span>
+                                    <img src="{{ asset('assets/letter-w.png') }}" alt="">
                                 </a>
                             </div><!-- End Logo -->
-
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="pt-4 pb-2">
                                         <h5 class="card-title text-center pb-0 fs-4">Buat Akun</h5>
                                         <p class="text-center small">Masukkan data diri Anda untuk membuat akun</p>
                                     </div>
-
                                     <form class="row g-3" action="{{ route('doRegister') }}" method="POST">
                                         @csrf()
-
                                         <div class="col-12">
                                             <label for="yourName" class="form-label">Nama Lengkap</label>
                                             <input type="text" name="nama"
@@ -68,7 +60,6 @@
                                                 </div>
                                             @enderror
                                         </div>
-
                                         <div class="col-12">
                                             <label for="yourEmail" class="form-label">Alamat Email Anda</label>
                                             <input type="email" name="email"
@@ -80,7 +71,6 @@
                                                 </div>
                                             @enderror
                                         </div>
-
                                         <div class="col-12">
                                             <label for="yourPassword" class="form-label">Password</label>
                                             <input type="password" name="password"
@@ -92,14 +82,12 @@
                                                 </div>
                                             @enderror
                                         </div>
-
                                         <div class="col-12">
                                             <div class="form-check">
                                                 <input class="form-check-input @error('terms') is-invalid @enderror"
                                                     name="terms" type="checkbox" value="true" id="acceptTerms">
                                                 <label class="form-check-label" for="acceptTerms">Saya setuju dan
-                                                    menyetujui
-                                                    <a href="#">syarat dan ketentuan</a>
+                                                    menyetujui syarat dan ketentuan
                                                 </label>
                                             </div>
                                         </div>
@@ -110,12 +98,11 @@
                                             </button>
                                         </div>
                                         <div class="col-12">
-                                            <p class="small mb-0">Sudah punya akun? <a
-                                                    href="{{ route('login') }}">Masuk</a>
+                                            <p class="small mb-0">Sudah punya akun?
+                                                <a href="{{ route('login') }}">Masuk</a>
                                             </p>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>

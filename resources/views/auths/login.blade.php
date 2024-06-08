@@ -10,8 +10,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/dashboard/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/dashboard/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/letter-w.png') }}" rel="icon">
+    <link href="{{ asset('assets/letter-w.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -26,6 +26,29 @@
     <!-- Template Main CSS File -->
     <link href="{{ asset('assets/dashboard/css/style.css') }}" rel="stylesheet">
 
+    <style>
+        .input-group.has-validation .form-control.is-invalid {
+            border-color: #dc3545;
+            /* Bootstrap's red color for invalid state */
+        }
+
+        .input-group.has-validation .btn-outline-secondary {
+            border: 1px solid #ced4da;
+            /* Default border color */
+            border-left: none;
+            /* Remove left border to merge with input */
+        }
+
+        .input-group.has-validation .btn-outline-secondary.is-invalid {
+            border-color: #dc3545;
+            /* Bootstrap's red color for invalid state */
+        }
+
+        .input-group .btn-outline-secondary {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+    </style>
 </head>
 
 <body>
@@ -37,20 +60,13 @@
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-                            @php
-                                $profil_bengkel = \App\Models\Settings::first();
-                            @endphp
                             <div class="d-flex text-center justify-content-center py-4">
                                 <a href="{{ route('home') }}" class="logo align-items-center w-auto">
-                                    <img src="{{ asset('assets/dashboard/img/logo.png') }}" alt="">
-                                    <span class="d-none d-lg-block mt-3">{{ $profil_bengkel->master_nama ?? '' }}</span>
+                                    <img src="{{ asset('assets/letter-w.png') }}" alt="">
                                 </a>
                             </div><!-- End Logo -->
-
                             <div class="card mb-3">
-
                                 <div class="card-body">
-
                                     <div class="pt-4 pb-2">
                                         @if (session('error'))
                                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -62,7 +78,6 @@
                                         <h5 class="card-title text-center pb-0 fs-4">Masuk ke Akun Anda</h5>
                                         <p class="text-center small">Masukkan email dan kata sandi Anda untuk masuk</p>
                                     </div>
-
                                     <form method="POST" action="{{ route('do-login') }}" class="row g-3" novalidate>
                                         @csrf
                                         <div class="col-12">
@@ -78,19 +93,24 @@
                                                 @enderror
                                             </div>
                                         </div>
-
                                         <div class="col-12">
                                             <label for="yourPassword" class="form-label">Password</label>
-                                            <input type="password" name="password"
-                                                class="form-control @error('password') is-invalid @enderror"
-                                                id="yourPassword">
-                                            @error('password')
-                                                <div class="invalid-feedback">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+                                            <div class="input-group has-validation">
+                                                <input type="password" name="password"
+                                                    class="form-control @error('password') is-invalid @enderror"
+                                                    id="yourPassword">
+                                                <button
+                                                    class="btn btn-outline-secondary @error('password') is-invalid @enderror"
+                                                    type="button" id="togglePassword">
+                                                    <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
+                                                </button>
+                                                @error('password')
+                                                    <div class="invalid-feedback">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
                                         </div>
-
                                         <div class="col-12">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" name="remember"
@@ -100,15 +120,15 @@
                                         </div>
                                         <div class="col-12">
                                             <button class="btn btn-primary w-100" type="submit"><i
-                                                    class="bi bi-box-arrow-in-right me-1"></i> Login</button>
+                                                    class="bi bi-box-arrow-in-right me-1"></i> Login
+                                            </button>
                                         </div>
                                         <div class="col-12">
-                                            <p class="small mb-0">Tidak punya akun? <a
-                                                    href="{{ route('register') }}">Buat akun</a>
+                                            <p class="small mb-0">Tidak punya akun?
+                                                <a href="{{ route('register') }}">Buat akun</a>
                                             </p>
                                         </div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
@@ -120,6 +140,19 @@
 
     <!-- Vendor JS Files -->
     <script src="{{ asset('assets/dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function(e) {
+            const password = document.getElementById('yourPassword');
+            const icon = document.getElementById('togglePasswordIcon');
+
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+
+            icon.classList.toggle('bi-eye');
+            icon.classList.toggle('bi-eye-slash');
+        });
+    </script>
 
 </body>
 

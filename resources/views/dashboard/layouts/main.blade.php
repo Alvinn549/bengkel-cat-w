@@ -11,8 +11,8 @@
     <meta content="" name="keywords">
 
     <!-- Favicons -->
-    <link href="{{ asset('assets/dashboard/img/favicon.png') }}" rel="icon">
-    <link href="{{ asset('assets/dashboard/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/letter-w.png') }}" rel="icon">
+    <link href="{{ asset('assets/letter-w.png') }}" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
@@ -108,14 +108,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
+
     <!-- Template Main JS File -->
     <script src="{{ asset('assets/dashboard/js/main.js') }}"></script>
 
-    @if (auth()->user()->role == 'pelanggan' || auth()->user()->role == 'pekerja')
+    {{-- @if (auth()->user()->role == 'pelanggan' || auth()->user()->role == 'pekerja')
         <script>
             document.querySelector('body').classList.add('toggle-sidebar');
         </script>
-    @endif
+    @endif --}}
 
     @yield('js')
 </body>
