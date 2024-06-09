@@ -200,9 +200,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/proses-perbaikan-menunggu-bayar/{perbaikan}', [DashboardAdminController::class, 'prosesPerbaikanMenungguBayar'])
                 ->name('dashboard.admin.proses-menunggu-bayar');
 
-            Route::put('/proses-perbaikan-menunggu-bayar/{perbaikan}/put', [DashboardAdminController::class, 'prosesPerbaikanMenungguBayarPut'])
-                ->name('dashboard.admin.proses-menunggu-bayar-put');
-
             Route::post('/konfirmasi-pembayaran-cash', [DashboardAdminController::class, 'konfirmasiPembayaranCash'])
                 ->name('dashboard.admin.konfirmasi-pembayaran-cash');
 

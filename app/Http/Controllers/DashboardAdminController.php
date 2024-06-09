@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ChangedStatusPerbaikanMail;
+use App\Mail\TransaksiCreatedMail;
+use App\Mail\TransaksiSelesaiMail;
 use App\Models\Perbaikan;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class DashboardAdminController extends Controller
@@ -168,6 +173,12 @@ class DashboardAdminController extends Controller
             'biaya' => $biaya
         ]);
 
+        try {
+            Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
+
         $pelanggan = $perbaikan->kendaraan->pelanggan;
 
         $fullName = explode(' ', $pelanggan->nama);
@@ -178,7 +189,7 @@ class DashboardAdminController extends Controller
             $lastName = end($fullName);
         }
 
-        Transaksi::updateOrCreate(
+        $transaksi = Transaksi::updateOrCreate(
             ['order_id' => 'tr-' . $perbaikan->kode_unik],
             [
                 'perbaikan_id' => $perbaikan->id,
@@ -192,6 +203,12 @@ class DashboardAdminController extends Controller
                 'transaction_status' => 'pending',
             ]
         );
+
+        try {
+            Mail::to($transaksi->email)->send(new TransaksiCreatedMail($transaksi));
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
 
         Alert::success('Perbaikan Selesai', 'Perbaikan telah di rubah statusnya dan transaksi telah dibuat');
 
@@ -233,48 +250,15 @@ class DashboardAdminController extends Controller
             'tgl_selesai' => now(),
         ]);
 
+        try {
+            Mail::to($transaksi->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+
+            Mail::to($transaksi->email)->send(new TransaksiSelesaiMail($transaksi));
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
+
         Alert::success('Perbaikan dan Transaksi Selesai', 'Perbaikan dan transaksi telah selesai');
-
-        return redirect()->route('dashboard.admin.list-perbaikan-menunggu-bayar');
-    }
-
-    public function prosesPerbaikanMenungguBayarPut(Request $request, Perbaikan $perbaikan)
-    {
-        // dd($request->all());
-
-        $request->validate([
-            'biaya' => ['required', 'string'],
-        ], [
-            'biaya.required' => 'Biaya tidak boleh kosong',
-        ]);
-
-        $perbaikan->update([
-            'status' => 'Menunggu Bayar'
-        ]);
-
-        $biaya = (int) str_replace(',', '', $request->biaya);
-
-        $pelanggan = $perbaikan->kendaraan->pelanggan;
-
-        $fullName = explode(' ', $pelanggan->nama);
-        $firstName = $fullName[0];
-        $lastName = isset($fullName[1]) ? $fullName[1] : null;
-
-        Transaksi::updateOrCreate(
-            ['order_id' => 'tr-' . $perbaikan->kode_unik],
-            [
-                'perbaikan_id' => $perbaikan->id,
-                'pelanggan_id' => $pelanggan->id,
-                'gross_amount' => $biaya,
-                'transaction_status' => 'New',
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'email' => $pelanggan->user->email,
-                'phone' => $pelanggan->no_telp,
-            ]
-        );
-
-        Alert::success('Perbaikan Selesai', 'Perbaikan telah selesai dan transaksi telah dibuat');
 
         return redirect()->route('dashboard.admin.list-perbaikan-menunggu-bayar');
     }

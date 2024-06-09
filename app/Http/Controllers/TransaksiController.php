@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ChangedStatusPerbaikanMail;
+use App\Mail\TransaksiSelesaiMail;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Yajra\DataTables\Facades\DataTables;
 use RealRashid\SweetAlert\Facades\Alert;
 use Midtrans\Config;
@@ -193,6 +196,14 @@ class TransaksiController extends Controller
                 'tgl_selesai' => now(),
             ]);
 
+            try {
+                Mail::to($getTransaksi->email)->send(new ChangedStatusPerbaikanMail($getPerbaikan));
+
+                Mail::to($getTransaksi->email)->send(new TransaksiSelesaiMail($getTransaksi));
+            } catch (\Exception $e) {
+                Log::error($e);
+            }
+
             Alert::success('Pembayaran', 'Pembayaran berhasil dan transaksi telah selesai !');
 
             return redirect()->route('dashboard.pelanggan.index');
@@ -274,6 +285,14 @@ class TransaksiController extends Controller
                 ]);
 
                 Log::channel('midtrans')->info('Transaction settled', ['order_id' => $order_id, 'bank' => $bank]);
+
+                try {
+                    Mail::to($getTransaksi->email)->send(new ChangedStatusPerbaikanMail($getPerbaikan));
+
+                    Mail::to($getTransaksi->email)->send(new TransaksiSelesaiMail($getTransaksi));
+                } catch (\Exception $e) {
+                    Log::error($e);
+                }
             } elseif ($transaction_status == 'pending' && $status_code == 201) {
                 $getTransaksi->update([
                     'transaction_status' => $transaction_status,
