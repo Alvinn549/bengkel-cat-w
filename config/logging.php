@@ -54,6 +54,12 @@ return [
             'level' => 'debug',
         ],
 
+        'mail' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/mail.log'),
+            'level' => 'debug',
+        ],
+
         'wablas' => [
             'driver' => 'single',
             'path' => storage_path('logs/wablas.log'),
