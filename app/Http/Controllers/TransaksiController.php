@@ -201,7 +201,7 @@ class TransaksiController extends Controller
 
                 Mail::to($getTransaksi->email)->send(new TransaksiSelesaiMail($getTransaksi));
             } catch (\Exception $e) {
-                Log::error($e);
+                Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
             }
 
             Alert::success('Pembayaran', 'Pembayaran berhasil dan transaksi telah selesai !');
@@ -291,7 +291,7 @@ class TransaksiController extends Controller
 
                     Mail::to($getTransaksi->email)->send(new TransaksiSelesaiMail($getTransaksi));
                 } catch (\Exception $e) {
-                    Log::error($e);
+                    Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                 }
             } elseif ($transaction_status == 'pending' && $status_code == 201) {
                 $getTransaksi->update([

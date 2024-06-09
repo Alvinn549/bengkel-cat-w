@@ -176,7 +176,7 @@ class DashboardAdminController extends Controller
         try {
             Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
 
         $pelanggan = $perbaikan->kendaraan->pelanggan;
@@ -207,7 +207,7 @@ class DashboardAdminController extends Controller
         try {
             Mail::to($transaksi->email)->send(new TransaksiCreatedMail($transaksi));
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
 
         Alert::success('Perbaikan Selesai', 'Perbaikan telah di rubah statusnya dan transaksi telah dibuat');
@@ -255,7 +255,7 @@ class DashboardAdminController extends Controller
 
             Mail::to($transaksi->email)->send(new TransaksiSelesaiMail($transaksi));
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
 
         Alert::success('Perbaikan dan Transaksi Selesai', 'Perbaikan dan transaksi telah selesai');

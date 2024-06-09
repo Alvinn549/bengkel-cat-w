@@ -52,7 +52,7 @@ class DashboardPekerjaController extends Controller
         try {
             Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
 
         Progres::create([
@@ -90,7 +90,7 @@ class DashboardPekerjaController extends Controller
         try {
             Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
 
         Progres::create([
@@ -167,7 +167,7 @@ class DashboardPekerjaController extends Controller
                     try {
                         Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
                     } catch (\Exception $e) {
-                        Log::error($e);
+                        Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                     }
 
                     if ($request->hasFile('foto')) {
@@ -185,7 +185,7 @@ class DashboardPekerjaController extends Controller
                     try {
                         Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new AddedProgresPerbaikanMail($progres));
                     } catch (\Exception $e) {
-                        Log::error($e);
+                        Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                     }
 
                     return response()->json([
@@ -210,7 +210,7 @@ class DashboardPekerjaController extends Controller
                 try {
                     Mail::to($progres->perbaikan->kendaraan->pelanggan->user->email)->send(new AddedProgresPerbaikanMail($progres));
                 } catch (\Exception $e) {
-                    Log::error($e);
+                    Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                 }
 
                 return response()->json([

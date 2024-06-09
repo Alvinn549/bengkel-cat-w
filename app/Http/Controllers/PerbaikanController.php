@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\WablasNotification;
 use App\Mail\RegisteredPerbaikanMail;
 use App\Models\Kendaraan;
 use App\Models\Perbaikan;
@@ -72,9 +73,58 @@ class PerbaikanController extends Controller
         ]);
 
         try {
-            Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new RegisteredPerbaikanMail($perbaikan));
+            Mail::to($kendaraan->pelanggan->user->email)->send(new RegisteredPerbaikanMail($perbaikan));
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $kendaraan->pelanggan->user->email]);
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
+        }
+
+        try {
+            $phone = $perbaikan->kendaraan->pelanggan->no_telp;
+            $merek = $perbaikan->kendaraan->merek->nama_merek;
+            $tipe = $perbaikan->kendaraan->tipe->nama_tipe;
+            $noPlat = $perbaikan->kendaraan->no_plat;
+
+            $namaPerbaikan = $perbaikan->nama;
+            $keteranganPerbaikan = $perbaikan->keterangan;
+            $durasiPerbaikan = $perbaikan->durasi;
+            $statusPerbaikan = $perbaikan->status;
+
+            $message = "Halo, " . $perbaikan->kendaraan->pelanggan->nama . "!\n\n" .
+                "Kendaraan Anda dengan detail berikut:\n\n" .
+                "*Merek:* " . $merek . "\n" .
+                "*Tipe:* " . $tipe . "\n" .
+                "*Nomor Plat:* " . $noPlat . "\n\n" .
+                "Perbaikan terbaru:\n\n" .
+                "*Nama Perbaikan:* " . $namaPerbaikan . "\n" .
+                "*Keterangan:* " . $keteranganPerbaikan . "\n" .
+                "*Durasi:* " . $durasiPerbaikan . "\n" .
+                "*Status:* " . $statusPerbaikan . "\n\n" .
+                "Telah berhasil didaftarkan di sistem kami.\n" .
+                "Terima kasih telah mempercayakan layanan kami.\n\n" .
+                "Salam,\n" .
+                "-Tim Bengkel Cat Wijayanto";
+
+            $wablasNotification = new WablasNotification();
+
+            $wablasNotification->setPhone($phone);
+            $wablasNotification->setMessage($message);
+
+            $response = $wablasNotification->sendMessage();
+
+            if ($response['status'] !== 200) {
+                Log::channel('wablas')->error('Gagal mengirim notifikasi ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            } else {
+                Log::channel('wablas')->info('Notifikasi berhasil dikirim ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('wablas')->error('Gagal mengirim notifikasi: ', ['error' => $e->getMessage()]);
         }
 
         Alert::toast('<p style="color: white; margin-top: 15px;">' . $perbaikan->nama . ' berhasil ditambahkan!</p>', 'success')

@@ -25,7 +25,7 @@ class VerificationController extends Controller
         try {
             Mail::to($request->user())->send(new WelcomeMail($request->user()->pelanggan->nama));
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
 
         return redirect()->route('dashboard')
