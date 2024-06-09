@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\WablasNotification;
 use App\Mail\RegisteredCarMail;
 use App\Models\Kendaraan;
 use App\Models\Merek;
@@ -105,8 +106,47 @@ class KendaraanController extends Controller
 
         try {
             Mail::to($kendaraan->pelanggan->user->email)->send(new RegisteredCarMail($kendaraan));
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $kendaraan->pelanggan->user->email]);
         } catch (\Exception $e) {
-            Log::error($e);
+            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
+        }
+
+        try {
+            $phone = $kendaraan->pelanggan->no_telp;
+            $merek = $kendaraan->merek->nama_merek;
+            $tipe = $kendaraan->tipe->nama_tipe;
+            $noPlat = $kendaraan->no_plat;
+
+            $message = "Halo, " . $kendaraan->pelanggan->nama . "!\n\n" .
+                "Kendaraan Anda dengan detail berikut:\n\n" .
+                "*Merek:* " . $merek . "\n" .
+                "*Tipe:* " . $tipe . "\n" .
+                "*Nomor Plat:* " . $noPlat . "\n\n" .
+                "Telah berhasil didaftarkan di sistem kami\n" .
+                "Terima kasih telah mempercayakan layanan kami.\n" .
+                "Salam,\n" .
+                "-Tim Bengkel Cat Wijayanto";
+
+            $wablasNotification = new WablasNotification();
+
+            $wablasNotification->setPhone($phone);
+            $wablasNotification->setMessage($message);
+
+            $response = $wablasNotification->sendMessage();
+
+            if ($response['status'] !== 200) {
+                Log::channel('wablas')->error('Gagal mengirim notifikasi ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            } else {
+                Log::channel('wablas')->info('Notifikasi berhasil dikirim ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('wablas')->error('Gagal mengirim notifikasi: ', ['error' => $e->getMessage()]);
         }
 
         Alert::toast('<p style="color: white; margin-top: 10px;">' . $kendaraan->no_plat . ' berhasil ditambahkan!</p>', 'success')
