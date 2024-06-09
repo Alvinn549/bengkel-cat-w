@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ChangedStatusPerbaikanMail;
 use App\Models\Perbaikan;
 use App\Models\Progres;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class DashboardPekerjaController extends Controller
@@ -45,6 +48,12 @@ class DashboardPekerjaController extends Controller
     {
         $perbaikan->update(['status' => 'Antrian']);
 
+        try {
+            Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
+
         Progres::create([
             'perbaikan_id' => $perbaikan->id,
             'pekerja_id' => auth()->user()->pekerja->id,
@@ -76,6 +85,12 @@ class DashboardPekerjaController extends Controller
     public function prosesPerbaikanAntrian(Perbaikan $perbaikan)
     {
         $perbaikan->update(['status' => 'Dalam proses']);
+
+        try {
+            Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
 
         Progres::create([
             'perbaikan_id' => $perbaikan->id,

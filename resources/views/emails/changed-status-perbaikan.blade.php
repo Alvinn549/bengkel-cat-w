@@ -74,9 +74,9 @@
 
 <body>
     <div class="container">
-        <h2>Perbaikan Anda Telah Terdaftar</h2>
+        <h2>Status Perbaikan Berubah</h2>
         <p>Halo {{ $perbaikan->kendaraan->pelanggan->nama }},</p>
-        <p>Perbaikan Anda telah berhasil terdaftar dengan detail berikut:</p>
+        <p>Status perbaikan kendaraan Anda telah berubah. Berikut adalah detail terbaru perbaikan Anda:</p>
         <table>
             <tr>
                 <th>Kode</th>
@@ -104,14 +104,15 @@
             </tr>
             <tr>
                 <th>Tanggal</th>
-                <td>{{ $perbaikan->created_at }}</td>
+                <td>{{ $perbaikan->updated_at }}</td>
             </tr>
         </table>
         <a href="{{ route('home.detail-perbaikan', $perbaikan->id) }}" class="button" style="color: white;">Lihat
             Detail</a>
-        <p>Terima kasih telah mendaftarkan perbaikan Anda di Bengkel Cat Wijayanto.</p>
+        <p>Terima kasih telah mempercayakan perbaikan kendaraan Anda pada Bengkel Cat Wijayanto. Jika Anda memiliki
+            pertanyaan lebih lanjut, jangan ragu untuk menghubungi kami.</p>
         <p>Salam,</p>
-        <p>-Tim Bengkel Cat Wijayanto</p>
+        <p>- Tim Bengkel Cat Wijayanto</p>
         <div class="footer">
             &copy; <?php echo date('Y'); ?> Bengkel Cat Wijayanto. Semua hak dilindungi.
         </div>
