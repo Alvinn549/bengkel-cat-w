@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\WelcomeMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class VerificationController extends Controller
 {
@@ -19,8 +22,14 @@ class VerificationController extends Controller
     {
         $request->fulfill();
 
+        try {
+            Mail::to($request->user())->send(new WelcomeMail($request->user()->pelanggan->nama));
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
+
         return redirect()->route('dashboard')
-            ->withSuccess('Your email has been verified.');
+            ->withSuccess('Email berhasil diverifikasi');
     }
 
     public function resend(Request $request)
@@ -28,7 +37,7 @@ class VerificationController extends Controller
         $request->user()->sendEmailVerificationNotification();
 
         return back()
-            ->withSuccess('A fresh verification link has been sent to your email address.');
+            ->withSuccess('Link verifikasi yang baru telah dikirim');
     }
 
     public function changeEmail(Request $request)
@@ -51,6 +60,6 @@ class VerificationController extends Controller
         event(new Registered($user));
 
         return redirect()->route('verification.notice')
-            ->with('success', 'Email Berhasil diubah dan link verifikasi telah dikirim');
+            ->with('success', 'Email Berhasil diubah dan link verifikasi yang baru telah dikirim');
     }
 }

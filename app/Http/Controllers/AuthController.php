@@ -51,7 +51,7 @@ class AuthController extends Controller
         $request->session()->regenerate();
 
         return redirect()->route('verification.notice')
-            ->with('success', 'Registrasi Berhasil Silahkan Verifikasi Email Anda');
+            ->with('success', 'Registrasi berhasil, silahkan verifikasi Email anda');
     }
 
     public function doLogin(Request $request)

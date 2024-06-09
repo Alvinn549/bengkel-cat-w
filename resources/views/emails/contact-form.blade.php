@@ -63,7 +63,7 @@
         <p><span class="strong">Message:</span> {{ $pesan }}</p>
     </div>
     <div class="footer">
-        &copy; 2024 Your Company. All rights reserved.
+        &copy; 2024 Bengkel Cat Wijayanto. All rights reserved.
     </div>
 </body>
 

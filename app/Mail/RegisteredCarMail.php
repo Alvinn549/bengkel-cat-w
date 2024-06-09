@@ -9,34 +9,49 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactFormMail extends Mailable
+class RegisteredCarMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(private $name, private $email, private $pesan)
+    /**
+     * Create a new message instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
         //
     }
 
+    /**
+     * Get the message envelope.
+     *
+     * @return \Illuminate\Mail\Mailables\Envelope
+     */
     public function envelope()
     {
         return new Envelope(
-            subject: 'Contact Form',
+            subject: 'Registered Car Mail',
         );
     }
 
+    /**
+     * Get the message content definition.
+     *
+     * @return \Illuminate\Mail\Mailables\Content
+     */
     public function content()
     {
         return new Content(
-            view: 'emails.contact-form',
-            with: [
-                'name' => $this->name,
-                'email' => $this->email,
-                'pesan' => $this->pesan
-            ]
+            view: 'view.name',
         );
     }
 
+    /**
+     * Get the attachments for the message.
+     *
+     * @return array
+     */
     public function attachments()
     {
         return [];
