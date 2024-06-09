@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegisteredPerbaikanMail;
 use App\Models\Kendaraan;
 use App\Models\Perbaikan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
@@ -67,6 +70,12 @@ class PerbaikanController extends Controller
             'status' => $request->status,
             'durasi' => $request->durasi,
         ]);
+
+        try {
+            Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new RegisteredPerbaikanMail($perbaikan));
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
 
         Alert::toast('<p style="color: white; margin-top: 15px;">' . $perbaikan->nama . ' berhasil ditambahkan!</p>', 'success')
             ->toHtml()

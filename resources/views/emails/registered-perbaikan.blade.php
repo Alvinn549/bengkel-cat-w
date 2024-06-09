@@ -62,30 +62,38 @@
 
 <body>
     <div class="container">
-        <h2>Kendaraan Anda Telah Terdaftar</h2>
-        <p>Halo {{ $kendaraan->pelanggan->nama }},</p>
-        <p>Kendaraan Anda telah berhasil terdaftar dengan detail berikut:</p>
+        <h2>Perbaikan Anda Telah Terdaftar</h2>
+        <p>Halo {{ $perbaikan->kendaraan->pelanggan->nama }},</p>
+        <p>Perbaikan Anda telah berhasil terdaftar dengan detail berikut:</p>
         <table>
             <tr>
-                <th>Nomor Plat</th>
-                <td>{{ $kendaraan->no_plat }}</td>
+                <th>Kode</th>
+                <td>{{ $perbaikan->kode_unik }}</td>
             </tr>
             <tr>
-                <th>Tipe</th>
-                <td>{{ $kendaraan->tipe->nama_tipe }}</td>
+                <th>Nomor Plat Kendaraan</th>
+                <td>{{ $perbaikan->kendaraan->no_plat }}</td>
             </tr>
             <tr>
-                <th>Merek</th>
-                <td>{{ $kendaraan->merek->nama_merek }}</td>
+                <th>Nama Perbaikan</th>
+                <td>{{ $perbaikan->nama }}</td>
+            </tr>
+            <tr>
+                <th>Keterangan</th>
+                <td>{{ $perbaikan->keterangan }}</td>
+            </tr>
+            <tr>
+                <th>Estimasi Durasi</th>
+                <td>{{ $perbaikan->durasi }}</td>
             </tr>
             <tr>
                 <th>Tanggal</th>
-                <td>{{ $kendaraan->created_at }}</td>
+                <td>{{ $perbaikan->created_at }}</td>
             </tr>
         </table>
-        <p>Terima kasih telah mendaftarkan kendaraan Anda di Bengkel Cat Wijayanto.</p>
+        <p>Terima kasih telah mendaftarkan perbaikan Anda di Bengkel Cat Wijayanto.</p>
         <p>Salam,</p>
-        <p>-Tim Bengkel Cat Wijayanto</p>
+        <p>- Tim Bengkel Cat Wijayanto</p>
         <div class="footer">
             &copy; <?php echo date('Y'); ?> Bengkel Cat Wijayanto. Semua hak dilindungi.
         </div>
