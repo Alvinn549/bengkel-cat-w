@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\WablasNotification;
 use App\Mail\ChangedStatusPerbaikanMail;
 use App\Mail\TransaksiSelesaiMail;
 use App\Models\Transaksi;
@@ -197,9 +198,15 @@ class TransaksiController extends Controller
             ]);
 
             try {
-                Mail::to($getTransaksi->email)->send(new ChangedStatusPerbaikanMail($getPerbaikan));
+                $email = $getTransaksi->email;
 
-                Mail::to($getTransaksi->email)->send(new TransaksiSelesaiMail($getTransaksi));
+                Mail::to($email)->send(new ChangedStatusPerbaikanMail($getPerbaikan));
+                Mail::to($email)->send(new TransaksiSelesaiMail($getTransaksi));
+
+                Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
+
+                $this->sendWhatsappNotificationChangedStatus($getPerbaikan);
+                $this->sendWhatsappNotificationTransaksiDone($getTransaksi);
             } catch (\Exception $e) {
                 Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
             }
@@ -287,9 +294,15 @@ class TransaksiController extends Controller
                 Log::channel('midtrans')->info('Transaction settled', ['order_id' => $order_id, 'bank' => $bank]);
 
                 try {
-                    Mail::to($getTransaksi->email)->send(new ChangedStatusPerbaikanMail($getPerbaikan));
+                    $email = $getTransaksi->email;
 
-                    Mail::to($getTransaksi->email)->send(new TransaksiSelesaiMail($getTransaksi));
+                    Mail::to($email)->send(new ChangedStatusPerbaikanMail($getPerbaikan));
+                    Mail::to($email)->send(new TransaksiSelesaiMail($getTransaksi));
+
+                    Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
+
+                    $this->sendWhatsappNotificationChangedStatus($getPerbaikan);
+                    $this->sendWhatsappNotificationTransaksiDone($getTransaksi);
                 } catch (\Exception $e) {
                     Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                 }
@@ -319,5 +332,99 @@ class TransaksiController extends Controller
             'message' => 'OK',
             'transaksi' => $getTransaksi ?? null,
         ], 200);
+    }
+
+    private function sendWhatsappNotificationChangedStatus($perbaikan)
+    {
+        try {
+            $phone = $perbaikan->kendaraan->pelanggan->no_telp;
+            $message = $this->createNotificationMessageChangedStatus($perbaikan);
+
+            $wablasNotification = new WablasNotification();
+            $wablasNotification->setPhone($phone);
+            $wablasNotification->setMessage($message);
+
+            $response = $wablasNotification->sendMessage();
+
+            if ($response['status'] !== 200) {
+                Log::channel('wablas')->error('Gagal mengirim notifikasi ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            } else {
+                Log::channel('wablas')->info('Notifikasi berhasil dikirim ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('wablas')->error('Gagal mengirim notifikasi: ', ['error' => $e->getMessage()]);
+        }
+    }
+
+    private function createNotificationMessageChangedStatus($perbaikan)
+    {
+        $namaPelanggan = $perbaikan->kendaraan->pelanggan->nama;
+        $namaPerbaikan = $perbaikan->nama;
+        $keteranganPerbaikan = $perbaikan->keterangan;
+        $durasiPerbaikan = $perbaikan->durasi;
+        $statusPerbaikan = $perbaikan->status;
+        $tanggalPerbaikan = $perbaikan->updated_at;
+
+        return "Halo, " . $namaPelanggan . "!\n\n" .
+            "Kami ingin menginformasikan bahwa status perbaikan kendaraan Anda telah berubah. Berikut adalah detail perbaikan Anda:\n\n" .
+            "*Nama Perbaikan:* " . $namaPerbaikan . "\n" .
+            "*Keterangan:* " . $keteranganPerbaikan . "\n" .
+            "*Durasi:* " . $durasiPerbaikan . "\n" .
+            "*Status:* " . $statusPerbaikan . "\n" .
+            "*Tanggal:* " . $tanggalPerbaikan->format('d-m-Y H:i') . "\n\n" .
+            "Terima kasih telah mempercayakan layanan kami.\n\n" .
+            "Salam,\n" .
+            "-Tim Bengkel Cat Wijayanto";
+    }
+
+    private function sendWhatsappNotificationTransaksiDone($transaksi)
+    {
+        try {
+            $phone = $transaksi->phone;
+            $message = $this->createNotificationMessageTransaksiDone($transaksi);
+
+            $wablasNotification = new WablasNotification();
+            $wablasNotification->setPhone($phone);
+            $wablasNotification->setMessage($message);
+
+            $response = $wablasNotification->sendMessage();
+
+            if ($response['status'] !== 200) {
+                Log::channel('wablas')->error('Gagal mengirim notifikasi ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            } else {
+                Log::channel('wablas')->info('Notifikasi berhasil dikirim ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('wablas')->error('Gagal mengirim notifikasi: ', ['error' => $e->getMessage()]);
+        }
+    }
+
+    private function createNotificationMessageTransaksiDone($transaksi)
+    {
+        $namaPelanggan = $transaksi->pelanggan->nama;
+        $orderId = $transaksi->order_id;
+        $grossAmount = $transaksi->gross_amount;
+        $transaction_status = $transaksi->transaction_status;
+
+        return "Halo, " . $namaPelanggan . "!\n\n" .
+            "Kami ingin menginformasikan bahwa transaksi Anda telah selesai. Berikut adalah detail transaksi Anda:\n\n" .
+            "*Order ID:* " . $orderId . "\n" .
+            "*Jumlah Pembayaran:* Rp " . number_format($grossAmount, 2, ',', '.') . "\n" .
+            "*Status Transaksi:* " . $transaction_status . "\n\n" .
+            "Terima kasih telah menyelesaikan transaksi ini. Kami menghargai kepercayaan Anda terhadap layanan kami.\n\n" .
+            "Salam,\n" .
+            "-Tim Bengkel Cat Wijayanto";
     }
 }
