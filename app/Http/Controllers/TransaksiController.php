@@ -204,12 +204,12 @@ class TransaksiController extends Controller
                 Mail::to($email)->send(new TransaksiSelesaiMail($getTransaksi));
 
                 Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
-
-                $this->sendWhatsappNotificationChangedStatus($getPerbaikan);
-                $this->sendWhatsappNotificationTransaksiDone($getTransaksi);
             } catch (\Exception $e) {
                 Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
             }
+
+            $this->sendWhatsappNotificationChangedStatus($getPerbaikan);
+            $this->sendWhatsappNotificationTransaksiDone($getTransaksi);
 
             Alert::success('Pembayaran', 'Pembayaran berhasil dan transaksi telah selesai !');
 
@@ -300,12 +300,12 @@ class TransaksiController extends Controller
                     Mail::to($email)->send(new TransaksiSelesaiMail($getTransaksi));
 
                     Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
-
-                    $this->sendWhatsappNotificationChangedStatus($getPerbaikan);
-                    $this->sendWhatsappNotificationTransaksiDone($getTransaksi);
                 } catch (\Exception $e) {
                     Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                 }
+
+                $this->sendWhatsappNotificationChangedStatus($getPerbaikan);
+                $this->sendWhatsappNotificationTransaksiDone($getTransaksi);
             } elseif ($transaction_status == 'pending' && $status_code == 201) {
                 $getTransaksi->update([
                     'transaction_status' => $transaction_status,

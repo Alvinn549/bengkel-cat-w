@@ -7,6 +7,7 @@ use App\Models\Perbaikan;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 use App\Mail\ContactFormMail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class LandingPageController extends Controller
@@ -59,7 +60,11 @@ class LandingPageController extends Controller
 
         try {
             Mail::to('alvinn549@gmail.com')->send(new ContactFormMail($name, $email, $pesan));
+
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
         } catch (\Exception $e) {
+            Log::channel('mail')->error('Email gagal dikirim ', ['email' => $email]);
+
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal mengirim pesan: ' . $e->getMessage()

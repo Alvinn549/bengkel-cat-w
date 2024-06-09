@@ -23,7 +23,11 @@ class VerificationController extends Controller
         $request->fulfill();
 
         try {
-            Mail::to($request->user())->send(new WelcomeMail($request->user()->pelanggan->nama));
+            $email = $request->user()->email;
+
+            Mail::to($email)->send(new WelcomeMail($request->user()->pelanggan->nama));
+
+            Log::channel('mail')->info('Email berhasil dikirim: ', ['email' => $email]);
         } catch (\Exception $e) {
             Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }

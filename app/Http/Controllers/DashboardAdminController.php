@@ -175,13 +175,16 @@ class DashboardAdminController extends Controller
         ]);
 
         try {
-            Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
-            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $perbaikan->kendaraan->pelanggan->user->email]);
+            $email = $perbaikan->kendaraan->pelanggan->user->email;
 
-            $this->sendWhatsappNotificationChangedStatus($perbaikan);
+            Mail::to($email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
         } catch (\Exception $e) {
-            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
+            Log::channel('mail')->error('Gagal mengirim email ', ['error' => $e->getMessage()]);
         }
+
+        $this->sendWhatsappNotificationChangedStatus($perbaikan);
 
         $pelanggan = $perbaikan->kendaraan->pelanggan;
 
@@ -209,13 +212,16 @@ class DashboardAdminController extends Controller
         );
 
         try {
-            Mail::to($transaksi->email)->send(new TransaksiCreatedMail($transaksi));
-            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $transaksi->email]);
+            $email = $transaksi->email;
 
-            $this->sendWhatsappNotificationCreatedTransaksi($transaksi);
+            Mail::to($email)->send(new TransaksiCreatedMail($transaksi));
+
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
         } catch (\Exception $e) {
-            Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
+            Log::channel('mail')->error('Gagal mengirim email ', ['error' => $e->getMessage()]);
         }
+
+        $this->sendWhatsappNotificationCreatedTransaksi($transaksi);
 
         Alert::success('Perbaikan Selesai', 'Perbaikan telah di rubah statusnya dan transaksi telah dibuat');
 
@@ -258,16 +264,18 @@ class DashboardAdminController extends Controller
         ]);
 
         try {
-            Mail::to($transaksi->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
-            Mail::to($transaksi->email)->send(new TransaksiSelesaiMail($transaksi));
+            $email = $transaksi->email;
 
-            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $transaksi->email]);
+            Mail::to($email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+            Mail::to($email)->send(new TransaksiSelesaiMail($transaksi));
 
-            $this->sendWhatsappNotificationChangedStatus($perbaikan);
-            $this->sendWhatsappNotificationTransaksiDone($transaksi);
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
         } catch (\Exception $e) {
             Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
+
+        $this->sendWhatsappNotificationChangedStatus($perbaikan);
+        $this->sendWhatsappNotificationTransaksiDone($transaksi);
 
         Alert::success('Perbaikan dan Transaksi Selesai', 'Perbaikan dan transaksi telah selesai');
 

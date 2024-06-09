@@ -54,12 +54,13 @@ class DashboardPekerjaController extends Controller
             $email = $perbaikan->kendaraan->pelanggan->user->email;
 
             Mail::to($email)->send(new ChangedStatusPerbaikanMail($perbaikan));
-            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
 
-            $this->sendWhatsappNotificationChangedStatus($perbaikan);
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
         } catch (\Exception $e) {
             Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
+
+        $this->sendWhatsappNotificationChangedStatus($perbaikan);
 
         Progres::create([
             'perbaikan_id' => $perbaikan->id,
@@ -97,12 +98,13 @@ class DashboardPekerjaController extends Controller
             $email = $perbaikan->kendaraan->pelanggan->user->email;
 
             Mail::to($email)->send(new ChangedStatusPerbaikanMail($perbaikan));
-            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
 
-            $this->sendWhatsappNotificationChangedStatus($perbaikan);
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
         } catch (\Exception $e) {
             Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
+
+        $this->sendWhatsappNotificationChangedStatus($perbaikan);
 
         Progres::create([
             'perbaikan_id' => $perbaikan->id,
@@ -179,12 +181,13 @@ class DashboardPekerjaController extends Controller
                         $email = $perbaikan->kendaraan->pelanggan->user->email;
 
                         Mail::to($email)->send(new ChangedStatusPerbaikanMail($perbaikan));
-                        Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
 
-                        $this->sendWhatsappNotificationChangedStatus($perbaikan);
+                        Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
                     } catch (\Exception $e) {
                         Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                     }
+
+                    $this->sendWhatsappNotificationChangedStatus($perbaikan);
 
                     if ($request->hasFile('foto')) {
                         $foto = $request->file('foto')->store('foto');
@@ -202,12 +205,13 @@ class DashboardPekerjaController extends Controller
                         $email = $perbaikan->kendaraan->pelanggan->user->email;
 
                         Mail::to($email)->send(new AddedProgresPerbaikanMail($progres));
-                        Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
 
-                        $this->sendWhatsappNotificationAddedProgresPerbaikan($progres);
+                        Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
                     } catch (\Exception $e) {
                         Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                     }
+
+                    $this->sendWhatsappNotificationAddedProgresPerbaikan($progres);
 
                     return response()->json([
                         'status' => 'success-update-to-selesai',
@@ -232,12 +236,13 @@ class DashboardPekerjaController extends Controller
                     $email = $progres->perbaikan->kendaraan->pelanggan->user->email;
 
                     Mail::to($email)->send(new AddedProgresPerbaikanMail($progres));
-                    Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
 
-                    $this->sendWhatsappNotificationAddedProgresPerbaikan($progres);
+                    Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
                 } catch (\Exception $e) {
                     Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                 }
+
+                $this->sendWhatsappNotificationAddedProgresPerbaikan($progres);
 
                 return response()->json([
                     'status' => 'success-insert-new-progress',

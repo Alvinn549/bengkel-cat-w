@@ -73,8 +73,11 @@ class PerbaikanController extends Controller
         ]);
 
         try {
-            Mail::to($kendaraan->pelanggan->user->email)->send(new RegisteredPerbaikanMail($perbaikan));
-            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $kendaraan->pelanggan->user->email]);
+            $email = $kendaraan->pelanggan->user->email;
+
+            Mail::to($email)->send(new RegisteredPerbaikanMail($perbaikan));
+
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
         } catch (\Exception $e) {
             Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
