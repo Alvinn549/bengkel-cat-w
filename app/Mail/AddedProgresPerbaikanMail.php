@@ -9,28 +9,34 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ProgresPerbaikanMail extends Mailable
+class AddedProgresPerbaikanMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct()
+    public $progres;
+
+    public function __construct($progres)
     {
-        //
+        $this->progres = $progres;
     }
 
     public function envelope()
     {
         return new Envelope(
-            subject: 'Progres Perbaikan',
+            subject: 'New Progres Perbaikan',
         );
     }
 
     public function content()
     {
         return new Content(
-            view: 'emails.progres-perbaikan',
+            view: 'emails.added-progres-perbaikan',
+            with: [
+                'progres' => $this->progres
+            ]
         );
     }
+
     public function attachments()
     {
         return [];

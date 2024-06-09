@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AddedProgresPerbaikanMail;
 use App\Mail\ChangedStatusPerbaikanMail;
 use App\Models\Perbaikan;
 use App\Models\Progres;
@@ -163,17 +164,29 @@ class DashboardPekerjaController extends Controller
                     $perbaikan = Perbaikan::find($request->perbaikan_id);
                     $perbaikan->update(['status' => 'Proses Selesai']);
 
+                    try {
+                        Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+                    } catch (\Exception $e) {
+                        Log::error($e);
+                    }
+
                     if ($request->hasFile('foto')) {
                         $foto = $request->file('foto')->store('foto');
                     }
 
-                    Progres::create([
+                    $progres = Progres::create([
                         'perbaikan_id' => $request->perbaikan_id,
                         'pekerja_id' => $request->pekerja_id,
                         'keterangan' => $request->keterangan,
                         'foto' => $foto,
                         'is_selesai' => true,
                     ]);
+
+                    try {
+                        Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new AddedProgresPerbaikanMail($progres));
+                    } catch (\Exception $e) {
+                        Log::error($e);
+                    }
 
                     return response()->json([
                         'status' => 'success-update-to-selesai',
@@ -186,13 +199,19 @@ class DashboardPekerjaController extends Controller
                     $foto = $request->file('foto')->store('foto');
                 }
 
-                Progres::create([
+                $progres = Progres::create([
                     'perbaikan_id' => $request->perbaikan_id,
                     'pekerja_id' => $request->pekerja_id,
                     'keterangan' => $request->keterangan,
                     'foto' => $foto,
                     'is_selesai' => false,
                 ]);
+
+                try {
+                    Mail::to($progres->perbaikan->kendaraan->pelanggan->user->email)->send(new AddedProgresPerbaikanMail($progres));
+                } catch (\Exception $e) {
+                    Log::error($e);
+                }
 
                 return response()->json([
                     'status' => 'success-insert-new-progress',
@@ -221,22 +240,8 @@ class DashboardPekerjaController extends Controller
             'is_selesai' => 'nullable',
         ]);
 
-        $is_selesai = null;
-
-        if ($request->has('is_selesai')) {
-            if ($request->is_selesai == 'on') {
-                $is_selesai = true;
-            } else {
-                $is_selesai = false;
-            }
-        } else {
-            $is_selesai = false;
-        }
-
-        // Update progress data
         $progres->update([
             'keterangan' => $request->keterangan,
-            'is_selesai' => $is_selesai,
         ]);
 
         if ($request->hasFile('foto')) {
