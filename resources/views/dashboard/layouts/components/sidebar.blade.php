@@ -4,10 +4,10 @@
             $countPerbaikansProsesSelesai = App\Models\Perbaikan::where('status', 'Proses Selesai')->count();
             $countPerbaikansMenungguBayar = App\Models\Perbaikan::where('status', 'Menunggu Bayar')->count();
 
-            $isExclamationMark = false;
+            $stateCount = false;
 
             if ($countPerbaikansProsesSelesai > 0 || $countPerbaikansMenungguBayar > 0) {
-                $isExclamationMark = true;
+                $stateCount = true;
             }
         @endphp
         <li class="nav-item">
@@ -17,7 +17,8 @@
                     <i class="bi bi-grid"></i>
                     <span>Dashboard</span>
                 </div>
-                <i class="bi bi-exclamation text-warning fs-3 {{ $isExclamationMark ? '' : 'd-none' }}"></i>
+                <span
+                    class="text-warning {{ $stateCount ? '' : 'd-none' }}">{{ $countPerbaikansProsesSelesai + $countPerbaikansMenungguBayar }}</span>
             </a>
         </li><!-- End Dashboard Nav -->
 
