@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Services\WablasNotification;
 use App\Mail\AddedProgresPerbaikanMail;
 use App\Mail\ChangedStatusPerbaikanMail;
 use App\Models\Perbaikan;
@@ -50,7 +51,12 @@ class DashboardPekerjaController extends Controller
         $perbaikan->update(['status' => 'Antrian']);
 
         try {
-            Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+            $email = $perbaikan->kendaraan->pelanggan->user->email;
+
+            Mail::to($email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
+
+            $this->sendWhatsappNotificationChangedStatus($perbaikan);
         } catch (\Exception $e) {
             Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
@@ -88,7 +94,12 @@ class DashboardPekerjaController extends Controller
         $perbaikan->update(['status' => 'Dalam proses']);
 
         try {
-            Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+            $email = $perbaikan->kendaraan->pelanggan->user->email;
+
+            Mail::to($email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+            Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
+
+            $this->sendWhatsappNotificationChangedStatus($perbaikan);
         } catch (\Exception $e) {
             Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
         }
@@ -165,7 +176,12 @@ class DashboardPekerjaController extends Controller
                     $perbaikan->update(['status' => 'Proses Selesai']);
 
                     try {
-                        Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+                        $email = $perbaikan->kendaraan->pelanggan->user->email;
+
+                        Mail::to($email)->send(new ChangedStatusPerbaikanMail($perbaikan));
+                        Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
+
+                        $this->sendWhatsappNotificationChangedStatus($perbaikan);
                     } catch (\Exception $e) {
                         Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                     }
@@ -183,7 +199,10 @@ class DashboardPekerjaController extends Controller
                     ]);
 
                     try {
-                        Mail::to($perbaikan->kendaraan->pelanggan->user->email)->send(new AddedProgresPerbaikanMail($progres));
+                        $email = $perbaikan->kendaraan->pelanggan->user->email;
+
+                        Mail::to($email)->send(new AddedProgresPerbaikanMail($progres));
+                        Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
                     } catch (\Exception $e) {
                         Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                     }
@@ -208,7 +227,10 @@ class DashboardPekerjaController extends Controller
                 ]);
 
                 try {
-                    Mail::to($progres->perbaikan->kendaraan->pelanggan->user->email)->send(new AddedProgresPerbaikanMail($progres));
+                    $email = $progres->perbaikan->kendaraan->pelanggan->user->email;
+
+                    Mail::to($email)->send(new AddedProgresPerbaikanMail($progres));
+                    Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
                 } catch (\Exception $e) {
                     Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                 }
@@ -257,5 +279,59 @@ class DashboardPekerjaController extends Controller
 
         return redirect()->back()
             ->with('success', 'Progress updated successfully');
+    }
+
+    private function sendWhatsappNotificationChangedStatus($perbaikan)
+    {
+        try {
+            $phone = $this->getPhoneNumber($perbaikan);
+            $message = $this->createNotificationMessage($perbaikan);
+
+            $wablasNotification = new WablasNotification();
+            $wablasNotification->setPhone($phone);
+            $wablasNotification->setMessage($message);
+
+            $response = $wablasNotification->sendMessage();
+
+            if ($response['status'] !== 200) {
+                Log::channel('wablas')->error('Gagal mengirim notifikasi ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            } else {
+                Log::channel('wablas')->info('Notifikasi berhasil dikirim ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('wablas')->error('Gagal mengirim notifikasi: ', ['error' => $e->getMessage()]);
+        }
+    }
+
+    private function getPhoneNumber($perbaikan)
+    {
+        return $perbaikan->kendaraan->pelanggan->no_telp;
+    }
+
+    private function createNotificationMessage($perbaikan)
+    {
+        $namaPelanggan = $perbaikan->kendaraan->pelanggan->nama;
+        $namaPerbaikan = $perbaikan->nama;
+        $keteranganPerbaikan = $perbaikan->keterangan;
+        $durasiPerbaikan = $perbaikan->durasi;
+        $statusPerbaikan = $perbaikan->status;
+        $tanggalPerbaikan = $perbaikan->updated_at;
+
+        return "Halo, " . $namaPelanggan . "!\n\n" .
+            "Kami ingin menginformasikan bahwa status perbaikan kendaraan Anda telah berubah. Berikut adalah detail perbaikan Anda:\n\n" .
+            "*Nama Perbaikan:* " . $namaPerbaikan . "\n" .
+            "*Keterangan:* " . $keteranganPerbaikan . "\n" .
+            "*Durasi:* " . $durasiPerbaikan . "\n" .
+            "*Status:* " . $statusPerbaikan . "\n" .
+            "*Tanggal:* " . $tanggalPerbaikan->format('d-m-Y H:i') . "\n\n" .
+            "Terima kasih telah mempercayakan layanan kami.\n\n" .
+            "Salam,\n" .
+            "-Tim Bengkel Cat Wijayanto";
     }
 }
