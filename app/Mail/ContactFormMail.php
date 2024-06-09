@@ -13,9 +13,15 @@ class ContactFormMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(private $name, private $email, private $pesan)
+    public $name;
+    public $email;
+    public $pesan;
+
+    public function __construct($name,  $email,  $pesan)
     {
-        //
+        $this->name = $name;
+        $this->email = $email;
+        $this->pesan = $pesan;
     }
 
     public function envelope()

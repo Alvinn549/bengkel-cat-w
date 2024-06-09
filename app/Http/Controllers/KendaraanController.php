@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\RegisteredCarMail;
 use App\Models\Kendaraan;
 use App\Models\Merek;
 use App\Models\Pelanggan;
 use App\Models\Tipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
@@ -99,6 +102,12 @@ class KendaraanController extends Controller
             'keterangan' => $validate['keterangan'],
             'foto' => $foto,
         ]);
+
+        try {
+            Mail::to($kendaraan->pelanggan->user->email)->send(new RegisteredCarMail($kendaraan));
+        } catch (\Exception $e) {
+            Log::error($e);
+        }
 
         Alert::toast('<p style="color: white; margin-top: 10px;">' . $kendaraan->no_plat . ' berhasil ditambahkan!</p>', 'success')
             ->toHtml()

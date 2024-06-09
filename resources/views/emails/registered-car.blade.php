@@ -40,11 +40,16 @@
 
 <body>
     <div class="container">
-        <h2>Selamat Datang di Bengkel Cat Wijayanto</h2>
-        <p>Halo {{ $name }},</p>
-        <p>Kami sangat senang memiliki Anda bersama kami. Kami berharap Anda memiliki pengalaman yang luar biasa dengan
-            layanan kami.</p>
-        <h5><a href="{{ route('login') }}">Login Sekarang</a></h5>
+        <h2>Kendaraan Anda Telah Terdaftar</h2>
+        <p>Halo {{ $kendaraan->pelanggan->nama }},</p>
+        <p>Kendaraan Anda telah berhasil terdaftar dengan detail berikut:</p>
+        <ul>
+            <li><strong>Nomor Plat:</strong> {{ $kendaraan->no_plat }}</li>
+            <li><strong>Tipe:</strong> {{ $kendaraan->tipe->nama_tipe }}</li>
+            <li><strong>Merek:</strong> {{ $kendaraan->merek->nama_merek }}</li>
+            <li><strong>Tanggal:</strong> {{ $kendaraan->created_at }}</li>
+        </ul>
+        <p>Terima kasih telah mendaftarkan kendaraan Anda di Bengkel Cat Wijayanto.</p>
         <p>Salam,</p>
         <p>-Tim Bengkel Cat Wijayanto</p>
         <div class="footer">

@@ -63,7 +63,7 @@
         <p><span class="strong">Message:</span> {{ $pesan }}</p>
     </div>
     <div class="footer">
-        &copy; 2024 Bengkel Cat Wijayanto. All rights reserved.
+        &copy; <?php echo date('Y'); ?> Bengkel Cat Wijayanto. Semua hak dilindungi.
     </div>
 </body>
 

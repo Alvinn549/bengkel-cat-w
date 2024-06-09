@@ -14,9 +14,11 @@ class WelcomeMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(private $name)
+    public $name;
+
+    public function __construct($name)
     {
-        //
+        $this->name = $name;
     }
 
     public function envelope()
