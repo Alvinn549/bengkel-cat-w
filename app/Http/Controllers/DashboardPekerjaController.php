@@ -203,6 +203,8 @@ class DashboardPekerjaController extends Controller
 
                         Mail::to($email)->send(new AddedProgresPerbaikanMail($progres));
                         Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
+
+                        $this->sendWhatsappNotificationAddedProgresPerbaikan($progres);
                     } catch (\Exception $e) {
                         Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                     }
@@ -231,6 +233,8 @@ class DashboardPekerjaController extends Controller
 
                     Mail::to($email)->send(new AddedProgresPerbaikanMail($progres));
                     Log::channel('mail')->info('Email berhasil dikirim ', ['email' => $email]);
+
+                    $this->sendWhatsappNotificationAddedProgresPerbaikan($progres);
                 } catch (\Exception $e) {
                     Log::channel('mail')->error('Gagal mengirim email: ', ['error' => $e->getMessage()]);
                 }
@@ -281,11 +285,11 @@ class DashboardPekerjaController extends Controller
             ->with('success', 'Progress updated successfully');
     }
 
-    private function sendWhatsappNotificationChangedStatus($perbaikan)
+    private function sendWhatsappNotificationAddedProgresPerbaikan($progres)
     {
         try {
-            $phone = $this->getPhoneNumber($perbaikan);
-            $message = $this->createNotificationMessage($perbaikan);
+            $phone = $progres->perbaikan->kendaraan->pelanggan->no_telp;
+            $message = $this->createNotificationMessageAddedProgresPerbaikan($progres);
 
             $wablasNotification = new WablasNotification();
             $wablasNotification->setPhone($phone);
@@ -309,12 +313,35 @@ class DashboardPekerjaController extends Controller
         }
     }
 
-    private function getPhoneNumber($perbaikan)
+    private function sendWhatsappNotificationChangedStatus($perbaikan)
     {
-        return $perbaikan->kendaraan->pelanggan->no_telp;
+        try {
+            $phone = $perbaikan->kendaraan->pelanggan->no_telp;
+            $message = $this->createNotificationMessageChangedStatus($perbaikan);
+
+            $wablasNotification = new WablasNotification();
+            $wablasNotification->setPhone($phone);
+            $wablasNotification->setMessage($message);
+
+            $response = $wablasNotification->sendMessage();
+
+            if ($response['status'] !== 200) {
+                Log::channel('wablas')->error('Gagal mengirim notifikasi ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            } else {
+                Log::channel('wablas')->info('Notifikasi berhasil dikirim ', [
+                    'status' => $response['status'],
+                    'response' => $response['response'],
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::channel('wablas')->error('Gagal mengirim notifikasi: ', ['error' => $e->getMessage()]);
+        }
     }
 
-    private function createNotificationMessage($perbaikan)
+    private function createNotificationMessageChangedStatus($perbaikan)
     {
         $namaPelanggan = $perbaikan->kendaraan->pelanggan->nama;
         $namaPerbaikan = $perbaikan->nama;
@@ -330,6 +357,23 @@ class DashboardPekerjaController extends Controller
             "*Durasi:* " . $durasiPerbaikan . "\n" .
             "*Status:* " . $statusPerbaikan . "\n" .
             "*Tanggal:* " . $tanggalPerbaikan->format('d-m-Y H:i') . "\n\n" .
+            "Terima kasih telah mempercayakan layanan kami.\n\n" .
+            "Salam,\n" .
+            "-Tim Bengkel Cat Wijayanto";
+    }
+
+    private function createNotificationMessageAddedProgresPerbaikan($progres)
+    {
+        $namaPelanggan = $progres->perbaikan->kendaraan->pelanggan->nama;
+        $kodePerbaikan = $progres->perbaikan->kode_unik;
+        $keteranganProgres = $progres->keterangan;
+        $tanggalProgres = $progres->created_at->format('d-m-Y H:i');
+
+        return "Halo, " . $namaPelanggan . "!\n\n" .
+            "Kami ingin menginformasikan bahwa ada progres baru pada perbaikan kendaraan Anda. Berikut adalah detail progres perbaikan Anda:\n\n" .
+            "*Kode Perbaikan:* " . $kodePerbaikan . "\n" .
+            "*Keterangan Progres:* " . $keteranganProgres . "\n" .
+            "*Tanggal:* " . $tanggalProgres . "\n\n" .
             "Terima kasih telah mempercayakan layanan kami.\n\n" .
             "Salam,\n" .
             "-Tim Bengkel Cat Wijayanto";
