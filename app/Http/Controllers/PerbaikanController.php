@@ -89,6 +89,7 @@ class PerbaikanController extends Controller
             $keteranganPerbaikan = $perbaikan->keterangan;
             $durasiPerbaikan = $perbaikan->durasi;
             $statusPerbaikan = $perbaikan->status;
+            $tanggalPerbaikan = $perbaikan->created_at;
 
             $message = "Halo, " . $perbaikan->kendaraan->pelanggan->nama . "!\n\n" .
                 "Kendaraan Anda dengan detail berikut:\n\n" .
@@ -99,7 +100,8 @@ class PerbaikanController extends Controller
                 "*Nama Perbaikan:* " . $namaPerbaikan . "\n" .
                 "*Keterangan:* " . $keteranganPerbaikan . "\n" .
                 "*Durasi:* " . $durasiPerbaikan . "\n" .
-                "*Status:* " . $statusPerbaikan . "\n\n" .
+                "*Status:* " . $statusPerbaikan . "\n" .
+                "*Tanggal:* " . $tanggalPerbaikan . "\n\n" .
                 "Telah berhasil didaftarkan di sistem kami.\n" .
                 "Terima kasih telah mempercayakan layanan kami.\n\n" .
                 "Salam,\n" .
