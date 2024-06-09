@@ -17,12 +17,17 @@ class WablasNotification
 
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $this->phone = $this->formatPhone($phone);
     }
 
     public function setMessage($message)
     {
         $this->message = $message;
+    }
+
+    private function formatPhone($phone)
+    {
+        return preg_replace('/^0/', '62', $phone);
     }
 
     public function sendMessage()
