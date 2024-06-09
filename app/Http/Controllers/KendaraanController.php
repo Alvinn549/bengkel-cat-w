@@ -123,7 +123,7 @@ class KendaraanController extends Controller
                 "*Tipe:* " . $tipe . "\n" .
                 "*Nomor Plat:* " . $noPlat . "\n\n" .
                 "Telah berhasil didaftarkan di sistem kami\n" .
-                "Terima kasih telah mempercayakan layanan kami.\n" .
+                "Terima kasih telah mempercayakan layanan kami.\n\n" .
                 "Salam,\n" .
                 "-Tim Bengkel Cat Wijayanto";
 
