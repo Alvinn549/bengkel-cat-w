@@ -54,6 +54,12 @@ return [
             'level' => 'debug',
         ],
 
+        'wablas' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/wablas.log'),
+            'level' => 'debug',
+        ],
+
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],
