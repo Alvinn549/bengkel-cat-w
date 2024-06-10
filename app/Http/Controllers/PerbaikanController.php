@@ -43,7 +43,7 @@ class PerbaikanController extends Controller
             [
                 'nama' => ['required', 'string'],
                 'keterangan' => ['required', 'string'],
-                'foto' => ['required', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
+                'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
                 'durasi' => ['required', 'string'],
             ],
             [
@@ -56,7 +56,11 @@ class PerbaikanController extends Controller
             ]
         );
 
-        $foto = $validate['foto']->store('foto');
+        $foto = null;
+
+        if ($request->hasFile('foto')) {
+            $foto = $validate['foto']->store('foto');
+        }
 
         $randomString = Str::random(4);
         $randomNumber = rand(1000, 9999);
