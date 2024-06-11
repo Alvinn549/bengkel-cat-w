@@ -14,7 +14,6 @@ class LandingPageController extends Controller
 {
     public function index(Request $request)
     {
-
         $settings = Settings::first();
         $galleries = Gallery::all();
         $perbaikan = null;
@@ -26,12 +25,27 @@ class LandingPageController extends Controller
             $perbaikan = Perbaikan::where('kode_unik', 'like', '%' . $kode_unik . '%')->first();
         }
 
-        return view('landing.index', compact(
-            'pageTitle',
-            'settings',
-            'galleries',
-            'perbaikan'
-        ));
+        if (auth()->user()) {
+            if (auth()->user()->role == 'pelanggan') {
+                return redirect()->route('dashboard.pelanggan.index');
+            } elseif (auth()->user()->role == 'pekerja') {
+                return redirect()->route('dashboard.pekerja.index');
+            } else {
+                return view('landing.index', compact(
+                    'pageTitle',
+                    'settings',
+                    'galleries',
+                    'perbaikan'
+                ));
+            }
+        } else {
+            return view('landing.index', compact(
+                'pageTitle',
+                'settings',
+                'galleries',
+                'perbaikan'
+            ));
+        }
     }
 
     public function detailPerbaikan(Perbaikan $perbaikan)
