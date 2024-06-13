@@ -27,7 +27,7 @@ class PelangganSeeder extends Seeder
         Pelanggan::create([
             'user_id' => $pelanggan->id,
             'nama' => 'Pelanggan',
-            'no_telp' => '089696764576',
+            'no_telp' => '087865865401',
             'alamat' => 'Pacitan, Jatim',
             'jenis_k' => 'L',
             'foto' => null,

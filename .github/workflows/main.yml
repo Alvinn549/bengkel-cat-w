@@ -24,7 +24,7 @@ jobs:
             php artisan optimize
 
   update_cloudpanel:
-    name: Update CloudPanel
+    name: Update CloudPanel DigitalOcean
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -35,11 +35,10 @@ jobs:
         with:
           host: ${{ secrets.CLOUDPANEL_HOST }}
           username: ${{ secrets.CLOUDPANEL_USERNAME }}
-          password: ${{ secrets.CLOUDPANEL_PASSWORD }}
           key: ${{ secrets.CLOUDPANEL_KEY }}
           port: ${{ secrets.CLOUDPANEL_PORT }}
           script: |
-            cd htdocs/bengkel-cat-w.australiaeast.cloudapp.azure.com/
+            cd htdocs/bengkel-cat-w.alvinns.tech/
             git pull
             php artisan migrate:fresh --seed --force
             php artisan optimize
