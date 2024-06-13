@@ -36,7 +36,7 @@
                 <div class="container-search">
                     <form action="{{ route('home') }}" method="GET">
                         <input id="inputSearch" name="kode_unik" type="text" placeholder="Kode Perbaikan"
-                            value="{{ request('kode_unik') }}">
+                            value="{{ request('kode_unik') }}" autocomplete="off">
                         <div class="search"></div>
                     </form>
                 </div>
