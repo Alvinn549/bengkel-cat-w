@@ -51,7 +51,9 @@ class DashboardPelangganController extends Controller
     {
         $pageTitle = 'Kendaraan Saya';
 
-        $kendaraans = Kendaraan::where('pelanggan_id', $idPelanggan)->get();
+        $kendaraans = Kendaraan::where('pelanggan_id', $idPelanggan)
+            ->latest()
+            ->get();
 
         return view('dashboard.pages.pelanggan.my-kendaraan.index', compact(
             'pageTitle',
@@ -172,6 +174,7 @@ class DashboardPelangganController extends Controller
 
         $perbaikans = Perbaikan::whereIn('kendaraan_id', $kendaraanIds)
             ->where('status', 'Selesai')
+            ->latest()
             ->get();
         // dd($perbaikans);
 

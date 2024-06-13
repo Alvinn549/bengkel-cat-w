@@ -41,6 +41,7 @@ class DashboardAdminController extends Controller
 
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Baru')
+            ->latest()
             ->get();
 
         return view('dashboard.pages.admin.dashboard.perbaikan-baru.index', compact(
@@ -55,6 +56,7 @@ class DashboardAdminController extends Controller
 
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Antrian')
+            ->latest()
             ->get();
 
         return view('dashboard.pages.admin.dashboard.perbaikan-antrian.index', compact(
@@ -69,6 +71,7 @@ class DashboardAdminController extends Controller
 
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Dalam proses')
+            ->latest()
             ->get();
 
         return view('dashboard.pages.admin.dashboard.perbaikan-dalam-proses.index', compact(
@@ -96,6 +99,7 @@ class DashboardAdminController extends Controller
 
         $perbaikans = Perbaikan::with('kendaraan')
             ->where('status', 'Proses Selesai')
+            ->latest()
             ->get();
 
         return view('dashboard.pages.admin.dashboard.perbaikan-selesai-diproses.index', compact(
@@ -123,6 +127,7 @@ class DashboardAdminController extends Controller
 
         $perbaikans = Perbaikan::with('kendaraan', 'transaksi')
             ->where('status', 'Menunggu Bayar')
+            ->latest()
             ->get();
 
         return view('dashboard.pages.admin.dashboard.perbaikan-menunggu-bayar.index', compact(
@@ -254,6 +259,7 @@ class DashboardAdminController extends Controller
 
         $transaksi->update([
             'transaction_status' => 'settlement',
+            'pay_by' => 'cash',
         ]);
 
         $perbaikan = Perbaikan::find($transaksi->perbaikan_id);

@@ -56,6 +56,7 @@
                                             <th>Nama Perbaikan</th>
                                             <th>Masuk</th>
                                             <th>Selesai</th>
+                                            <th>Metode Bayar</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -68,6 +69,7 @@
                                                 <td>{{ $perbaikan->nama }}</td>
                                                 <td>{{ $perbaikan->created_at ?? '-' }}</td>
                                                 <td>{{ $perbaikan->tgl_selesai ?? '-' }}</td>
+                                                <td>{{ $perbaikan->transaksi->chosen_payment ?? '-' }}</td>
                                                 <td>
                                                     @php
                                                         $badge_bg = null;
