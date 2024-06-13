@@ -20,8 +20,7 @@
                         <h5 class="card-title">Perbaikan Baru</h5>
                         <a href="{{ route('dashboard.admin.list-perbaikan-baru') }}">
                             <div class="d-flex align-items-center">
-                                <div
-                                    class="card-icon {{ $countPerbaikansBaru != 0 ? 'bg-warning text-white' : '' }}  rounded-circle d-flex align-items-center justify-content-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-hammer"></i>
                                 </div>
                                 <div class="ps-3">
@@ -38,8 +37,7 @@
                         <h5 class="card-title">Antrian Perbaikan</h5>
                         <a href="{{ route('dashboard.admin.list-perbaikan-antrian') }}">
                             <div class="d-flex align-items-center">
-                                <div
-                                    class="card-icon {{ $countPerbaikansAntrian != 0 ? 'bg-warning text-white' : '' }}  rounded-circle d-flex align-items-center justify-content-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-clock-history"></i>
                                 </div>
                                 <div class="ps-3">
@@ -56,8 +54,7 @@
                         <h5 class="card-title">Perbaikan Dalam Proses</h5>
                         <a href="{{ route('dashboard.admin.list-perbaikan-dalam-proses') }}">
                             <div class="d-flex align-items-center">
-                                <div
-                                    class="card-icon {{ $countPerbaikansProses != 0 ? 'bg-warning text-white' : '' }}  rounded-circle d-flex align-items-center justify-content-center">
+                                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                     <i class="bi bi-tools"></i>
                                 </div>
                                 <div class="ps-3">
