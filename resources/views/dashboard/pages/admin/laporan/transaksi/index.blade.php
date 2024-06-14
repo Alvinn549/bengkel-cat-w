@@ -32,15 +32,19 @@
                                     <select class="form-select" name="pelanggan" id="pelanggan">
                                         <option value="">All</option>
                                         @foreach ($pelanggans as $pelanggan)
-                                            <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama }}</option>
+                                            <option value="{{ $pelanggan->id }}"
+                                                {{ request('pelanggan') == $pelanggan->id ? 'selected' : '' }}>
+                                                {{ $pelanggan->nama }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <select class="form-select" name="status" id="status">
                                         <option value="">All</option>
-                                        <option value="pending">Pending</option>
-                                        <option value="settlement">Settlement</option>
+                                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>
+                                            Pending</option>
+                                        <option value="settlement"
+                                            {{ request('status') == 'settlement' ? 'selected' : '' }}>Settlement</option>
                                     </select>
                                 </div>
                                 <div class="col-md-10">
