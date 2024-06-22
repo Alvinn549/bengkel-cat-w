@@ -23,7 +23,7 @@
                             @csrf
                             @method('PUT')
                             <div class="col-md-12">
-                                <label for="inputNama" class="form-label">Nama</label>
+                                <label for="inputNama" class="form-label">Nama<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                     name="nama" id="inputNama" value="{{ old('nama') ?? $admin->nama }}">
                                 @error('nama')
@@ -33,7 +33,7 @@
                                 @enderror
                             </div>
                             <div class="col-md-12 mt-3">
-                                <label for="inputEmail" class="form-label">Email</label>
+                                <label for="inputEmail" class="form-label">Email<span class="text-danger">*</span></label>
                                 <input type="email" class="form-control @error('email') is-invalid @enderror"
                                     name="email" id="inputEmail" value="{{ old('email') ?? $admin->user->email }}">
                                 @error('email')
@@ -41,9 +41,16 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+                                <small class="text-warning mt-1">
+                                    <ul>
+                                        <li>Email harus valid</li>
+                                        <li>Email harus unik</li>
+                                    </ul>
+                                </small>
                             </div>
                             <div class="col-md-12">
-                                <label for="inputPassword" class="form-label">Password</label>
+                                <label for="inputPassword" class="form-label">Password<span
+                                        class="text-danger">*</span></label>
                                 <small class="d-block mb-2 text-warning">*Kosongkan jika tidak ingin mengganti
                                     password</small>
                                 <input type="password" class="form-control @error('password') is-invalid @enderror"
@@ -53,9 +60,16 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+                                <small class="text-warning mt-1">
+                                    <ul>
+                                        <li>Kosongkan jika tidak ingin mengganti
+                                            password</li>
+                                        <li>Password harus minimal 8 karakter</li>
+                                    </ul>
+                                </small>
                             </div>
                             <div class="col-md-8">
-                                <label for="inpuNoTelp" class="form-label">No Telp</label>
+                                <label for="inpuNoTelp" class="form-label">No Telp<span class="text-danger">*</span></label>
                                 <input type="text" class="form-control @error('no_telp') is-invalid @enderror"
                                     name="no_telp" id="inpuNoTelp" pattern="\d+"
                                     oninput="this.value = formatNoTelp(this.value)" inputmode="numeric"
@@ -65,9 +79,16 @@
                                         {{ $message }}
                                     </div>
                                 @enderror
+                                <small class="text-warning mt-1">
+                                    <ul>
+                                        <li>No Telp minimal 11 Digit</li>
+                                        <li>No Telp maximal 16 Digit</li>
+                                    </ul>
+                                </small>
                             </div>
                             <div class="col-md-4">
-                                <label for="inputJenisKelamin" class="form-label">Jenis Kelamin</label>
+                                <label for="inputJenisKelamin" class="form-label">Jenis Kelamin<span
+                                        class="text-danger">*</span></label>
                                 <select id="inputJenisKelamin" name="jenis_k"
                                     class="form-select @error('jenis_k') is-invalid @enderror">
                                     <option value="">Choose...</option>
@@ -83,7 +104,7 @@
                                 @enderror
                             </div>
                             <div class="col-12">
-                                <label for="inputAlamat" class="form-label">Alamat</label>
+                                <label for="inputAlamat" class="form-label">Alamat<span class="text-danger">*</span></label>
                                 <textarea class="form-control @error('alamat') is-invalid @enderror" placeholder="Alamat" name="alamat"
                                     id="inputAlamat" style="height: 100px;">{{ old('alamat') ?? $admin->alamat }}</textarea>
                                 @error('alamat')
