@@ -7,11 +7,6 @@
             border: none;
             background-color: transparent;
         }
-
-        /*
-                                                                                            .btn-show-pemilik:hover {
-                                                                                                color: #007bff;
-                                                                                            } */
     </style>
 @endsection
 @section('content')
@@ -122,11 +117,6 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Data Perbaikan</h5>
-                        <a class="btn btn-outline-primary mb-4"
-                            href="{{ route('perbaikan.create', ['idKendaraan' => $kendaraan->id]) }}">
-                            <i class="ri-add-circle-line"></i>
-                            Tambah
-                        </a>
                         <div class="row">
                             <div class="col-md-12">
                                 <table id="datatable" class="table table-bordered ">
@@ -137,8 +127,8 @@
                                             <th>Nama Perbaikan</th>
                                             <th>Masuk</th>
                                             <th>Selesai</th>
+                                            <th>Biaya</th>
                                             <th>Status</th>
-                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -149,6 +139,7 @@
                                                 <td>{{ $perbaikan->nama }}</td>
                                                 <td>{{ $perbaikan->created_at ?? '-' }}</td>
                                                 <td>{{ $perbaikan->tgl_selesai ?? '-' }}</td>
+                                                <td>{{ $perbaikan->biaya }}</td>
                                                 <td>
                                                     @php
                                                         $badge_bg = null;
@@ -185,30 +176,6 @@
                                                         {{ $perbaikan->status ?? '-' }}
                                                     </span>
                                                 </td>
-                                                <td nowrap>
-                                                    <a class="btn btn-success btn-sm" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="Lihat"
-                                                        href="{{ route('perbaikan.show', $perbaikan->id) }}">
-                                                        <i class="ri-eye-line"></i>
-                                                    </a>
-                                                    <a class="btn btn-primary btn-sm" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="Edit"
-                                                        href="{{ route('perbaikan.edit', $perbaikan->id) }}">
-                                                        <i class="ri-edit-2-line"></i>
-                                                    </a>
-                                                    <a class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
-                                                        data-bs-placement="top" title="Hapus" href="javascript:"
-                                                        onclick="deleteData({{ $perbaikan->id }})">
-                                                        <i class="ri-delete-bin-5-line"></i>
-                                                    </a>
-
-                                                    <form class="d-none" id="formDelete-{{ $perbaikan->id }}"
-                                                        action="{{ route('perbaikan.destroy', $perbaikan->id) }}"
-                                                        method="POST">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                    </form>
-                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -229,24 +196,5 @@
                 responsive: true,
             });
         })
-    </script>
-
-    <script>
-        function deleteData(id) {
-            Swal.fire({
-                title: 'Apakah Anda yakin?',
-                text: "Data yang dihapus tidak dapat dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('formDelete-' + id).submit()
-                }
-            });
-        }
     </script>
 @endsection

@@ -2,11 +2,11 @@
 
 @section('content')
     <div class="pagetitle">
-        <h1>Kendraan</h1>
+        <h1>Form Perbaikan</h1>
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item active">Kendraan</li>
+                <li class="breadcrumb-item active">Form Perbaikan</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -17,56 +17,29 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">Data Kendraan</h5>
-                        <a class="btn btn-outline-primary mb-4" href="{{ route('kendaraan.create') }}">
+                        <h5 class="card-title">Data Perbaikan</h5>
+                        <a class="btn btn-outline-primary mb-4" href="{{ route('perbaikan.create') }}">
                             <i class="ri-add-circle-line"></i>
                             Tambah
                         </a>
-
-                        <!-- Table with stripped rows -->
-                        <table id="datatable" class="table table-bordered ">
+                        <table id="datatable"
+                            class="display table table-hover table-bordered dt-responsive table-responsive"
+                            style="width:100%">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Pemilik</th>
+                                    <th>Kode</th>
                                     <th>No Plat</th>
-                                    <th>Merek</th>
-                                    <th>Tipe</th>
-                                    <th>Keterangan</th>
+                                    <th>Nama Pelanggan</th>
+                                    <th>Nama Perbaikan</th>
+                                    <th>Masuk</th>
+                                    <th>Selesai</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($kendaraans as $kendaraan)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $kendaraan->pelanggan->nama ?? '' }}</td>
-                                        <td>{{ $kendaraan->no_plat }}</td>
-                                        <td>{{ $kendaraan->merek }}</td>
-                                        <td>{{ $kendaraan->tipe }}</td>
-                                        <td>{{ $kendaraan->keterangan }}</td>
-                                        <td>
-                                            <a class="btn btn-success btn-sm"
-                                                href="{{ route('kendaraan.show', $kendaraan->id) }}">
-                                                <i class="ri-eye-line"></i>
-                                            </a>
-                                            <a class="btn btn-primary btn-sm"
-                                                href="{{ route('kendaraan.edit', $kendaraan->id) }}">
-                                                <i class="ri-edit-2-line"></i>
-                                            </a>
-                                            <a class="btn btn-danger btn-sm" href="javascript:"
-                                                onclick="deleteData({{ $kendaraan->id }})">
-                                                <i class="ri-delete-bin-5-line"></i>
-                                            </a>
 
-                                            <form class="d-none" id="formDelete-{{ $kendaraan->id }}"
-                                                action="{{ route('kendaraan.destroy', $kendaraan->id) }}" method="POST">
-                                                @method('DELETE')
-                                                @csrf
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endforeach
                             </tbody>
                         </table>
                         <!-- End Table with stripped rows -->
@@ -81,12 +54,88 @@
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
-                lengthMenu: [
-                    [5, 10, 25, 50, -1],
-                    [5, 10, 25, 50, "All"]
+                processing: true,
+                serverSide: true,
+                responsive: true,
+                ajax: "{{ route('perbaikan.data-table') }}",
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false,
+                        width: '5%'
+                    },
+                    {
+                        data: 'kode_unik',
+                        name: 'kode_unik'
+                    },
+                    {
+                        data: 'no_plat',
+                        name: 'no_plat'
+                    },
+                    {
+                        data: 'pelanggan',
+                        name: 'pelanggan'
+                    },
+                    {
+                        data: 'nama',
+                        name: 'nama'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at',
+                        render: function(data) {
+                            return moment(data).format('DD MMMM YYYY HH:mm:ss');
+                        }
+                    },
+                    {
+                        data: 'tgl_selesai',
+                        name: 'tgl_selesai',
+                        render: function(data) {
+                            if (!data) {
+                                return '-';
+                            } else {
+                                return moment(data).format('DD MMMM YYYY HH:mm:ss');
+                            }
+                        }
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                        render: function(data) {
+                            let badge_bg = null;
+                            switch (data) {
+                                case 'Selesai':
+                                    badge_bg = 'bg-success';
+                                    break;
+                                case 'Baru':
+                                    badge_bg = 'bg-info';
+                                    break;
+                                case 'Antrian':
+                                    badge_bg = 'bg-primary';
+                                    break;
+                                case 'Dalam Proses':
+                                    badge_bg = 'bg-secondary';
+                                    break;
+                                case 'Menunggu Bayar':
+                                    badge_bg = 'bg-warning';
+                                    break;
+                                default:
+                                    badge_bg = 'bg-dark';
+                                    break;
+                            }
+                            return '<span class="badge ' + badge_bg + '">' + data + '</span>';
+                        }
+                    },
+                    {
+                        data: 'aksi',
+                        name: 'aksi',
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
             });
-        })
+        });
     </script>
 
     <script>

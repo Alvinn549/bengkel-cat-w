@@ -33,10 +33,18 @@
         </li><!-- End Pelanggan Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link {{ request()->routeIs(['kendaraan*', 'perbaikan*']) ? 'active' : 'collapsed' }}"
+            <a class="nav-link {{ request()->routeIs('kendaraan*') ? 'active' : 'collapsed' }}"
                 href="{{ route('kendaraan.index') }}">
                 <i class="bx bxs-car"></i>
                 <span>Kendaraan</span>
+            </a>
+        </li><!-- End Kendaraan Page Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link {{ request()->routeIs('perbaikan*') ? 'active' : 'collapsed' }}"
+                href="{{ route('perbaikan.index') }}">
+                <i class="bi bi-tools"></i>
+                <span>Form Perbaikan</span>
             </a>
         </li><!-- End Kendaraan Page Nav -->
 

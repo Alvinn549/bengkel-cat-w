@@ -6,8 +6,7 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('kendaraan.index') }}">Kendaraan</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('kendaraan.show', $perbaikan->kendaraan_id) }}">Show</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('perbaikan.index') }}">Form Perbaikan</a></li>
                 <li class="breadcrumb-item active">Edit Perbaikan</li>
             </ol>
         </nav>
@@ -66,21 +65,26 @@
                                 @enderror
                             </div>
                             <div class="col-md-12">
-                                @if ($perbaikan->foto)
-                                    <img src="{{ asset('storage/' . $perbaikan->foto) }}"
-                                        class="preview-foto img-fluid rounded" alt="">
-                                @else
-                                    <img class="preview-foto img-fluid rounded">
-                                @endif
+                                <div class="row justify-content-center">
+                                    @if ($perbaikan->foto)
+                                        <div class="col-6">
+                                            <img src="{{ asset('storage/' . $perbaikan->foto) }}"
+                                                class="preview-foto img-fluid rounded" alt="">
+                                        </div>
+                                    @else
+                                        <div class="col-6">
+                                            <img class="preview-foto img-fluid rounded">
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </form>
         <div class="text-center">
-            <button type="submit" class="btn btn-primary" onclick="submit()">Submit</button>
-            <a href="{{ route('kendaraan.show', $perbaikan->kendaraan_id) }}" class="btn btn-secondary">Kembali</a></a>
+            <button type="button" class="btn btn-primary" onclick="submit_form()">Submit</button>
+            <a href="{{ route('perbaikan.index') }}" class="btn btn-secondary">Kembali</a></a>
         </div>
     </section>
 @endsection
@@ -98,22 +102,9 @@
                 defaultDate: defaultDate,
             });
         });
-
-        $(document).ready(function() {
-            $('.select2').select2({
-                theme: 'bootstrap-5'
-            });
-        });
     </script>
 
     <script>
-        function formatNumberInput(value) {
-            let formatedValue = value.replace(/[^0-9]/g, '').slice(0, 8);
-
-            formatedValue = formatedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            return formatedValue;
-        }
-
         function previewFoto() {
             const image = document.querySelector('#foto');
             const imgPreview = document.querySelector('.preview-foto');
@@ -128,7 +119,7 @@
             }
         }
 
-        function submit() {
+        function submit_form() {
             Swal.fire({
                 title: 'Apakah Anda yakin?',
                 text: "Data akan disimpan !",

@@ -222,7 +222,12 @@ Route::middleware('auth')->group(function () {
                 ->name('kendaraan.data-table');
 
             Route::resource('kendaraan', KendaraanController::class);
+
+            Route::get('/perbaikan-data-table', [PerbaikanController::class, 'dataTablePerbaikan'])
+                ->name('perbaikan.data-table');
+
             Route::resource('perbaikan', PerbaikanController::class);
+
             Route::resource('tipe', TipeController::class);
             Route::resource('merek', MerekController::class);
 

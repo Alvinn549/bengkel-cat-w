@@ -19,7 +19,7 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('kendaraan.index') }}">Kendaraan</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('perbaikan.index') }}">Kendaraan</a></li>
                 <li class="breadcrumb-item active">Show Perbaikan</li>
             </ol>
         </nav>
@@ -28,8 +28,8 @@
     <section class="section dashboard">
         <div class="row">
             <div class="mb-4">
-                <a href="{{ route('kendaraan.show', $perbaikan->kendaraan_id) }}" class="btn btn-outline-secondary"
-                    data-bs-toggle="tooltip" data-bs-placement="right" title="Kembali">
+                <a href="{{ route('perbaikan.index') }}" class="btn btn-outline-secondary" data-bs-toggle="tooltip"
+                    data-bs-placement="right" title="Kembali">
                     <i class="ri-arrow-go-back-line"></i>
                 </a>
             </div>

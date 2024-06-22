@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\WablasNotification;
 use App\Mail\RegisteredPerbaikanMail;
-use App\Models\Kendaraan;
+use App\Models\Pelanggan;
 use App\Models\Perbaikan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -12,41 +12,58 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
 
 class PerbaikanController extends Controller
 {
+    public function index()
+    {
+        $pageTitle = 'Form Perbaikan';
+
+        return view('dashboard.pages.admin.perbaikan.index', compact('pageTitle'));
+    }
+
+    public function dataTablePerbaikan()
+    {
+        $perbaikans = Perbaikan::with('kendaraan.pelanggan')->latest()->get();
+
+        return DataTables::of($perbaikans)
+            ->addIndexColumn()
+            ->addColumn('no_plat', function ($data) {
+                return $data->kendaraan->no_plat ?? '-';
+            })
+            ->addColumn('pelanggan', function ($data) {
+                return $data->kendaraan->pelanggan->nama ?? '-';
+            })
+            ->addColumn('aksi', function ($data) {
+                return view('dashboard.pages.admin.perbaikan.components.aksi-data-table', ['id' => $data->id, 'status' => $data->status]);
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
     public function create()
     {
         $pageTitle = 'Tambah Perbaikan';
 
-        $kendaraan = Kendaraan::find(request('idKendaraan'));
+        $pelanggans = Pelanggan::with('kendaraans')->get();
 
-        if (!$kendaraan) {
-            Alert::error('Error', 'Kendaraan tidak ditemukan');
-            return redirect()->back();
-        }
-
-        return view('dashboard.pages.admin.perbaikan.create', compact('pageTitle', 'kendaraan'));
+        return view('dashboard.pages.admin.perbaikan.create', compact('pageTitle', 'pelanggans'));
     }
 
     public function store(Request $request)
     {
         // dd($request->all());
-        $kendaraan = Kendaraan::find($request->idKendaraan);
-
-        if (!$kendaraan) {
-            Alert::error('Error', 'Kendaraan tidak ditemukan');
-            return redirect()->back();
-        }
-
         $validate = $request->validate(
             [
+                'kendaraan_id' => ['required', 'string'],
                 'nama' => ['required', 'string'],
                 'keterangan' => ['required', 'string'],
                 'foto' => ['nullable', 'image', 'file', 'mimes:jpeg,png,jpg,gif,svg', 'max:5000'],
                 'durasi' => ['required', 'string'],
             ],
             [
+                'kendaraan_id.required' => 'Kendaraan tidak boleh kosong',
                 'nama.required' => 'Nama tidak boleh kosong',
                 'keterangan.required' => 'Keterangan tidak boleh kosong',
                 'foto.required' => 'Foto tidak boleh kosong',
@@ -67,17 +84,17 @@ class PerbaikanController extends Controller
         $kodeUnik = $randomString . '-' . $randomNumber;
 
         $perbaikan = Perbaikan::create([
+            'kendaraan_id' => $request->kendaraan_id,
             'kode_unik' => $kodeUnik,
-            'kendaraan_id' => $request->idKendaraan,
             'nama' => $request->nama,
             'keterangan' => $request->keterangan,
             'foto' => $foto,
-            'status' => $request->status,
+            'status' => 'Baru',
             'durasi' => $request->durasi,
         ]);
 
         try {
-            $email = $kendaraan->pelanggan->user->email;
+            $email = $perbaikan->kendaraan->pelanggan->user->email;
 
             Mail::to($email)->send(new RegisteredPerbaikanMail($perbaikan));
 
@@ -140,7 +157,7 @@ class PerbaikanController extends Controller
             ->toHtml()
             ->background('#201658');
 
-        return redirect()->route('kendaraan.show', $request->idKendaraan);
+        return redirect()->route('perbaikan.index');
     }
 
     public function show(Perbaikan $perbaikan)
@@ -208,7 +225,7 @@ class PerbaikanController extends Controller
             ->toHtml()
             ->background('#333A73');
 
-        return redirect()->route('kendaraan.show', $perbaikan->kendaraan_id);
+        return redirect()->route('perbaikan.index');
     }
 
     public function destroy(Perbaikan $perbaikan)
@@ -223,6 +240,6 @@ class PerbaikanController extends Controller
             ->toHtml()
             ->background('#333A73');
 
-        return redirect()->route('kendaraan.show', $perbaikan->kendaraan_id);
+        return redirect()->route('perbaikan.index');
     }
 }

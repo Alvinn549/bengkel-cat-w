@@ -6,9 +6,8 @@
         <nav>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('kendaraan.index') }}">Kendaraan</a></li>
-                <li class="breadcrumb-item"><a href="{{ route('kendaraan.show', request('idKendaraan')) }}">Show</a></li>
-                <li class="breadcrumb-item active">Create Perbaikan</li>
+                <li class="breadcrumb-item"><a href="{{ route('perbaikan.index') }}">Form Perbaikan</a></li>
+                <li class="breadcrumb-item active">Tambah Perbaikan</li>
             </ol>
         </nav>
     </div><!-- End Page Title -->
@@ -22,8 +21,28 @@
                         <form class="row g-3" action="{{ route('perbaikan.store') }}" method="POST" id="form"
                             enctype="multipart/form-data">
                             @csrf
-                            <input type="hidden" value="{{ $kendaraan->id }}" name="idKendaraan">
-                            <input type="hidden" value="Baru" name="status">
+                            <div class="col-md-12">
+                                <label for="kendaraan_id" class="form-label">Kendaraan</label>
+                                <select id="kendaraan_id" name="kendaraan_id"
+                                    class="form-select @error('kendaraan_id') is-invalid @enderror" data-width="100%">
+                                    <option value="">Choose...</option>
+                                    @foreach ($pelanggans as $pelanggan)
+                                        <optgroup label="Kendaraan Milik {{ $pelanggan->nama }}">
+                                            @foreach ($pelanggan->kendaraans as $kendaraan)
+                                                <option value="{{ $kendaraan->id }}"
+                                                    {{ old('kendaraan_id') == $kendaraan->id ? 'selected' : '' }}>
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;{{ $kendaraan->no_plat }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
+                                @error('kendaraan_id')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
                             <div class="col-md-12">
                                 <label for="inputNama" class="form-label">Nama Perbaikan</label>
                                 <input type="text" class="form-control @error('nama') is-invalid @enderror"
@@ -79,7 +98,7 @@
         </div>
         <div class="text-center">
             <button type="submit" class="btn btn-primary" onclick="submit()">Submit</button>
-            <a href="{{ route('kendaraan.show', request('idKendaraan')) }}" class="btn btn-secondary">Kembali</a></a>
+            <a href="{{ route('perbaikan.index') }}" class="btn btn-secondary">Kembali</a></a>
         </div>
     </section>
 @endsection
@@ -100,20 +119,13 @@
         });
 
         $(document).ready(function() {
-            $('.select2').select2({
+            $('#kendaraan_id').select2({
                 theme: 'bootstrap-5'
             });
         });
     </script>
 
     <script>
-        function formatNumberInput(value) {
-            let formatedValue = value.replace(/[^0-9]/g, '').slice(0, 8);
-
-            formatedValue = formatedValue.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            return formatedValue;
-        }
-
         function previewFoto() {
             const image = document.querySelector('#foto');
             const imageContainer = document.querySelector('#container-preview');
